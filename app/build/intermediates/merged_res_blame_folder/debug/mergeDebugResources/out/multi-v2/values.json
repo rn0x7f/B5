@@ -23,40 +23,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\renro\\AndroidStudioProjects\\App\\app\\src\\main\\res\\values\\themes.xml",
-                    "from": {
-                        "startLines": "3",
-                        "startColumns": "4",
-                        "startOffsets": "59",
-                        "endColumns": "91",
-                        "endOffsets": "146"
-                    },
-                    "to": {
-                        "startLines": "221",
-                        "startColumns": "4",
-                        "startOffsets": "13863",
-                        "endColumns": "90",
-                        "endOffsets": "13949"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\renro\\AndroidStudioProjects\\App\\app\\src\\main\\res\\values\\strings.xml",
-                    "from": {
-                        "startLines": "2,3,1",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "71,116,17",
-                        "endColumns": "43,56,52",
-                        "endOffsets": "110,168,65"
-                    },
-                    "to": {
-                        "startLines": "109,110,112",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "6425,6469,6609",
-                        "endColumns": "43,56,52",
-                        "endOffsets": "6464,6521,6657"
-                    }
-                },
-                {
                     "source": "C:\\Users\\renro\\.gradle\\caches\\transforms-4\\a0cd37779fa942a39e14b7ed82af83c9\\transformed\\savedstate-1.2.1\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2",
@@ -74,6 +40,23 @@
                     }
                 },
                 {
+                    "source": "C:\\Users\\renro\\B5\\app\\src\\main\\res\\values\\colors.xml",
+                    "from": {
+                        "startLines": "12,7,9,11,2,3,4,10,5,6,8",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "518,293,379,468,57,105,153,426,201,247,336",
+                        "endColumns": "36,41,45,48,46,46,46,40,44,44,41",
+                        "endOffsets": "550,330,420,512,99,147,195,462,241,287,373"
+                    },
+                    "to": {
+                        "startLines": "3,6,7,10,13,14,15,16,17,18,19",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "210,407,449,626,807,854,901,948,989,1034,1079",
+                        "endColumns": "36,41,45,48,46,46,46,40,44,44,41",
+                        "endOffsets": "242,444,490,670,849,896,943,984,1029,1074,1116"
+                    }
+                },
+                {
                     "source": "C:\\Users\\renro\\.gradle\\caches\\transforms-4\\a8026168f01cb1383320348ea6f050fe\\transformed\\activity-1.9.1\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,3",
@@ -88,23 +71,6 @@
                         "startOffsets": "5194,6138",
                         "endColumns": "41,59",
                         "endOffsets": "5231,6193"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\renro\\AndroidStudioProjects\\App\\app\\src\\main\\res\\values\\colors.xml",
-                    "from": {
-                        "startLines": "12,7,9,11,2,3,4,10,5,6,8",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "518,293,379,468,57,105,153,426,201,247,336",
-                        "endColumns": "36,41,45,48,46,46,46,40,44,44,41",
-                        "endOffsets": "550,330,420,512,99,147,195,462,241,287,373"
-                    },
-                    "to": {
-                        "startLines": "3,6,7,10,13,14,15,16,17,18,19",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "210,407,449,626,807,854,901,948,989,1034,1079",
-                        "endColumns": "36,41,45,48,46,46,46,40,44,44,41",
-                        "endOffsets": "242,444,490,670,849,896,943,984,1029,1074,1116"
                     }
                 },
                 {
@@ -160,6 +126,23 @@
                         "startOffsets": "5003,5127",
                         "endColumns": "53,66",
                         "endOffsets": "5052,5189"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\renro\\B5\\app\\src\\main\\res\\values\\themes.xml",
+                    "from": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "59",
+                        "endColumns": "91",
+                        "endOffsets": "146"
+                    },
+                    "to": {
+                        "startLines": "221",
+                        "startColumns": "4",
+                        "startOffsets": "13863",
+                        "endColumns": "90",
+                        "endOffsets": "13949"
                     }
                 },
                 {
@@ -228,6 +211,23 @@
                         "startOffsets": "6095",
                         "endColumns": "42",
                         "endOffsets": "6133"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\renro\\B5\\app\\src\\main\\res\\values\\strings.xml",
+                    "from": {
+                        "startLines": "2,3,1",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "71,116,17",
+                        "endColumns": "43,56,52",
+                        "endOffsets": "110,168,65"
+                    },
+                    "to": {
+                        "startLines": "109,110,112",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "6425,6469,6609",
+                        "endColumns": "43,56,52",
+                        "endOffsets": "6464,6521,6657"
                     }
                 }
             ]

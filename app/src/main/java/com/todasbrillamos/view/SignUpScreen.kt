@@ -17,8 +17,11 @@ import androidx.compose.ui.unit.dp
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.CampoPassword
 import com.todasbrillamos.view.componentes.CampoTexto
+import com.todasbrillamos.view.componentes.CheckboxComp
+import com.todasbrillamos.view.componentes.TextoClickeableLogin
 import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
+import com.todasbrillamos.view.componentes.boton
 
 @Composable
 fun SignUpScreen(){
@@ -53,10 +56,14 @@ fun SignUpScreen(){
             )
             CampoPassword(
                 labelValue = "Contraseña",
-                painterResource = painterResource (id = R.drawable.pass))
+                painterResource = painterResource (id = R.drawable.pass)
+            )
+            CheckboxComp(value ="Al crear una cuenta, aceptas nuestros términos y condiciones")
 
+            Spacer(modifier = Modifier.height(190.dp))
+            boton(value = "Registrar")
 
-
+            TextoClickeableLogin(value = "")
         }
     }
 }

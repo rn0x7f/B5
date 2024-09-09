@@ -2,12 +2,22 @@
 
 package com.todasbrillamos.view.componentes
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,17 +27,23 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.todasbrillamos.R
@@ -67,6 +83,66 @@ fun TextoResaltado(value:String) {
 
     )
 }
+
+@Composable
+fun TextoClickeable(value: String) {
+    val textoInicial = "Al continuar aceptas nuestros "
+    val TerminosCondiciones = "Términos y Condiciones"
+    val politica = "terminosCondiciones"
+
+    val annString = buildAnnotatedString {
+        append(textoInicial)
+        pushStringAnnotation(tag = politica, annotation = politica) // Añadir la anotación
+        withStyle(style = SpanStyle(color = colorResource(id = R.color.rosaTB))) {
+            append(TerminosCondiciones) // Aplicar estilo al texto
+        }
+        pop() // Cerrar la anotación
+    }
+
+    ClickableText(
+        text = annString,
+        onClick = { offset ->
+            annString.getStringAnnotations(tag = politica, start = offset, end = offset)
+                .firstOrNull()?.let {
+                    // Aquí podrías manejar el clic para abrir los términos y condiciones
+                }
+        }
+    )
+}
+
+@Composable
+fun TextoClickeableLogin(value: String) {
+    val textoInicial = "¿Ya tienes una cuenta? "
+    val sesion = "Inicia Sesión"
+    val login = "login"
+
+    val annString = buildAnnotatedString {
+        append(textoInicial)
+        pushStringAnnotation(tag = login, annotation = login) // Añadir la anotación
+        withStyle(style = SpanStyle(color = colorResource(id = R.color.rosaTB))) {
+            append(sesion) // Aplicar estilo al texto
+        }
+        pop() // Cerrar la anotación
+    }
+
+    ClickableText(
+        text = annString,
+        modifier = Modifier
+            .fillMaxWidth() // Rellenar el ancho máximo
+            .padding(16.dp), // Añadir padding
+        style = TextStyle(
+            textAlign = TextAlign.Center // Centrar el texto
+        ),
+        onClick = { offset ->
+            annString.getStringAnnotations(tag = login, start = offset, end = offset)
+                .firstOrNull()?.let {
+                    // Aquí podrías manejar el clic para INICIAR SESIÓN
+                }
+        }
+    )
+}
+
+
 
 @Composable
 fun CampoTexto(labelValue: String, painterResource: Painter) {
@@ -144,4 +220,59 @@ fun CampoPassword(labelValue: String, painterResource: Painter) {
         visualTransformation = if(passwordVisible.value) VisualTransformation.None else
             PasswordVisualTransformation()
     )
+}
+
+@Composable
+fun CheckboxComp(value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(56.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        val checkedState = remember {
+            mutableStateOf(false)
+        }
+        androidx.compose.material3.Checkbox(
+            checked = checkedState.value,
+            onCheckedChange = {
+                checkedState.value = it
+            }
+        )
+        TextoClickeable(value = value)
+    }
+}
+
+@Composable
+fun boton(value: String) {
+    Button(
+        onClick = { /*TODO*/ },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        contentPadding = PaddingValues(),
+        colors = ButtonDefaults.buttonColors(Color.Transparent)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .background(
+                    brush = Brush.horizontalGradient(
+                        listOf(
+                            colorResource(id = R.color.rosaTB), // Asegúrate de definir estos colores
+                            colorResource(id = R.color.purple_200)
+                        )
+                    ),
+                    shape = RoundedCornerShape(50.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = value,
+                fontSize = 18.sp, // Cambiado a sp
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
 }
