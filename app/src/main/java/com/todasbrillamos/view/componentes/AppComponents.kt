@@ -142,6 +142,78 @@ fun TextoClickeableLogin(value: String) {
     )
 }
 
+@Composable
+fun TextoClickeableRegistro() {
+    val textoInicial = "¿Aún no tienes cuenta? "
+    val registrate = "Registrarme"
+    val registroTag = "registro"
+
+    val annString = buildAnnotatedString {
+        append(textoInicial)
+        pushStringAnnotation(tag = registroTag, annotation = registroTag)
+        withStyle(
+            style = SpanStyle(
+                color = colorResource(id = R.color.rosaTB),
+                textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline
+            )
+        ) {
+            append(registrate)
+        }
+        pop()
+    }
+
+    ClickableText(
+        text = annString,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        style = TextStyle(
+            textAlign = TextAlign.Center
+        ),
+        onClick = { offset ->
+            annString.getStringAnnotations(tag = registroTag, start = offset, end = offset)
+                .firstOrNull()?.let {
+                }
+        }
+    )
+}
+
+
+@Composable
+fun TextoClickeableOlvideContrasena() {
+    val textoOlvide = "Olvidé mi contraseña"
+    val olvideTag = "olvideContrasena"
+
+    val annString = buildAnnotatedString {
+        pushStringAnnotation(tag = olvideTag, annotation = olvideTag)
+        withStyle(
+            style = SpanStyle(
+                color = colorResource(id = R.color.rosaTB),
+                textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline
+            )
+        ) {
+            append(textoOlvide)
+        }
+        pop()
+    }
+
+    ClickableText(
+        text = annString,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        style = TextStyle(
+            textAlign = TextAlign.Center // Centrar el texto
+        ),
+        onClick = { offset ->
+            annString.getStringAnnotations(tag = olvideTag, start = offset, end = offset)
+                .firstOrNull()?.let {
+                    // Aquí podrías manejar el clic para OLVIDAR CONTRASEÑA
+                }
+        }
+    )
+}
+
 
 
 @Composable
