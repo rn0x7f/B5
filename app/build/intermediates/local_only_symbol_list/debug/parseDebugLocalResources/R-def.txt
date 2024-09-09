@@ -1,0 +1,28 @@
+R_DEF: Internal format may change without notice
+local
+color BG
+color black
+color blancoFondo
+color negroPrincipal
+color purple_200
+color purple_500
+color purple_700
+color rosaTB
+color teal_200
+color teal_700
+color white
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable logo
+drawable mail
+drawable pass
+drawable phone
+drawable profile
+mipmap ic_launcher
+mipmap ic_launcher_round
+string Bienvenida
+string CrearCuenta
+string app_name
+style Theme.TodasBrillamos
+xml backup_rules
+xml data_extraction_rules
