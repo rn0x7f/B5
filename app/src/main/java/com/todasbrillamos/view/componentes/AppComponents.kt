@@ -333,7 +333,7 @@ fun boton(value: String) {
                     brush = Brush.horizontalGradient(
                         listOf(
                             colorResource(id = R.color.rosaTB), // Asegúrate de definir estos colores
-                            colorResource(id = R.color.purple_200)
+                            colorResource(id = R.color.rosaTB)
                         )
                     ),
                     shape = RoundedCornerShape(50.dp)

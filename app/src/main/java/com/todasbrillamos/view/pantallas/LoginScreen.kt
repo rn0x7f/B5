@@ -14,6 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,19 +31,25 @@ import com.todasbrillamos.view.componentes.boton
 
 @Composable
 fun LoginScreen() {
+    // Definir el gradiente
+    val gradientColors = listOf(
+        Color( 0xFFffe5b4), // Color inicial
+        Color(0xFFffbba8)  // Color final
+    )
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.blancoFondo))
+            .background(brush = Brush.linearGradient(colors = gradientColors))
             .padding(28.dp)
     ) {
 
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .background(color = colorResource(id = R.color.blancoFondo))
-
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(brush = Brush.linearGradient(colors = gradientColors))
         ) {
-            TextoNormal(value = "Hey,")
+            TextoNormal(value = "Hola!")
             TextoResaltado(value = "Bienvenida de vuelta")
             Spacer(modifier = Modifier
                 .padding(20.dp))

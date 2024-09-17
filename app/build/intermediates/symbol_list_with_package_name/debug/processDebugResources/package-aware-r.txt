@@ -23,6 +23,7 @@ color black
 color blancoFondo
 color call_notification_answer_color
 color call_notification_decline_color
+color fondo
 color negroPrincipal
 color notification_action_color_filter
 color notification_icon_bg_color

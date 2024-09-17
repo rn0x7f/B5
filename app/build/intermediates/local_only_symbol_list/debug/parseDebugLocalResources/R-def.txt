@@ -3,6 +3,7 @@ local
 color BG
 color black
 color blancoFondo
+color fondo
 color negroPrincipal
 color purple_200
 color purple_500
