@@ -35,3 +35,6 @@ google-services.json
 # Excluir la carpeta .gradle dentro de la carpeta app
 app/.gradle/
 app/local.properties
+
+# Mac OS
+.DS_Store
