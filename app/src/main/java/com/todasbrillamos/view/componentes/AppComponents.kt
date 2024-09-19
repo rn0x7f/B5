@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -33,7 +34,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -49,25 +49,24 @@ import androidx.compose.ui.unit.sp
 import com.todasbrillamos.R
 
 @Composable
-fun TextoNormal(value:String) {
+fun TextoNormal(value: String, size: Int = 24) {
     Text(
         text = value,
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 40.dp),
         style = TextStyle(
-            fontSize = 24.sp,
+            fontSize = size.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
-        )
-        ,color = colorResource(id = R.color.negroPrincipal),
+        ), color = colorResource(id = R.color.negroPrincipal),
         textAlign = TextAlign.Center
 
     )
 }
 
 @Composable
-fun TextoResaltado(value:String) {
+fun TextoResaltado(value: String) {
     Text(
         text = value,
         modifier = Modifier
@@ -77,8 +76,24 @@ fun TextoResaltado(value:String) {
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
-        )
-        ,color = colorResource(id = R.color.rosaTB),
+        ), color = colorResource(id = R.color.rosaTB),
+        textAlign = TextAlign.Center
+
+    )
+}
+
+@Composable
+fun TextoResaltadoMini(value: String) {
+    Text(
+        text = value,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(),
+        style = TextStyle(
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Bold,
+            fontStyle = FontStyle.Normal
+        ), color = colorResource(id = R.color.rosaTB),
         textAlign = TextAlign.Center
 
     )
@@ -215,11 +230,10 @@ fun TextoClickeableOlvideContrasena() {
 }
 
 
-
 @Composable
 fun CampoTexto(labelValue: String, painterResource: Painter) {
 
-    val textValue = remember{
+    val textValue = remember {
         mutableStateOf("")
     }
 
@@ -239,7 +253,7 @@ fun CampoTexto(labelValue: String, painterResource: Painter) {
         },
         singleLine = true, // Asegura que sea una sola línea
         leadingIcon = {
-            Icon(painter = painterResource, contentDescription ="" )
+            Icon(painter = painterResource, contentDescription = "")
         }
     )
 }
@@ -247,7 +261,7 @@ fun CampoTexto(labelValue: String, painterResource: Painter) {
 @Composable
 fun CampoPassword(labelValue: String, painterResource: Painter) {
 
-    val password = remember{
+    val password = remember {
         mutableStateOf("")
     }
 
@@ -271,25 +285,25 @@ fun CampoPassword(labelValue: String, painterResource: Painter) {
         },
         singleLine = true, // Asegura que sea una sola línea
         leadingIcon = {
-            Icon(painter = painterResource, contentDescription ="" )
+            Icon(painter = painterResource, contentDescription = "")
         },
         trailingIcon = {
-            val iconImage = if(passwordVisible.value){
+            val iconImage = if (passwordVisible.value) {
                 Icons.Filled.Visibility
-            }else{
+            } else {
                 Icons.Filled.VisibilityOff
             }
-            var description = if(passwordVisible.value){
+            var description = if (passwordVisible.value) {
                 "esconder contraseña"
-            }else {
+            } else {
                 "mostrar contraseña"
             }
 
-            IconButton(onClick = {passwordVisible.value = !passwordVisible.value}){
+            IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
                 Icon(imageVector = iconImage, contentDescription = description)
             }
         },
-        visualTransformation = if(passwordVisible.value) VisualTransformation.None else
+        visualTransformation = if (passwordVisible.value) VisualTransformation.None else
             PasswordVisualTransformation()
     )
 }
@@ -347,4 +361,9 @@ fun boton(value: String) {
             )
         }
     }
+}
+
+@Composable
+fun Espaciador() {
+    Spacer(modifier = Modifier.padding(8.dp))
 }

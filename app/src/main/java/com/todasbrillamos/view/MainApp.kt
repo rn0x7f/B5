@@ -1,4 +1,4 @@
-package com.todasbrillamos.model
+package com.todasbrillamos.view
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
