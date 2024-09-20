@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation ("com.google.accompanist:accompanist-pager:0.12.0")
     implementation("androidx.compose.material:material-icons-extended") // Sin versión, gestionada por el BOM
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

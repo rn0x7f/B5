@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.Espaciador
+import com.todasbrillamos.view.componentes.PagerAcercaDe
 import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.view.componentes.TextoResaltadoMini
@@ -50,13 +51,7 @@ fun AcercaScreen() {
                 .background(brush = Brush.linearGradient(colors = gradientColors))
         ) {
             TextoResaltado(value = "Acerca de nosotras: ")
-
-
-            Image(
-                painter = painterResource(id = R.drawable.foto_acerca_de),
-                contentDescription = "Foto de la fundación",
-                modifier = Modifier.padding(vertical = 10.dp)
-            )
+            PagerAcercaDe()
             Espaciador()
             TextoResaltado(value = "Preguntas frecuentes: ")
             Espaciador()

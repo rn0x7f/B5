@@ -1,24 +1,42 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalFoundationApi::class
+)
 
 package com.todasbrillamos.view.componentes
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,14 +44,19 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -46,7 +69,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.todasbrillamos.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun TextoNormal(value: String, size: Int = 24) {
@@ -352,7 +379,6 @@ fun boton(value: String) {
                     ),
                     shape = RoundedCornerShape(50.dp)
                 ),
-            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = value,
@@ -366,4 +392,103 @@ fun boton(value: String) {
 @Composable
 fun Espaciador() {
     Spacer(modifier = Modifier.padding(8.dp))
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun PagerAcercaDe(modifier: Modifier = Modifier) {
+
+    val images = listOf(
+        R.drawable.imgprueba,
+        R.drawable.foto_acerca_de
+    )
+    val pagerState = com.google.accompanist.pager.rememberPagerState(pageCount = images.size)
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(2000)
+            val nextPage = (pagerState.currentPage + 1) % pagerState.pageCount
+            pagerState.scrollToPage(nextPage)
+        }
+    }
+    val scope = rememberCoroutineScope()
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+        // Place pager at the top of the screen
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f) // Adjust size by giving weight
+        ) { currentPage ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                elevation = CardDefaults.cardElevation(8.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = images[currentPage]),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+
+        // Place arrow buttons below the pager
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween, // Place arrows at opposite ends
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Left Arrow Button
+            IconButton(
+                onClick = {
+                    val prevPage = pagerState.currentPage - 1
+                    if (prevPage >= 0) {
+                        scope.launch {
+                            pagerState.scrollToPage(prevPage)
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    contentDescription = null, // Provide content description if needed
+                    modifier = Modifier.fillMaxSize(),
+                    tint = Color.White
+                )
+            }
+
+            // Right Arrow Button
+            IconButton(
+                onClick = {
+                    val nextPage = pagerState.currentPage + 1
+                    if (nextPage < images.size) {
+                        scope.launch {
+                            pagerState.scrollToPage(nextPage)
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null, // Provide content description if needed
+                    modifier = Modifier.fillMaxSize(),
+                    tint = Color.White
+                )
+            }
+        }
+    }
 }
