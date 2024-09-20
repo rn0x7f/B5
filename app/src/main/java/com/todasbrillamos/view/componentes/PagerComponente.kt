@@ -36,7 +36,7 @@ import androidx.compose.ui.draw.clip
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun PagerAcercaDe(
+fun Pager(
     images: List<Int>,  // Lista de imágenes pasada como parámetro
     modifier: Modifier = Modifier
 ) {
