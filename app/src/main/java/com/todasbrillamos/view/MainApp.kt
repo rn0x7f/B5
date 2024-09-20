@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.todasbrillamos.view.pantallas.AcercaScreen
+import com.todasbrillamos.view.pantallas.HomeScreen
 import com.todasbrillamos.view.pantallas.SignUpScreen
 
 //contiene todas las pantallas de la app
@@ -16,7 +17,7 @@ fun MainApp(modifier: Modifier = Modifier) {
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ){
-        AcercaScreen()
+        HomeScreen()
 
     }
 
