@@ -51,7 +51,10 @@ fun AcercaScreen() {
                 .background(brush = Brush.linearGradient(colors = gradientColors))
         ) {
             TextoResaltado(value = "Acerca de nosotras: ")
-            PagerAcercaDe()
+            PagerAcercaDe(images = listOf(
+                R.drawable.imgprueba,
+                R.drawable.foto_acerca_de
+                ))
             Espaciador()
             TextoResaltado(value = "Preguntas frecuentes: ")
             Espaciador()
