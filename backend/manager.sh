@@ -24,13 +24,13 @@ trap ctrl_c INT
 # Maneja errores de sudo
 # Si se equivoca 3 veces en la contraseña regresa false
 check_sudo() {
-  tput cnorm
+  tput cnorm # Mostrar cursor
   local command="$1"
   ATTEMPTS=0
   MAX_ATTEMPTS=1
   while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
     if eval "$command"; then
-      tput civis
+      tput civis # Ocultar cursor
       return 0
     else
       ATTEMPTS=$((ATTEMPTS + 1))
