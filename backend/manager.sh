@@ -296,12 +296,12 @@ function database_config(){
   if grep -q "^MYSQL_IP=" .env; then
     # Si ya existe, la actualiza
     sed -i "s/^MYSQL_IP=.*/MYSQL_IP=$MYSQL_IP/" .env
-    echo -e "${greenColor}[+]${endColor} ${grayColor}Puerto de MySQL actualizado en .env.${endColor}\n"
+    echo -e "${greenColor}[+]${endColor} ${grayColor}IP de MySQL actualizado en .env.${endColor}\n"
     sleep 1
   else
     # Si no existe, la agrega
-    echo "MYSQL_PORT=$MYSQL_IP" >> .env
-    echo -e "${greenColor}[+]${endColor} ${grayColor}Puerto de MySQL guardado en .env.${endColor}\n"
+    echo "MYSQL_IP=$MYSQL_IP" >> .env
+    echo -e "${greenColor}[+]${endColor} ${grayColor}IP de MySQL guardado en .env.${endColor}\n"
     sleep 1
   fi
 
