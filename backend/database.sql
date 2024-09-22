@@ -1,4 +1,4 @@
-CREATE DATABASE TodasBrillamos;
+CREATE DATABASE IF NOT EXISTS TodasBrillamos;
 
 USE TodasBrillamos;
 
