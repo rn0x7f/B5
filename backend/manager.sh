@@ -134,7 +134,7 @@ function setup_virtual_env(){
 declare -i parameter_counter=0
 
 # Parametros del script
-while getopts "dvth" arg; do
+while getopts "dvh" arg; do
   case $arg in
     d) let parameter_counter+=1;; # Instalar dependencias
     v) let parameter_counter+=2;; # Crear entorno virtual
