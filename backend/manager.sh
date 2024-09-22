@@ -107,6 +107,20 @@ function setup_virtual_env(){
   else
     echo -e "\n${greenColor}[+]${endColor} ${grayColor}El entorno virtual .venv ya existe.${endColor}\n"
   fi
+  
+  # Subshell para instalar los requerimientos con pip para el venv
+  (
+    source .venv/bin/activate
+    # Instalar dependencias desde requirements.txt si existe
+    if [ -f "requirements.txt" ]; then
+      echo -e "${yellowColor}[+]${endColor} ${grayColor}Instalando dependencias desde requirements.txt...${endColor}"
+      pip install -r requirements.txt &>/dev/null
+      echo -e "\n${greenColor}[+]${endColor} ${grayColor}Dependencias instaladas correctamente.${endColor}\n"
+    else
+      echo -e "${redColor}[!]${endColor} ${yellowColor}Archivo requirements.txt no encontrado. No se han instalado las dependencias.${endColor}\n"
+    fi
+  )
+ 
 }
 
 
