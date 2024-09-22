@@ -49,7 +49,6 @@ function help_panel(){
   echo -e "\t${purpleColor}d)${endColor} ${grayColor}Descargar dependencias del sistema.${endColor}"
   echo -e "\t${purpleColor}v)${endColor} ${grayColor}Crear entorno virtual.${endColor}"
   echo -e "\t${purpleColor}m)${endColor} ${grayColor}Registrar un usuario de MySQL.${endColor}"
-    echo -e "\t\t${turquoiseColor}./manager.sh -m \"usuario contraseña\"${endColor}"
   echo -e "\t${purpleColor}h)${endColor} ${grayColor}Mostrar este panel de ayuda.${endColor}\n"
 }
 
@@ -134,25 +133,66 @@ function setup_virtual_env(){
 
 # Crear usuario y base de datos en MySQL
 function mysql_account(){
-  name=$1
-  password=$2
-  
-  # Valida que el usuario y contraseña no estén vacíos
-  if [ -z "$name" ] || [ -z "$password" ]; then
-    echo -e "\n${redColor}[!]${endColor} ${yellowColor}Faltan argumentos.${endColor}"
-    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Uso:${endColor}"
-    echo -e "\t${turquoiseColor}./manager.sh -m \"usuario contraseña\"${endColor}\n"
+  # Inicia MySQL
+  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Iniciando MySQL...${endColor}"
+  if ! check_sudo "sudo service mysql start &>/dev/null"; then
     return 1
   fi
+  sleep 1
+  echo -e "\n${greenColor}[+]${endColor} ${grayColor}MySQL Iniciado correctamente.${endColor}\n"
 
-  # Confirma que el usuario y contraseña elegidos sean correctos
-  echo -e "\n${yellowColor}[?]${endColor} ${grayColor}Las credenciales son correctas?${endColor}"
-  echo -e "\t${turquoiseColor}User:${endColor} ${name}"
-  echo -e "\t${turquoiseColor}Pass:${endColor} ${password}"
-  echo -e "\n${redColor}[!]${endColor} ${yellowColor}Presiona${endColor} ${turquoiseColor}Enter${endColor} ${yellowColor}para continuar o${endColor} ${turquoiseColor}Ctrl + C${endColor} ${yellowColor}para cancelar.${endColor}"
-  read -p "" -r
+  # Solicitar credenciales al usuario
+  echo -e "${redColor}[!]${endColor} ${grayColor}Introduce el nombre de usuario MySQL:${endColor}"
+  read -p "" MYSQL_USER
+  echo ""
+  while true; do
+    echo -e "${redColor}[!]${endColor} ${grayColor}Introduce la contraseña para el usuario MySQL:${endColor}"
+    read -sp "" MYSQL_PASSWORD
+    echo -e "\n${redColor}[!]${endColor} ${grayColor}Verifica la contraseña:${endColor}"
+    read -sp "" MYSQL_PASSWORD_CONFIRM
+    
+    if [ "$MYSQL_PASSWORD" == "$MYSQL_PASSWORD_CONFIRM" ]; then
+      break
+    else
+      echo -e "\n${redColor}[!]${endColor} ${yellowColor}Las contraseñas no coinciden. Por favor, inténtalo de nuevo.${endColor}\n"
+    fi
+  done
   
-  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Iniciando MySQL...${endColor}"
+  # Antes de crear el usuario verifica si ya existe y pregunta si desea sobreescribirlo
+  if sudo mysql -u root -e "SELECT User FROM mysql.user WHERE User='$MYSQL_USER';" | grep -q "$MYSQL_USER"; then
+    echo -e "\n${redColor}[!]${endColor} ${yellowColor}El usuario MySQL '$MYSQL_USER' ya existe.${endColor}\n"
+    echo -e "${redColor}[!]${endColor} ${yellowColor}¿Deseas sobreescribirlo?${endColor} ${turquoiseColor}[s/n]${endColor}"
+    read -p "" overwrite
+    if [ "$overwrite" == "n" ]; then
+      return 1
+    else
+      sudo mysql -u root -e "DROP USER IF EXISTS '$MYSQL_USER'@'localhost';"
+      echo -e "${yellowColor}[+]${endColor} ${grayColor}Usuario ${turquoiseColor}$MYSQL_USER${endColor} eliminado.${endColor}"
+    fi
+  fi
+  sleep 1
+  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Creando usuario ${turquoiseColor}$MYSQL_USER${endColor}.${endColor}\n"
+  sudo mysql -u root -e "CREATE USER '$MYSQL_USER'@'localhost' IDENTIFIED BY '$MYSQL_PASSWORD';"
+  sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER'@'localhost';"
+  sudo mysql -u root -e "FLUSH PRIVILEGES;"  
+  echo -e "${greenColor}[+]${endColor} ${grayColor}Usuario ${turquoiseColor}$MYSQL_USER${endColor} registrado.${endColor}"
+  sleep 1
+
+  # Verifica si el usuario y la clave ya están en el archivo .env y los sobreescribe o los agrega
+  if [ -f ".env" ]; then
+    if grep -q "MYSQL_USER" .env; then
+      sed -i "s/MYSQL_USER=.*/MYSQL_USER=\"$MYSQL_USER\"/g" .env
+      sed -i "s/MYSQL_PASSWORD=.*/MYSQL_PASSWORD=\"$MYSQL_PASSWORD\"/g" .env
+    else
+      echo "MYSQL_USER=\"$MYSQL_USER\"" >> .env
+      echo "MYSQL_PASSWORD=\"$MYSQL_PASSWORD\"" >> .env
+    fi
+  else
+    echo "MYSQL_USER=\"$MYSQL_USER\"" >> .env
+    echo "MYSQL_PASSWORD=\"$MYSQL_PASSWORD\"" >> .env
+  fi
+
+  echo -e "\n${greenColor}[+]${endColor} ${grayColor}Credenciales de MySQL registradas en .env${endColor}\n"
 }
 
 
@@ -160,13 +200,11 @@ function mysql_account(){
 declare -i parameter_counter=0
 
 # Parametros del script
-while getopts "dvm:h" arg; do
+while getopts "dvmh" arg; do
   case $arg in
     d) let parameter_counter+=1;; # Instalar dependencias
     v) let parameter_counter+=2;; # Crear entorno virtual
-    m) name=$(echo "$OPTARG" | awk '{print $1}');      # Extraer el primer argumento (usuario)
-       password=$(echo "$OPTARG" | awk '{print $2}');  # Extraer el segundo argumento (contraseña)
-       let parameter_counter+=4;;
+    m) let parameter_counter+=4;; # Crear usuario MySQL
     h) ;; # Panel de ayuda
   esac
 done # Cierre del bucle
@@ -179,7 +217,7 @@ if [ $parameter_counter -eq 1 ]; then
 elif [ $parameter_counter -eq 2 ]; then
   setup_virtual_env
 elif [ $parameter_counter -eq 4 ]; then
-  mysql_account $name $password
+  mysql_account
 else
   help_panel
 fi # Cierre del condicional
