@@ -22,7 +22,7 @@ trap ctrl_c INT
 
 function helpPanel(){
   echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Uso:${endColor}"
-  echo -e "\t${purpleColor}d)${endColor} ${grayColor}Descargar dependencias.${endColor}"
+  echo -e "\t${purpleColor}d)${endColor} ${grayColor}Descargar dependencias del sistema.${endColor}"
   echo -e "\t${purpleColor}h)${endColor} ${grayColor}Mostrar este panel de ayuda.${endColor}\n"
 }
 
@@ -31,6 +31,22 @@ function helpPanel(){
 check_package() {
     local package="$1"
     dpkg -l | grep -q "$package"
+}
+
+
+# Instala un paquete si no está instalado
+install_package() {
+    local package="$1"
+    if ! check_package "$package"; then
+        echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Instalando $package...${endColor}"
+        sudo apt-get install -y $package &> /dev/null
+        echo -e "\n${greenColor}[+]${endColor} ${grayColor}$package Instalado con exito.${endColor}"
+        sleep 1
+
+    else
+        echo -e "\n${greenColor}[+]${endColor} ${grayColor}$package ya está instalado.${endColor}"
+        sleep 1
+    fi
 }
 
 
