@@ -43,6 +43,7 @@ check_sudo() {
 function help_panel(){
   echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Uso:${endColor}"
   echo -e "\t${purpleColor}d)${endColor} ${grayColor}Descargar dependencias del sistema.${endColor}"
+  echo -e "\t${purpleColor}v)${endColor} ${grayColor}Crear entorno virtual.${endColor}"
   echo -e "\t${purpleColor}h)${endColor} ${grayColor}Mostrar este panel de ayuda.${endColor}\n"
 }
 
@@ -81,9 +82,31 @@ install_dependencies() {
 
     install_package "build-essential"
     install_package "python3-dev"
+    install_package "python3-venv"
     install_package "python3-pip"
     install_package "libmysqlclient-dev"
     install_package "mysql-server"
+}
+
+
+# Crea un entorno virtual de python si no existe
+function setup_virtual_env(){
+  # Verificar si el módulo venv está disponible en python3
+  if ! python3 -c "import venv" &>/dev/null; then
+    echo -e "\n${redColor}[!]${endColor} ${grayColor}El módulo 'venv' no está disponible."
+    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Ejecuta '${endColor}${turquoiseColor}./manager -d${endColor}${grayColor}' para instalar las dependencias necesarias.${endColor}\n"
+    return 1
+  fi
+
+  # Verificar si ya existe el entorno virtual
+  if [ ! -d ".venv" ]; then
+    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Creando entorno virtual .venv...${endColor}"
+    sleep 1
+    python3 -m venv .venv
+    echo -e "\n${greenColor}[+]${endColor} ${grayColor}Entorno virtual creado.${endColor}\n"
+  else
+    echo -e "\n${greenColor}[+]${endColor} ${grayColor}El entorno virtual .venv ya existe.${endColor}\n"
+  fi
 }
 
 
@@ -91,9 +114,10 @@ install_dependencies() {
 declare -i parameter_counter=0
 
 # Parametros del script
-while getopts "dh" arg; do
+while getopts "dhv" arg; do
   case $arg in
     d) let parameter_counter+=1;; # Instalar dependencias
+    v) let parameter_counter+=2;; # Crear entorno virtual
     h) ;; # Panel de ayuda
   esac
 done # Cierre del bucle
@@ -102,6 +126,8 @@ done # Cierre del bucle
 # Seleccion de funcion de acuerdo al parametro elegido
 if [ $parameter_counter -eq 1 ]; then
   install_dependencies
+elif [ $parameter_counter -eq 2 ]; then
+  setup_virtual_env
 else
   help_panel
 fi # Cierre del condicional
