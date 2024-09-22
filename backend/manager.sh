@@ -81,6 +81,7 @@ install_dependencies() {
 
     install_package "build-essential"
     install_package "python3-dev"
+    install_package "python3-pip"
     install_package "libmysqlclient-dev"
     install_package "mysql-server"
 }
