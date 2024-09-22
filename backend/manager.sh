@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# @author: rn0x7f / Renato García Morán
 # Colors
 greenColor="\e[0;32m\033[1m"
 redColor="\e[0;31m\033[1m"
