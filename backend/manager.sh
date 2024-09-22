@@ -29,12 +29,12 @@ check_sudo() {
   ATTEMPTS=0
   MAX_ATTEMPTS=1
   while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
-      if eval "$command"; then
-          tput civis
-          return 0
-      else
-          ATTEMPTS=$((ATTEMPTS + 1))
-      fi
+    if eval "$command"; then
+      tput civis
+      return 0
+    else
+      ATTEMPTS=$((ATTEMPTS + 1))
+    fi
   done
 
 
@@ -54,8 +54,8 @@ function help_panel(){
 
 # Verifica si un paquete está instalado
 check_package() {
-    local package="$1"
-    dpkg -l | grep -q "$package"
+  local package="$1"
+  dpkg -l | grep -q "$package"
 }
 
 
@@ -81,7 +81,7 @@ install_dependencies() {
   
   # Si falla la autenticación de contraseña no instala dependencias
   if ! check_sudo "sudo apt-get update &>/dev/null"; then
-          return 1
+    return 1
   fi
 
   install_package "build-essential"
