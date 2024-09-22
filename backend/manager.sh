@@ -12,7 +12,8 @@ endColor="\033[0m\e[0m"
 
 #ctrl_c
 function ctrl_c(){
-  echo -e "\n\n${redColor}[!] Saliendo...${endColor}\n"
+  echo -e "\n\n${redColor}[!] Abortando...${endColor}\n"
+  sleep 1
   tput cnorm && exit 1
 }
 
@@ -137,6 +138,7 @@ while getopts "dhv" arg; do
 done # Cierre del bucle
 
 
+tput civis # Ocultar cursor
 # Seleccion de funcion de acuerdo al parametro elegido
 if [ $parameter_counter -eq 1 ]; then
   install_dependencies
@@ -145,3 +147,4 @@ elif [ $parameter_counter -eq 2 ]; then
 else
   help_panel
 fi # Cierre del condicional
+tput cnorm # Mostrar cursor
