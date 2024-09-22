@@ -24,20 +24,23 @@ trap ctrl_c INT
 # Maneja errores de sudo
 # Si se equivoca 3 veces en la contraseña regresa false
 check_sudo() {
-    local command="$1"
-    ATTEMPTS=0
-    MAX_ATTEMPTS=1
-    while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
-        if eval "$command"; then
-            return 0
-        else
-            ATTEMPTS=$((ATTEMPTS + 1))
-        fi
-    done
+  tput cnorm
+  local command="$1"
+  ATTEMPTS=0
+  MAX_ATTEMPTS=1
+  while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
+      if eval "$command"; then
+          tput civis
+          return 0
+      else
+          ATTEMPTS=$((ATTEMPTS + 1))
+      fi
+  done
 
-    echo -e "\n${redColor}[x]${endColor} ${yellowColor}Fallos en la verificación de la contraseña.${endColor}\n"
-    
-    return 1
+
+  echo -e "\n${redColor}[x]${endColor} ${yellowColor}Fallos en la verificación de la contraseña.${endColor}\n"
+  
+  return 1
 }
 
 
@@ -58,35 +61,35 @@ check_package() {
 
 # Instala un paquete si no está instalado
 install_package() {
-    local package="$1"
-    if ! check_package "$package"; then
-        echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Instalando $package...${endColor}\n"
-        sudo apt-get install -y $package &> /dev/null
-        echo -e "${greenColor}[+]${endColor} ${grayColor}$package Instalado con exito.${endColor}\n"
-        sleep 1
+  local package="$1"
+  if ! check_package "$package"; then
+    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Instalando $package...${endColor}\n"
+    sudo apt-get install -y $package &> /dev/null
+    echo -e "${greenColor}[+]${endColor} ${grayColor}$package Instalado con exito.${endColor}\n"
+    sleep 1
 
-    else
-        echo -e "${greenColor}[+]${endColor} ${grayColor}$package ya está instalado.${endColor}\n"
-        sleep 1
-    fi
+  else
+    echo -e "${greenColor}[+]${endColor} ${grayColor}$package ya está instalado.${endColor}\n"
+    sleep 1
+  fi
 }
 
 
 # Verifica e instala las dependencias del sistema
 install_dependencies() {
-    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Verificando e instalando dependencias del sistema...${endColor}\n"
-    
-    # Si falla la autenticación de contraseña no instala dependencias
-    if ! check_sudo "sudo apt-get update &>/dev/null"; then
-            return 1
-    fi
+  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Verificando e instalando dependencias del sistema...${endColor}\n"
+  
+  # Si falla la autenticación de contraseña no instala dependencias
+  if ! check_sudo "sudo apt-get update &>/dev/null"; then
+          return 1
+  fi
 
-    install_package "build-essential"
-    install_package "python3-dev"
-    install_package "python3-venv"
-    install_package "python3-pip"
-    install_package "libmysqlclient-dev"
-    install_package "mysql-server"
+  install_package "build-essential"
+  install_package "python3-dev"
+  install_package "python3-venv"
+  install_package "python3-pip"
+  install_package "libmysqlclient-dev"
+  install_package "mysql-server"
 }
 
 
