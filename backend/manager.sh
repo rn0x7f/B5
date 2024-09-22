@@ -48,7 +48,8 @@ function help_panel(){
   echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Uso:${endColor}"
   echo -e "\t${purpleColor}d)${endColor} ${grayColor}Descargar dependencias del sistema.${endColor}"
   echo -e "\t${purpleColor}v)${endColor} ${grayColor}Crear entorno virtual.${endColor}"
-  echo -e "\t${purpleColor}m)${endColor} ${grayColor}Registrar un usuario de MySQL.${endColor}"
+  echo -e "\t${purpleColor}u)${endColor} ${grayColor}Registrar un usuario de MySQL.${endColor}"
+  echo -e "\t${purpleColor}c)${endColor} ${grayColor}Configurar la base de datos.${endColor}"
   echo -e "\t${purpleColor}h)${endColor} ${grayColor}Mostrar este panel de ayuda.${endColor}\n"
 }
 
@@ -196,15 +197,123 @@ function mysql_account(){
 }
 
 
+# Configurar la base de datos
+function database_config(){
+  # Verifica si el archivo .env existe y contiene las credenciales de MySQL
+  if [ -f ".env" ]; then
+    source .env
+    if [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASSWORD" ]; then
+      echo -e "\n${redColor}[!]${endColor} ${yellowColor}No se han encontrado las credenciales de MySQL en el archivo .env.${endColor}\n"
+      echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, ejecuta ${turquoiseColor}./manager.sh -u${endColor} para registrar un usuario MySQL.${endColor}\n"
+      return 1
+    fi
+  else
+    echo -e "\n${redColor}[!]${endColor} ${yellowColor}No se ha encontrado el archivo .env.${endColor}\n"
+    echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, ejecuta ${turquoiseColor}./manager.sh -u${endColor} ${yellowColor}para registrar un usuario MySQL y crear .env.${endColor}\n"
+    return 1
+  fi
+
+  # Verifica si el usuario y la clave son correctos
+  if ! mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SELECT 1" &>/dev/null; then
+    echo -e "\n${redColor}[!]${endColor} ${yellowColor}Las credenciales de MySQL son incorrectas.${endColor}\n"
+    echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, ejecuta ${turquoiseColor}./manager.sh -u${endColor} ${yellowColor}para registrar un usuario MySQL.${endColor}\n"
+    return 1
+  fi
+
+  # Verifica si el archivo database.sql existe
+  if [ ! -f "database.sql" ]; then
+    echo -e "\n${redColor}[!]${endColor} ${yellowColor}No se ha encontrado el archivo database.sql.${endColor}\n"
+    echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, asegúrate de que el archivo database.sql esté en la carpeta actual.${endColor}\n"
+    sleep 1
+    return 1
+  fi
+  # Lee el nombre de la base de datos desde database.sql
+  DB_NAME=$(grep -oP '(?<=CREATE DATABASE IF NOT EXISTS )\w+' database.sql)
+  # Verifica que se encuentre el nombre de la base de datos
+  if [ -z "$DB_NAME" ]; then
+    echo -e "\n${redColor}[!]${endColor} ${yellowColor}No se ha encontrado el nombre de la base de datos en database.sql.${endColor}\n"
+    echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, asegúrate de que el archivo database.sql contenga el nombre de la base de datos.${endColor}\n"
+    # Muestra ejemplo de donde debe ir el nombre de la base de datos
+    echo -e "${yellowColor}[+]${endColor} ${grayColor}Ejemplo:${endColor}"
+    echo -e "\t${turquoiseColor}CREATE DATABASE IF NOT EXISTS nombre_de_la_base_de_datos;${endColor}\n"
+    return 1
+  fi
+
+  # Guarda o actualiza el nombre de la base de datos en el archivo .env
+  if grep -q "^DB_NAME=" .env; then
+    # Si ya existe, la actualiza
+    sed -i "s/^DB_NAME=.*/DB_NAME=$DB_NAME/" .env
+    echo -e "\n${greenColor}[+]${endColor} ${grayColor}Nombre de la base de datos actualizado en .env.${endColor}\n"
+  else
+    # Si no existe, la agrega
+    echo "DB_NAME=$DB_NAME" >> .env
+    echo -e "\n${greenColor}[+]${endColor} ${grayColor}Nombre de la base de datos guardado en .env.${endColor}\n"
+  fi
+
+  # Verifica si ya existe la base de datos y pregunta si se desea eliminar
+  if mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SHOW DATABASES;" 2>/dev/null | grep -q "$DB_NAME"; then
+    echo -e "${redColor}[!]${endColor} ${yellowColor}La base de datos '$DB_NAME' ya existe.${endColor}\n"
+    echo -e "${redColor}[!]${endColor} ${yellowColor}¿Deseas eliminarla?${endColor} ${turquoiseColor}[s/n]${endColor}"
+    read -p "" delete_db
+    if [ "$delete_db" == "n" ]; then
+      return 1
+    else
+      mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS $DB_NAME;" 2>/dev/null
+      echo -e "\n${redColor}[+] Base de datos $DB_NAME eliminada.${endColor}"
+    fi
+  fi
+  
+  # Crea la base de datos y las tablas
+  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Creando base de datos y tablas...${endColor}"
+  sleep 1
+
+  # Ejecuta el script SQL
+  mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" < database.sql &>/dev/null
+
+  echo -e "\n${greenColor}[+] Base de datos y tablas creadas exitosamente.${endColor}"
+
+  # Verifica en que puerto corre mysql y lo guarda en .env
+  MYSQL_PORT=$(mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "SHOW VARIABLES LIKE 'port';" 2>/dev/null | awk '{print $2}' | tail -n 1)
+
+  # Guarda o actualiza el puerto en el archivo .env
+  if grep -q "^MYSQL_PORT=" .env; then
+    # Si ya existe, la actualiza
+    sed -i "s/^MYSQL_PORT=.*/MYSQL_PORT=$MYSQL_PORT/" .env
+    echo -e "\n${greenColor}[+]${endColor} ${grayColor}Puerto de MySQL actualizado en .env.${endColor}\n"
+    sleep 1
+  else
+    # Si no existe, la agrega
+    echo "MYSQL_PORT=$MYSQL_PORT" >> .env
+    echo -e "\n${greenColor}[+]${endColor} ${grayColor}Puerto de MySQL guardado en .env.${endColor}\n"
+    sleep 1
+  fi
+
+  # Verifica en que dirección IP corre mysql y lo guarda en .env
+  MYSQL_IP=$(mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "SHOW VARIABLES LIKE 'bind_address';" 2>/dev/null | awk '{print $2}' | tail -n 1)
+  if grep -q "^MYSQL_IP=" .env; then
+    # Si ya existe, la actualiza
+    sed -i "s/^MYSQL_IP=.*/MYSQL_IP=$MYSQL_IP/" .env
+    echo -e "${greenColor}[+]${endColor} ${grayColor}Puerto de MySQL actualizado en .env.${endColor}\n"
+    sleep 1
+  else
+    # Si no existe, la agrega
+    echo "MYSQL_PORT=$MYSQL_IP" >> .env
+    echo -e "${greenColor}[+]${endColor} ${grayColor}Puerto de MySQL guardado en .env.${endColor}\n"
+    sleep 1
+  fi
+
+}
+
 # Indicadores
 declare -i parameter_counter=0
 
 # Parametros del script
-while getopts "dvmh" arg; do
+while getopts "dvuch" arg; do
   case $arg in
     d) let parameter_counter+=1;; # Instalar dependencias
     v) let parameter_counter+=2;; # Crear entorno virtual
-    m) let parameter_counter+=4;; # Crear usuario MySQL
+    u) let parameter_counter+=3;; # Crear usuario MySQL
+    c) let parameter_counter+=4;; # Configurar base de datos
     h) ;; # Panel de ayuda
   esac
 done # Cierre del bucle
@@ -216,8 +325,10 @@ if [ $parameter_counter -eq 1 ]; then
   install_dependencies
 elif [ $parameter_counter -eq 2 ]; then
   setup_virtual_env
-elif [ $parameter_counter -eq 4 ]; then
+elif [ $parameter_counter -eq 3 ]; then
   mysql_account
+elif [ $parameter_counter -eq 4 ]; then
+  database_config
 else
   help_panel
 fi # Cierre del condicional
