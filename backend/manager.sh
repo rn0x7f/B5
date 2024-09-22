@@ -141,6 +141,9 @@ function mysql_account(){
   fi
   sleep 1
   echo -e "\n${greenColor}[+]${endColor} ${grayColor}MySQL Iniciado correctamente.${endColor}\n"
+  sleep 1
+  # Mensaje enseñando como detener MySQL
+  echo -e "${yellowColor}[+]${endColor} ${blueColor}Para detener MySQL, ejecuta:${endColor} ${turquoiseColor}sudo service mysql stop${endColor}\n"
 
   # Solicitar credenciales al usuario
   echo -e "${redColor}[!]${endColor} ${grayColor}Introduce el nombre de usuario MySQL:${endColor}"
