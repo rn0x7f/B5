@@ -27,6 +27,13 @@ function helpPanel(){
 }
 
 
+# Verifica si un paquete está instalado
+check_package() {
+    local package="$1"
+    dpkg -l | grep -q "$package"
+}
+
+
 # Indicadores
 declare -i parameter_counter=0
 
