@@ -48,6 +48,8 @@ function help_panel(){
   echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Uso:${endColor}"
   echo -e "\t${purpleColor}d)${endColor} ${grayColor}Descargar dependencias del sistema.${endColor}"
   echo -e "\t${purpleColor}v)${endColor} ${grayColor}Crear entorno virtual.${endColor}"
+  echo -e "\t${purpleColor}m)${endColor} ${grayColor}Registrar un usuario de MySQL.${endColor}"
+    echo -e "\t\t${turquoiseColor}./manager.sh -m \"usuario contraseña\"${endColor}"
   echo -e "\t${purpleColor}h)${endColor} ${grayColor}Mostrar este panel de ayuda.${endColor}\n"
 }
 
@@ -125,8 +127,32 @@ function setup_virtual_env(){
     fi
   )
 
-  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Para activar el entorno virtual, ejecuta:${endColor} ${turquoiseColor}source .venv/bin/activate${endColor}\n"
-  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Para desactivar el entorno virtual, ejecuta:${endColor} ${turquoiseColor}deactivate${endColor}\n"
+  echo -e "${yellowColor}[+]${endColor} ${blueColor}Para activar el entorno virtual, ejecuta:${endColor} ${turquoiseColor}source .venv/bin/activate${endColor}\n"
+  echo -e "${yellowColor}[+]${endColor} ${blueColor}Para desactivar el entorno virtual, ejecuta:${endColor} ${turquoiseColor}deactivate${endColor}\n"
+}
+
+
+# Crear usuario y base de datos en MySQL
+function mysql_account(){
+  name=$1
+  password=$2
+  
+  # Valida que el usuario y contraseña no estén vacíos
+  if [ -z "$name" ] || [ -z "$password" ]; then
+    echo -e "\n${redColor}[!]${endColor} ${yellowColor}Faltan argumentos.${endColor}"
+    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Uso:${endColor}"
+    echo -e "\t${turquoiseColor}./manager.sh -m \"usuario contraseña\"${endColor}\n"
+    return 1
+  fi
+
+  # Confirma que el usuario y contraseña elegidos sean correctos
+  echo -e "\n${yellowColor}[?]${endColor} ${grayColor}Las credenciales son correctas?${endColor}"
+  echo -e "\t${turquoiseColor}User:${endColor} ${name}"
+  echo -e "\t${turquoiseColor}Pass:${endColor} ${password}"
+  echo -e "\n${redColor}[!]${endColor} ${yellowColor}Presiona${endColor} ${turquoiseColor}Enter${endColor} ${yellowColor}para continuar o${endColor} ${turquoiseColor}Ctrl + C${endColor} ${yellowColor}para cancelar.${endColor}"
+  read -p "" -r
+  
+  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Iniciando MySQL...${endColor}"
 }
 
 
@@ -134,10 +160,13 @@ function setup_virtual_env(){
 declare -i parameter_counter=0
 
 # Parametros del script
-while getopts "dvh" arg; do
+while getopts "dvm:h" arg; do
   case $arg in
     d) let parameter_counter+=1;; # Instalar dependencias
     v) let parameter_counter+=2;; # Crear entorno virtual
+    m) name=$(echo "$OPTARG" | awk '{print $1}');      # Extraer el primer argumento (usuario)
+       password=$(echo "$OPTARG" | awk '{print $2}');  # Extraer el segundo argumento (contraseña)
+       let parameter_counter+=4;;
     h) ;; # Panel de ayuda
   esac
 done # Cierre del bucle
@@ -149,6 +178,8 @@ if [ $parameter_counter -eq 1 ]; then
   install_dependencies
 elif [ $parameter_counter -eq 2 ]; then
   setup_virtual_env
+elif [ $parameter_counter -eq 4 ]; then
+  mysql_account $name $password
 else
   help_panel
 fi # Cierre del condicional
