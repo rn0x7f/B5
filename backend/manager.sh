@@ -12,7 +12,7 @@ endColor="\033[0m\e[0m"
 
 #ctrl_c
 function ctrl_c(){
-  echo -e "\n\n${redColour}[!] Saliendo...${endColour}\n"
+  echo -e "\n\n${redColor}[!] Saliendo...${endColor}\n"
   tput cnorm && exit 1
 }
 
@@ -22,6 +22,8 @@ trap ctrl_c INT
 
 function helpPanel(){
   echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Uso:${endColor}"
+  echo -e "\t${purpleColor}d)${endColor} ${grayColor}Descargar dependencias.${endColor}"
+  echo -e "\t${purpleColor}h)${endColor} ${grayColor}Mostrar este panel de ayuda.${endColor}\n"
 }
 
 
