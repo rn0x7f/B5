@@ -20,7 +20,27 @@ function ctrl_c(){
 trap ctrl_c INT
 
 
-function helpPanel(){
+# Maneja errores de sudo
+# Si se equivoca 3 veces en la contraseña regresa false
+check_sudo() {
+    local command="$1"
+    ATTEMPTS=0
+    MAX_ATTEMPTS=1
+    while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
+        if eval "$command"; then
+            return 0
+        else
+            ATTEMPTS=$((ATTEMPTS + 1))
+        fi
+    done
+
+    echo -e "\n${redColor}[x]${endColor} ${yellowColor}Fallos en la verificación de la contraseña.${endColor}\n"
+    
+    return 1
+}
+
+
+function help_panel(){
   echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Uso:${endColor}"
   echo -e "\t${purpleColor}d)${endColor} ${grayColor}Descargar dependencias del sistema.${endColor}"
   echo -e "\t${purpleColor}h)${endColor} ${grayColor}Mostrar este panel de ayuda.${endColor}\n"
@@ -38,15 +58,31 @@ check_package() {
 install_package() {
     local package="$1"
     if ! check_package "$package"; then
-        echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Instalando $package...${endColor}"
+        echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Instalando $package...${endColor}\n"
         sudo apt-get install -y $package &> /dev/null
-        echo -e "\n${greenColor}[+]${endColor} ${grayColor}$package Instalado con exito.${endColor}"
+        echo -e "${greenColor}[+]${endColor} ${grayColor}$package Instalado con exito.${endColor}\n"
         sleep 1
 
     else
-        echo -e "\n${greenColor}[+]${endColor} ${grayColor}$package ya está instalado.${endColor}"
+        echo -e "${greenColor}[+]${endColor} ${grayColor}$package ya está instalado.${endColor}\n"
         sleep 1
     fi
+}
+
+
+# Verifica e instala las dependencias del sistema
+install_dependencies() {
+    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Verificando e instalando dependencias del sistema...${endColor}\n"
+    
+    # Si falla la autenticación de contraseña no instala dependencias
+    if ! check_sudo "sudo apt-get update &>/dev/null"; then
+            return 1
+    fi
+
+    install_package "build-essential"
+    install_package "python3-dev"
+    install_package "libmysqlclient-dev"
+    install_package "mysql-server"
 }
 
 
@@ -64,7 +100,7 @@ done # Cierre del bucle
 
 # Seleccion de funcion de acuerdo al parametro elegido
 if [ $parameter_counter -eq 1 ]; then
-  installDependencies
+  install_dependencies
 else
-  helpPanel
+  help_panel
 fi # Cierre del condicional
