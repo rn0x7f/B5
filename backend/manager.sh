@@ -124,7 +124,9 @@ function setup_virtual_env(){
       echo -e "${redColor}[!]${endColor} ${yellowColor}Archivo requirements.txt no encontrado. No se han instalado las dependencias.${endColor}\n"
     fi
   )
- 
+
+  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Para activar el entorno virtual, ejecuta:${endColor} ${turquoiseColor}source .venv/bin/activate${endColor}\n"
+  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Para desactivar el entorno virtual, ejecuta:${endColor} ${turquoiseColor}deactivate${endColor}\n"
 }
 
 
@@ -132,7 +134,7 @@ function setup_virtual_env(){
 declare -i parameter_counter=0
 
 # Parametros del script
-while getopts "dhv" arg; do
+while getopts "dvth" arg; do
   case $arg in
     d) let parameter_counter+=1;; # Instalar dependencias
     v) let parameter_counter+=2;; # Crear entorno virtual
