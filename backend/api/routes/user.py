@@ -1,17 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException
-from config.db import conn
 from models.user import users
 from schemas.user import User
-from cryptography.fernet import Fernet
 from sqlalchemy.orm import Session
 from typing import List
 from sqlalchemy.exc import IntegrityError
-from config.db import get_db, ENCRYPTION_KEY
-
-
-f = Fernet(ENCRYPTION_KEY) # Crea un objeto Fernet con la clave generada
+from config.db import get_db
+import bcrypt
 
 user = APIRouter()
+
+# Función para generar el hash de la contraseña usando bcrypt
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
 
 # Obtener todos los usuarios
 @user.get("/users", response_model=List[User])
@@ -29,7 +30,7 @@ async def create_user(user_data: User, db: Session = Depends(get_db)):
         nombre=user_data.nombre,
         apellido=user_data.apellido,
         telefono=user_data.telefono,
-        contrasena=f.encrypt(user_data.contrasena.encode()).decode()
+        contrasena=hash_password(user_data.contrasena)
     )
     
     try:
