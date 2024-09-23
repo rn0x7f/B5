@@ -9,3 +9,7 @@ async def signin():
 @auth.post("/signup")
 async def signup():
     return {"message": "Sign up"}
+
+@auth.post("/signout")
+async def signout():
+    return {"message": "Sign out"}
