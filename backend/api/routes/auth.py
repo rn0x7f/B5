@@ -6,7 +6,7 @@ from typing import List
 from sqlalchemy.exc import IntegrityError
 from config.db import get_db, SECRET_KEY
 import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import bcrypt
 
 auth = APIRouter()
@@ -20,10 +20,12 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 # Función para crear un token JWT
-def create_token(user_id: int) -> str:
-    expiration = datetime.utcnow() + timedelta(hours=1)
-    token = jwt.encode({"user_id": user_id, "exp": expiration}, SECRET_KEY, algorithm="HS256")
+def create_token(user_id: str) -> str:
+    # Usa timezone.utc para obtener la fecha actual en UTC
+    expiration = datetime.now(timezone.utc) + timedelta(hours=1)  # Asegúrate de usar timezone
+    token = jwt.encode({"user_id": user_id, "exp": expiration.timestamp()}, SECRET_KEY, algorithm="HS256")
     return token
+
 
 @auth.post("/signin")
 async def signin(email: str, password: str, db: Session = Depends(get_db)):
@@ -35,9 +37,9 @@ async def signin(email: str, password: str, db: Session = Depends(get_db)):
 
     # Verificar la contraseña
     if not bcrypt.checkpw(password.encode('utf-8'), user.contrasena.encode('utf-8')):
-        raise HTTPException(status_code=401, detail="Inicio de sesion no valido.")
+        raise HTTPException(status_code=401, detail="Inicio de sesión no válido.")
 
-    # Generar un token JWT
+    # Generar un token JWT usando el correo electrónico
     token = create_token(user.correo_electronico)  # Usa el correo electrónico
     return {"token": token}
 
