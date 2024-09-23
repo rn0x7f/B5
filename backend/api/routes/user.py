@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-#from config.db import conn
+from config.db import conn
 from models.user import users
 from schemas.user import User
 from cryptography.fernet import Fernet
@@ -21,6 +21,7 @@ async def get_users(db: Session = Depends(get_db)):
     result = query.all()
     return result
 
+# Crear un usuario
 @user.post("/users", response_model=User)
 async def create_user(user_data: User, db: Session = Depends(get_db)):
     # Crear un diccionario con los datos del usuario a insertar
@@ -29,7 +30,7 @@ async def create_user(user_data: User, db: Session = Depends(get_db)):
         nombre=user_data.nombre,
         apellido=user_data.apellido,
         telefono=user_data.telefono,
-        contrasena=user_data.contrasena  # Asegúrate de encriptar la contraseña en producción
+        contrasena=f.encrypt(user_data.contrasena.encode()).decode()
     )
     
     try:
@@ -43,20 +44,26 @@ async def create_user(user_data: User, db: Session = Depends(get_db)):
     # Devolver los datos del usuario creado
     return user_data
 
+# Obtener un usuario por su correo electrónico
+@user.get("/users/{email}", response_model=User)
+async def get_user(email: str, db: Session = Depends(get_db)):
+    query = db.query(users).filter(users.c.correo_electronico == email)
+    result = query.first()
+    if result is None:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return result
 
-# Obtener todos los usuarios
-# @user.get("/users")
-# def get_users():
-#   return conn.execute(users.select()).fetchall() # Hace una consulta de todos los usuarios en la tabla
-
-# @user.post("/users")
-# def create_user(user: User):
-#   new_user = {
-#               "correo_electronico": user.correo_electronico,
-#               "nombre": user.nombre,
-#               "apellido": user.apellido,
-#               "telefono": user.telefono,
-#             }
-#   new_user["contrasena"] = f.encrypt(user.contrasena.encode()).decode() # Encripta la contraseña
-#   result = conn.execute(users.insert().values(new_user)) # Inserta el nuevo usuario en la tabla
-#   return conn.execute(users.select().where(users.c.correo_electronico == result.lastrowid)).first() # Devuelve el usuario creado
+# Actualizar un usuario por su correo electrónico
+@user.put("/users/{email}", response_model=User)
+async def update_user(email: str, user_data: User, db: Session = Depends(get_db)):
+    # Crear un diccionario con los datos del usuario a actualizar
+    updated_user = {
+        "nombre": user_data.nombre,
+        "apellido": user_data.apellido,
+        "telefono": user_data.telefono,
+        "contrasena": f.encrypt(user_data.contrasena.encode()).decode()
+    }
+    
+    # Realizar la actualización en la base de datos
+    db.query(users).filter(users.c.correo_electronico == email).update(updated_user)
+    db.commit()
