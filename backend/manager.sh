@@ -323,54 +323,52 @@ function database_config(){
 
 
 function setup_key(){
-  # Verifica si el usuario esta corriendo el script en un entorno virtual
+  # Verifica si el usuario está corriendo el script en un entorno virtual
   if [ -z "$VIRTUAL_ENV" ]; then
     echo -e "\n${redColor}[!]${endColor} ${yellowColor}No estás en un entorno virtual.${endColor}\n"
     echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, ejecuta ${turquoiseColor}source .venv/bin/activate${endColor} ${yellowColor}para activar el entorno virtual.${endColor}\n"
     return 1
   fi
 
-  # Verifica si se tiene el módulo cryptography, si no, pide correr el script -v
-  if ! python3 -c "import cryptography" &>/dev/null; then
-    echo -e "\n${redColor}[!]${endColor} ${yellowColor}El módulo 'cryptography' no está disponible.${endColor}\n"
-    echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, ejecuta ${turquoiseColor}./manager.sh -v${endColor} ${yellowColor}para instalar las dependencias necesarias.${endColor}\n"
+  # Verifica si se tiene el módulo secrets, que está disponible en Python 3 de manera predeterminada
+  if ! python3 -c "import secrets" &>/dev/null; then
+    echo -e "\n${redColor}[!]${endColor} ${yellowColor}El módulo 'secrets' no está disponible.${endColor}\n"
+    echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, asegúrate de tener Python 3 instalado.${endColor}\n"
     return 1
   fi
 
   if [ -f ".env" ]; then
     source .env
-    if [ -z "$ENCRYPTION_KEY" ]; then
-      echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Generando key de encriptación...${endColor}"
+    if [ -z "$SECRET_KEY" ]; then
+      echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Generando SECRET_KEY...${endColor}"
       sleep 1
-      ENCRYPTION_KEY=$(python3 -c "from cryptography.fernet import Fernet; key = Fernet.generate_key(); print(key.decode())")
-      echo -e "\n${greenColor}[+]${endColor} ${grayColor}Key generada.${endColor}"
+      SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
+      echo -e "\n${greenColor}[+]${endColor} ${grayColor}SECRET_KEY generada.${endColor}"
       sleep 1
-      echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Guardando key en .env...${endColor}"
-      echo "ENCRYPTION_KEY=\"$ENCRYPTION_KEY\"" >> .env
-      echo -e "\n${greenColor}[+] Key guardada en .env.${endColor}\n"
+      echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Guardando SECRET_KEY en .env...${endColor}"
+      echo "SECRET_KEY=\"$SECRET_KEY\"" >> .env
+      echo -e "\n${greenColor}[+] SECRET_KEY guardada en .env.${endColor}\n"
       sleep 1
     else
-      echo -e "\n${redColor}[!]${endColor} ${yellowColor}La key de encriptación ya existe en el archivo .env.${endColor}\n"
-      echo -e "${redColor}[!]${endColor} ${yellowColor}Si deseas generar una nueva key, elimina la key actual del archivo .env.${endColor}\n"
-      # ejemplo de que borrar
-      echo -e "\t${redColor}Borrar:${endColor} ${grayColor}ENCRYPTION_KEY=\"abcdef\"${endColor}\n"
-      echo -e "${redColor}[!]${endColor} ${redColor}Si generas una nueva key, no podrás desencriptar las contraseñas actuales en la base de datos.${endColor}\n"
+      echo -e "\n${redColor}[!]${endColor} ${yellowColor}La SECRET_KEY ya existe en el archivo .env.${endColor}\n"
+      echo -e "${redColor}[!]${endColor} ${yellowColor}Si deseas generar una nueva SECRET_KEY, elimina la clave actual del archivo .env.${endColor}\n"
+      echo -e "\t${redColor}Borrar:${endColor} ${grayColor}SECRET_KEY=\"abcdef\"${endColor}\n"
+      echo -e "${redColor}[!]${endColor} ${redColor}Si generas una nueva SECRET_KEY, los tokens generados previamente dejarán de ser válidos.${endColor}\n"
       return 1
     fi
   else
-    # Si no existe el archivo .env lo crea
-    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Generando key de encriptación...${endColor}"
+    # Si no existe el archivo .env, lo crea
+    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Generando SECRET_KEY...${endColor}"
     sleep 1
-    ENCRYPTION_KEY=$(python3 -c "from cryptography.fernet import Fernet; key = Fernet.generate_key(); print(key.decode())")
-    echo -e "\n${greenColor}[+]${endColor} ${grayColor}Key generada.${endColor}"
+    SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
+    echo -e "\n${greenColor}[+]${endColor} ${grayColor}SECRET_KEY generada.${endColor}"
     sleep 1
-    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Guardando key en .env...${endColor}"
-    echo "ENCRYPTION_KEY=\"$ENCRYPTION_KEY\"" >> .env
-    echo -e "\n${greenColor}[+] Key guardada en .env.${endColor}\n"
+    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Guardando SECRET_KEY en .env...${endColor}"
+    echo "SECRET_KEY=\"$SECRET_KEY\"" >> .env
+    echo -e "\n${greenColor}[+] SECRET_KEY guardada en .env.${endColor}\n"
     sleep 1
     return 1
   fi
-
 }
 
 
