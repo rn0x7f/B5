@@ -2,8 +2,10 @@ from sqlalchemy import create_engine, MetaData
 from dotenv import load_dotenv
 import os
 
+# Dos niveles hacia arriba para llegar al .env
 # Cargar las variables de entorno desde el archivo .env en la raíz del proyecto
-load_dotenv('../../.env')  # Dos niveles hacia arriba para llegar al .env
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
+load_dotenv(dotenv_path)
 
 # Obtener las variables de entorno
 MYSQL_USER = os.getenv("MYSQL_USER")
