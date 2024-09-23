@@ -2,6 +2,8 @@ package com.todasbrillamos.view.componentes
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -15,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.exyte.animatednavbar.AnimatedNavigationBar
 import com.exyte.animatednavbar.animation.balltrajectory.Parabolic
+import com.exyte.animatednavbar.animation.balltrajectory.Straight
 import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.todasbrillamos.R
@@ -31,10 +34,11 @@ fun NavBar() {
     var selectedIndex by remember { mutableStateOf(0) }
 
     AnimatedNavigationBar(
-        modifier = Modifier.height(49.dp),
+        modifier = Modifier.height(68.dp)
+            .padding(all = 12.dp),
         selectedIndex = selectedIndex,
-        cornerRadius = shapeCornerRadius(cornerRadius = 43.dp),
-        ballAnimation = Parabolic(tween(300)),
+        cornerRadius = shapeCornerRadius(cornerRadius = 28.dp),
+        ballAnimation = Straight(tween(300)),
         indentAnimation = Height(tween(300)),
         barColor = colorResource(id = R.color.rosaTB),
         ballColor = colorResource(id = R.color.rosaTB)
@@ -47,6 +51,7 @@ fun NavBar() {
                 }
             ) {
                 Icon(
+                    modifier = Modifier.size(30.dp),
                     painter = painterResource(id = item),
                     contentDescription = null
                 )

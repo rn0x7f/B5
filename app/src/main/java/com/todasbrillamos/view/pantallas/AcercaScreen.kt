@@ -59,7 +59,7 @@ fun AcercaScreen() {
 
     Scaffold(
         bottomBar = { NavBar()}
-    ) { innerPadding ->
+    )  { innerPadding ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
