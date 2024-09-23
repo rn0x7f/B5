@@ -50,6 +50,7 @@ function help_panel(){
   echo -e "\t${purpleColor}v)${endColor} ${grayColor}Crear entorno virtual.${endColor}"
   echo -e "\t${purpleColor}u)${endColor} ${grayColor}Registrar un usuario de MySQL.${endColor}"
   echo -e "\t${purpleColor}c)${endColor} ${grayColor}Configurar la base de datos.${endColor}"
+  echo -e "\t${purpleColor}k)${endColor} ${grayColor}Crear key de encriptación.${endColor}"
   echo -e "\t${purpleColor}h)${endColor} ${grayColor}Mostrar este panel de ayuda.${endColor}\n"
 }
 
@@ -320,16 +321,70 @@ function database_config(){
 
 }
 
+
+function setup_key(){
+  # Verifica si el usuario esta corriendo el script en un entorno virtual
+  if [ -z "$VIRTUAL_ENV" ]; then
+    echo -e "\n${redColor}[!]${endColor} ${yellowColor}No estás en un entorno virtual.${endColor}\n"
+    echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, ejecuta ${turquoiseColor}source .venv/bin/activate${endColor} ${yellowColor}para activar el entorno virtual.${endColor}\n"
+    return 1
+  fi
+
+  # Verifica si se tiene el módulo cryptography, si no, pide correr el script -v
+  if ! python3 -c "import cryptography" &>/dev/null; then
+    echo -e "\n${redColor}[!]${endColor} ${yellowColor}El módulo 'cryptography' no está disponible.${endColor}\n"
+    echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, ejecuta ${turquoiseColor}./manager.sh -v${endColor} ${yellowColor}para instalar las dependencias necesarias.${endColor}\n"
+    return 1
+  fi
+
+  if [ -f ".env" ]; then
+    source .env
+    if [ -z "$ENCRYPTION_KEY" ]; then
+      echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Generando key de encriptación...${endColor}"
+      sleep 1
+      ENCRYPTION_KEY=$(python3 -c "from cryptography.fernet import Fernet; key = Fernet.generate_key(); print(key.decode())")
+      echo -e "\n${greenColor}[+]${endColor} ${grayColor}Key generada.${endColor}"
+      sleep 1
+      echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Guardando key en .env...${endColor}"
+      echo "ENCRYPTION_KEY=\"$ENCRYPTION_KEY\"" >> .env
+      echo -e "\n${greenColor}[+] Key guardada en .env.${endColor}\n"
+      sleep 1
+    else
+      echo -e "\n${redColor}[!]${endColor} ${yellowColor}La key de encriptación ya existe en el archivo .env.${endColor}\n"
+      echo -e "${redColor}[!]${endColor} ${yellowColor}Si deseas generar una nueva key, elimina la key actual del archivo .env.${endColor}\n"
+      # ejemplo de que borrar
+      echo -e "\t${redColor}Borrar:${endColor} ${grayColor}ENCRYPTION_KEY=\"abcdef\"${endColor}\n"
+      echo -e "${redColor}[!]${endColor} ${redColor}Si generas una nueva key, no podrás desencriptar las contraseñas actuales en la base de datos.${endColor}\n"
+      return 1
+    fi
+  else
+    # Si no existe el archivo .env lo crea
+    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Generando key de encriptación...${endColor}"
+    sleep 1
+    ENCRYPTION_KEY=$(python3 -c "from cryptography.fernet import Fernet; key = Fernet.generate_key(); print(key.decode())")
+    echo -e "\n${greenColor}[+]${endColor} ${grayColor}Key generada.${endColor}"
+    sleep 1
+    echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Guardando key en .env...${endColor}"
+    echo "ENCRYPTION_KEY=\"$ENCRYPTION_KEY\"" >> .env
+    echo -e "\n${greenColor}[+] Key guardada en .env.${endColor}\n"
+    sleep 1
+    return 1
+  fi
+
+}
+
+
 # Indicadores
 declare -i parameter_counter=0
 
 # Parametros del script
-while getopts "dvuch" arg; do
+while getopts "dvuckh" arg; do
   case $arg in
     d) let parameter_counter+=1;; # Instalar dependencias
     v) let parameter_counter+=2;; # Crear entorno virtual
     u) let parameter_counter+=3;; # Crear usuario MySQL
     c) let parameter_counter+=4;; # Configurar base de datos
+    k) let parameter_counter+=5;; # Crear key de encriptación
     h) ;; # Panel de ayuda
   esac
 done # Cierre del bucle
@@ -345,6 +400,8 @@ elif [ $parameter_counter -eq 3 ]; then
   mysql_account
 elif [ $parameter_counter -eq 4 ]; then
   database_config
+elif [ $parameter_counter -eq 5 ]; then
+  setup_key
 else
   help_panel
 fi # Cierre del condicional
