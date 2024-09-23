@@ -39,6 +39,7 @@ import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.Espaciador
+import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.Pager
 import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
@@ -47,13 +48,6 @@ import com.todasbrillamos.view.componentes.TextoResaltadoMini
 @Preview
 @Composable
 fun AcercaScreen() {
-
-    val navigationItems = listOf(
-        R.drawable.home,    // Replace with your actual drawable resources
-        R.drawable.phone,
-        R.drawable.mail
-    )
-    var selectedIndex by remember { mutableStateOf(0) }
 
     // Define gradient
     val gradientColors = listOf(
@@ -64,31 +58,7 @@ fun AcercaScreen() {
     val uriHandler = LocalUriHandler.current
 
     Scaffold(
-        bottomBar = {
-            AnimatedNavigationBar(
-                modifier = Modifier.height(49.dp),
-                selectedIndex = selectedIndex,
-                cornerRadius = shapeCornerRadius(cornerRadius = 43.dp),
-                ballAnimation = Parabolic(tween(300)),
-                indentAnimation = Height(tween(300)),
-                barColor = colorResource(id = R.color.rosaTB),
-                ballColor = colorResource(id = R.color.rosaTB)
-            ) {
-                // Create navigation bar items without onItemSelected
-                navigationItems.forEachIndexed { index, item ->
-                    IconButton(
-                        onClick = {
-                            selectedIndex = index
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = item),
-                            contentDescription = null
-                        )
-                    }
-                }
-            }
-        }
+        bottomBar = { NavBar()}
     ) { innerPadding ->
         Surface(
             modifier = Modifier
