@@ -67,3 +67,11 @@ async def update_user(email: str, user_data: User, db: Session = Depends(get_db)
     # Realizar la actualización en la base de datos
     db.query(users).filter(users.c.correo_electronico == email).update(updated_user)
     db.commit()
+
+# Eliminar un usuario por su correo electrónico
+@user.delete("/users/{email}")
+async def delete_user(email: str, db: Session = Depends(get_db)):
+    # Realizar la eliminación en la base de datos
+    db.query(users).filter(users.c.correo_electronico == email).delete()
+    db.commit()
+    return {"message": "Usuario eliminado"}
