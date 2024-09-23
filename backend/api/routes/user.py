@@ -61,7 +61,7 @@ async def update_user(email: str, user_data: User, db: Session = Depends(get_db)
         "nombre": user_data.nombre,
         "apellido": user_data.apellido,
         "telefono": user_data.telefono,
-        "contrasena": f.encrypt(user_data.contrasena.encode()).decode()
+        "contrasena": hash_password(user_data.contrasena)
     }
     
     # Realizar la actualización en la base de datos
