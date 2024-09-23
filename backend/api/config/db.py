@@ -26,7 +26,7 @@ engine = create_engine(connection_string)
 
 meta = MetaData()
 
-# Conexion a la base de datos
+# Conexion a la base de datos con querys
 conn = engine.connect()
 
 
@@ -35,7 +35,7 @@ Base = declarative_base()
 # Crear un SessionLocal para manejar sesiones
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Función para obtener una sesión de base de datos
+# Función para obtener una sesión de base de datos asincrona con orm
 def get_db():
     db = SessionLocal()
     try:
