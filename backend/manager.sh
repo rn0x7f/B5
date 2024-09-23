@@ -266,14 +266,27 @@ function database_config(){
     fi
   fi
   
-  # Crea la base de datos y las tablas
-  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Creando base de datos y tablas...${endColor}"
+  # Crea la base de datos
+  echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Creando base de datos...${endColor}"
   sleep 1
 
-  # Ejecuta el script SQL
-  mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" < database.sql &>/dev/null
+  mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" &>/dev/null
 
-  echo -e "\n${greenColor}[+] Base de datos y tablas creadas exitosamente.${endColor}"
+  echo -e "\n${greenColor}[+]${endColor} ${grayColor}Base de datos $DB_NAME creada.${endColor}"
+  sleep 1
+
+  # Pregunta al usuario si desea ejecutar el script
+  echo -e "\n${redColor}[!]${endColor} ${yellowColor}¿Deseas ejecutar el script database.sql para crear las tablas?${endColor} ${turquoiseColor}[s/n]${endColor}"
+  read -p "" respuesta
+
+  if [[ "$respuesta" == "s" ]]; then
+      # Ejecuta el script para crear las tablas
+      mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" < database.sql &>/dev/null
+      echo -e "\n${greenColor}[+] Base de datos y tablas creadas exitosamente.${endColor}"
+  else
+      echo -e "\n${yellowColor}[-] No se han creado las tablas.${endColor}"
+  fi
+
 
   # Verifica en que puerto corre mysql y lo guarda en .env
   MYSQL_PORT=$(mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "SHOW VARIABLES LIKE 'port';" 2>/dev/null | awk '{print $2}' | tail -n 1)
