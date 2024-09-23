@@ -17,3 +17,8 @@ connection_string = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_IP}:{
 
 # Crear el motor de la base de datos
 engine = create_engine(connection_string)
+
+meta = MetaData()
+
+# Conexion a la base de datos
+conn = engine.connect()
