@@ -6,11 +6,10 @@ from cryptography.fernet import Fernet
 from sqlalchemy.orm import Session
 from typing import List
 from sqlalchemy.exc import IntegrityError
-from config.db import get_db
+from config.db import get_db, ENCRYPTION_KEY
 
 
-key = Fernet.generate_key() # Genera string aleatorio para encriptar
-f = Fernet(key) # Crea un objeto Fernet con la clave generada
+f = Fernet(ENCRYPTION_KEY) # Crea un objeto Fernet con la clave generada
 
 user = APIRouter()
 
