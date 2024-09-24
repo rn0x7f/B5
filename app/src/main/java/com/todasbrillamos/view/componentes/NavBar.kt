@@ -26,9 +26,10 @@ import com.todasbrillamos.R
 fun NavBar() {
 
     val navigationItems = listOf(
-        R.drawable.home,    // Iconos de la barra
-        R.drawable.phone,
-        R.drawable.mail
+        R.drawable.homebar,    // Iconos de la barra
+        R.drawable.cartbar,
+        R.drawable.about,
+        R.drawable.userbar
     )
 
     var selectedIndex by remember { mutableStateOf(0) }
