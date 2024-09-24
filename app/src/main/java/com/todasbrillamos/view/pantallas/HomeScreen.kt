@@ -25,7 +25,10 @@ import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.Pager
 
-
+/**
+ * Pantalla de inicio de la aplicación.
+ * El usuario ve esta pantalla al abrir la aplicación.
+ */
 @Preview
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {

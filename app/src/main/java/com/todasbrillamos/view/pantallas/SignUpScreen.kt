@@ -24,6 +24,12 @@ import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.view.componentes.boton
 
+/**
+ * Pantalla de registro de usuarios
+ * @author Roger Rendón
+ *
+ */
+
 @Composable
 fun SignUpScreen(){
     // Definir el gradiente

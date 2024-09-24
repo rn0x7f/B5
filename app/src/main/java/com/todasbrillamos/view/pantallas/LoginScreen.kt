@@ -25,6 +25,12 @@ import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.view.componentes.boton
 
+/**
+ * Pantalla de inicio de sesión.
+ * Permite al usuario iniciar sesión en la aplicación.
+ * @author Roger Rendón
+ * @author Kevin Castro
+ */
 @Composable
 fun LoginScreen() {
     // Definir el gradiente

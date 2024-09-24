@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -46,7 +47,7 @@ fun Pager(
 
     LaunchedEffect(Unit) {
         while (true) {
-            kotlinx.coroutines.delay(2000)
+            kotlinx.coroutines.delay(3000)
             val nextPage = (pagerState.currentPage + 1) % pagerState.pageCount
             pagerState.scrollToPage(nextPage)
         }
@@ -55,7 +56,6 @@ fun Pager(
     val scope = rememberCoroutineScope()
 
     Column(
-        modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(modifier = modifier.wrapContentSize()) {

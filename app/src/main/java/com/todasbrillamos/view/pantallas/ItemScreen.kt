@@ -10,11 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.todasbrillamos.view.componentes.NavBar
 
+/**
+ * Vista general de un objeto comprable
+ * @author Roger Rendón
+ * @author Kevin Castro
+ */
 @Preview
 @Composable
 fun ItemScreen(modifier: Modifier = Modifier) {
@@ -24,7 +28,6 @@ fun ItemScreen(modifier: Modifier = Modifier) {
         Color(0xFFffbba8)  // Color final
     )
 
-    val uriHandler = LocalUriHandler.current
 
     Scaffold(
         bottomBar = { NavBar() }

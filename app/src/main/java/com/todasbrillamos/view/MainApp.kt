@@ -11,6 +11,10 @@ import com.todasbrillamos.view.pantallas.SignUpScreen
 
 //contiene todas las pantallas de la app
 
+/**
+ * Contiene la pantalla principal de la app.
+ * @param modifier modificador para personalizar la apariencia de la pantalla.
+ */
 @Composable
 fun MainApp(modifier: Modifier = Modifier) {
     Surface(
