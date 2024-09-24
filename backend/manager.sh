@@ -51,6 +51,7 @@ function help_panel(){
   echo -e "\t${purpleColor}u)${endColor} ${grayColor}Registrar un usuario de MySQL.${endColor}"
   echo -e "\t${purpleColor}c)${endColor} ${grayColor}Configurar la base de datos.${endColor}"
   echo -e "\t${purpleColor}k)${endColor} ${grayColor}Crear key de encriptación.${endColor}"
+  echo -e "\t${purpleColor}i)${endColor} ${grayColor}Iniciar proyecto.${endColor}"
   echo -e "\t${purpleColor}h)${endColor} ${grayColor}Mostrar este panel de ayuda.${endColor}\n"
 }
 
@@ -372,17 +373,50 @@ function setup_key(){
 }
 
 
+function init_project(){
+  if [ -f ".env" ] && [ -d ".venv" ]; then
+    source .env
+    if [ -z "$SECRET_KEY" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASSWORD" ] || [ -z "$DB_NAME" ] || [ -z "$MYSQL_PORT" ] || [ -z "$MYSQL_IP" ] ; then
+      echo -e "\n${redColor}[!]${endColor} ${yellowColor}No se han encontrado las credenciales necesarias en el archivo .env.${endColor}\n"
+      echo -e "\t${redColor}"
+      echo -e "${redColor}[!]${endColor} ${yellowColor}Ejecuta ${turquoiseColor}./manager.sh -u${endColor} ${yellowColor}para registrar un usuario MySQL.${endColor}\n"
+      echo -e "${redColor}[!]${endColor} ${yellowColor}Ejecuta ${turquoiseColor}./manager.sh -c${endColor} ${yellowColor}para Configurar la base de datos.${endColor}\n"
+      echo -e "${redColor}[!]${endColor} ${yellowColor}Ejecuta ${turquoiseColor}./manager.sh -k${endColor} ${yellowColor}para Crear la key de encriptación.${endColor}\n"
+      return 1
+    else
+      # Verifica si el usuario está corriendo el script en un entorno virtual
+      if [ -z "$VIRTUAL_ENV" ]; then
+        echo -e "\n${redColor}[!]${endColor} ${yellowColor}No estás en un entorno virtual.${endColor}\n"
+        echo -e "${redColor}[!]${endColor} ${yellowColor}Por favor, ejecuta ${turquoiseColor}source .venv/bin/activate${endColor} ${yellowColor}para activar el entorno virtual.${endColor}\n"
+        return 1
+      else 
+        # Inicia el proyecto
+        echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Iniciando proyecto...${endColor}"
+        sleep 1
+        echo -e "\n${yellowColor}[+]${endColor} ${grayColor}Para cerrar el proyecto, presiona ${turquoiseColor}Ctrl + C${endColor}${endColor}\n"
+        sleep 1
+        uvicorn app:app --reload --app-dir api/
+      fi
+    fi
+  else
+    echo -e "\n${redColor}[!]${endColor} ${yellowColor}No se han encontrado los archivos .env / .venv${endColor}"
+    echo -e "\n${yellowColor}[+]${endColor} Antes de iniciar el proyecto, utiliza los otros parámetros para configurar el entorno.${endColor}\n"
+    return 1
+  fi
+}
+
 # Indicadores
 declare -i parameter_counter=0
 
 # Parametros del script
-while getopts "dvuckh" arg; do
+while getopts "dvuckih" arg; do
   case $arg in
     d) let parameter_counter+=1;; # Instalar dependencias
     v) let parameter_counter+=2;; # Crear entorno virtual
     u) let parameter_counter+=3;; # Crear usuario MySQL
     c) let parameter_counter+=4;; # Configurar base de datos
     k) let parameter_counter+=5;; # Crear key de encriptación
+    i) let parameter_counter+=6;; # Iniciar proyecto
     h) ;; # Panel de ayuda
   esac
 done # Cierre del bucle
@@ -400,6 +434,8 @@ elif [ $parameter_counter -eq 4 ]; then
   database_config
 elif [ $parameter_counter -eq 5 ]; then
   setup_key
+elif [ $parameter_counter -eq 6 ]; then
+  init_project
 else
   help_panel
 fi # Cierre del condicional
