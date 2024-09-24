@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from models.user import users
+from models.models import users
 from schemas.user import User
 from sqlalchemy.orm import Session
 from typing import List
