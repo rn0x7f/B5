@@ -31,6 +31,7 @@ CREATE TABLE producto (
     precio DECIMAL(10,2),
     categoria VARCHAR(255),
     cantidad INT,
+    imagen VARCHAR(255),
     FOREIGN KEY (id_catalogo) REFERENCES catalogo(id_catalogo)
 );
 
