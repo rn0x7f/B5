@@ -8,8 +8,11 @@ from config.db import get_db, SECRET_KEY
 import jwt
 from datetime import datetime, timedelta, timezone
 import bcrypt
+from utils.auth import get_current_user
+
 
 auth = APIRouter()
+invalid_tokens = set()
 
 # Función para hashear contraseñas
 def hash_password(password: str) -> str:
@@ -64,6 +67,9 @@ async def signup(user_data: User, db: Session = Depends(get_db)):
     return user_data
 
 
-@auth.post("/signout")
-async def signout():
-    return {"message": "Sign out"}
+@auth.post("/logout")
+async def logout(current_user: User = Depends(get_current_user)):
+    # Aquí podrías invalidar el token actual, por ejemplo:
+    token = current_user.token  # Asegúrate de tener el token en el usuario
+    invalid_tokens.add(token)  # Añadir a la lista de tokens inválidos
+    return {"message": "Logout successful"}
