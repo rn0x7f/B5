@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.todasbrillamos.view.pantallas.AcercaScreen
+import com.todasbrillamos.view.pantallas.HomeScreen
 
 /**
  * Actividad principal de la app
@@ -14,7 +15,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AcercaScreen()
+            HomeScreen()
         }
     }
 }

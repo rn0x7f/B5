@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation ("com.google.accompanist:accompanist-pager:0.12.0")
+    implementation ("com.google.accompanist:accompanist-flowlayout:0.30.0")
     implementation("androidx.compose.material:material-icons-extended") // Sin versión, gestionada por el BOM
     //Animacion Navbar
     implementation("com.exyte:animated-navigation-bar:1.0.0")

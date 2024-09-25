@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.todasbrillamos.R
+import com.todasbrillamos.view.componentes.ImageGrid
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.Pager
 
@@ -81,9 +82,16 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                             )
                         )
                     }
-                    Column {
-                        
-                    }
+                    ImageGrid(images = listOf(
+                        R.drawable.imgprueba,
+                        R.drawable.imgprueba,
+                        R.drawable.imgprueba,
+                        R.drawable.imgprueba,
+                        R.drawable.imgprueba,
+                        R.drawable.imgprueba,
+                        R.drawable.imgprueba,
+                        R.drawable.imgprueba,
+                    ))
                 }
             }
         }
