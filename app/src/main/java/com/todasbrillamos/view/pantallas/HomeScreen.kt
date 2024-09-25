@@ -81,6 +81,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                             )
                         )
                     }
+                    Column {
+                        
+                    }
                 }
             }
         }
