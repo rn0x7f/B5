@@ -37,7 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.todasbrillamos.R
 
-
+/**
+ * Campo de texto personalizado, tiene animaciones
+ * @author Roger Rendon
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CampoTexto(labelValue: String, painterResource: Painter) {
