@@ -66,3 +66,14 @@ def update_usuario(db: Session, correo_electronico: str, usuario_update: schemas
     db.refresh(db_usuario)
 
     return db_usuario
+
+def delete_usuario(db: Session, correo_electronico: str):
+    db_usuario = db.query(models.Usuario).filter(models.Usuario.correo_electronico == correo_electronico).first()
+
+    if db_usuario is None:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    db.delete(db_usuario)
+    db.commit()
+
+    return db_usuario
