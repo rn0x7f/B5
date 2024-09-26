@@ -28,3 +28,7 @@ def get_user(email: str, db: Session = Depends(get_db)):
     if user is None:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return user
+
+@usuario.put("/users/{email}", response_model=Usuario)
+def update_user(email: str, usuario: UsuarioCreate, db: Session = Depends(get_db)):
+    return UsuarioCrud.update_usuario(db, email, usuario)
