@@ -1,0 +1,24 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from utils import UsuarioCrud
+from schemas.schemas import Usuario, UsuarioCreate
+from config.db import SessionLocal, engine
+
+usuario = APIRouter()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@usuario.post("/users/", response_model=Usuario)
+def create_user(usuario: UsuarioCreate, db: Session = Depends(get_db)):
+    return UsuarioCrud.create_usuario(db=db, usuario=usuario)
+
+@usuario.get("/users/", response_model=list[Usuario])
+def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    users = UsuarioCrud.get_usuarios(db, skip=skip, limit=limit)
+    return users
+
