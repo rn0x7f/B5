@@ -24,21 +24,7 @@ connection_string = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_IP}:{
 # Crear el motor de la base de datos
 engine = create_engine(connection_string)
 
-meta = MetaData()
-
-# Conexion a la base de datos con querys
-conn = engine.connect()
-
-
-Base = declarative_base()
-
-# Crear un SessionLocal para manejar sesiones
+# Para manejar sesiones
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Función para obtener una sesión de base de datos asincrona con orm
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+Base = declarative_base()
