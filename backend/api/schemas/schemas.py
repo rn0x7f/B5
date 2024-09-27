@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr
 
-
 # ____________________________________________________________________
 
 
@@ -76,15 +75,15 @@ class ProductoBase(BaseModel):
     categoria: str
     cantidad: int
     imagen: str
-
+    id_catalogo: int
+    
 # Datos que se reciben del cliente para crear un producto
 class ProductoCreate(ProductoBase):
-    id_catalogo: int
+    pass
 
 # Datos que se muestran al cliente
 class Producto(ProductoBase):
     id_producto: int
-    catalogo: Catalogo
 
     class Config:
         from_attributes = True
