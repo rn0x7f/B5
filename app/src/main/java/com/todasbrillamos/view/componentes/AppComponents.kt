@@ -141,6 +141,7 @@ fun TextoClickeableRegistro() {
     val registrate = "Registrarme"
     val registroTag = "registro"
 
+    
     val annString = buildAnnotatedString {
         append(textoInicial)
         pushStringAnnotation(tag = registroTag, annotation = registroTag)

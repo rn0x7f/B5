@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -50,18 +51,14 @@ fun AcercaScreen() {
     Scaffold(
         bottomBar = { NavBar() }
     ) { innerPadding ->
-        Surface(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(brush = Brush.linearGradient(colors = gradientColors))
                 .padding(innerPadding)
                 .padding(28.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(brush = Brush.linearGradient(colors = gradientColors))
-            ) {
+            item {
                 TextoResaltado(value = "Acerca de nosotras: ")
                 Pager(
                     images = listOf(
@@ -70,11 +67,14 @@ fun AcercaScreen() {
                     )
                 )
                 Espaciador()
+            }
+            item {
                 Column(modifier = Modifier.padding(16.dp)) {
                     TextoResaltado(value = "Preguntas Frecuentes: ")
                     TextoNormal(value = "Lorem ipsum", size = 16)
                 }
-
+            }
+            item {
                 TextoResaltadoMini(value = "Contáctanos: ")
                 Column(modifier = Modifier.padding(18.dp)) {
                     Row {
@@ -91,14 +91,12 @@ fun AcercaScreen() {
                     Row(modifier = Modifier.clickable {
                         uriHandler.openUri("https://www.facebook.com/")
                     }) {
-
                         Image(
                             painter = painterResource(id = R.drawable.facebook),
                             contentDescription = "correo",
                             modifier = Modifier
                                 .size(24.dp)
                                 .weight(2f)
-
                         )
                         Text(text = "@todasbrillamos", modifier = Modifier.weight(8f))
                     }
@@ -112,7 +110,6 @@ fun AcercaScreen() {
                             modifier = Modifier
                                 .size(24.dp)
                                 .weight(2f)
-
                         )
                         Text(text = "@todasbrillamos", modifier = Modifier.weight(8f))
                     }
@@ -120,21 +117,18 @@ fun AcercaScreen() {
                     Row(modifier = Modifier.clickable {
                         uriHandler.openUri("https://www.twitter.com/")
                     }) {
-
                         Image(
                             painter = painterResource(id = R.drawable.twitter),
                             contentDescription = "correo",
                             modifier = Modifier
                                 .size(24.dp)
                                 .weight(2f)
-
                         )
                         Text(text = "@todasbrillamos", modifier = Modifier.weight(8f))
                     }
                     Espaciador()
                 }
             }
-
         }
     }
 }

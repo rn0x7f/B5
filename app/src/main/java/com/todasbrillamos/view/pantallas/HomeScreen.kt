@@ -1,5 +1,6 @@
 package com.todasbrillamos.view.pantallas
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -25,6 +29,7 @@ import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.ImageGrid
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.Pager
+import com.todasbrillamos.view.componentes.Product
 
 /**
  * Pantalla de inicio de la aplicación.
@@ -33,7 +38,7 @@ import com.todasbrillamos.view.componentes.Pager
 @Preview
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-// Definir el gradiente
+    // Definir el gradiente
     val gradientColors = listOf(
         Color(0xFFffe5b4), // Color inicial
         Color(0xFFffbba8)  // Color final
@@ -42,59 +47,78 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
 
     Scaffold(
-        bottomBar = { NavBar()}
+        bottomBar = { NavBar() }
     ) { innerPadding ->
-        Surface(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(brush = Brush.linearGradient(colors = gradientColors))
-                .padding(28.dp)
-                .padding(innerPadding)
+                .padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally // Centrar los elementos
         ) {
+            item {
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "Logo zazil",
+                    modifier = Modifier.size(150.dp) // Ajusta el tamaño de la imagen
+                )
+            }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(brush = Brush.linearGradient(colors = gradientColors))
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.Start // Alineamos al inicio horizontalmente
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center // Alineamos el contenido de la Row al inicio
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.logo),
-                            contentDescription = "Logo zazil",
-                            modifier = Modifier.size(150.dp) // Ajusta el tamaño de la imagen
+            item {
+                Pager(
+                    images = listOf(
+                        R.drawable.imgprueba,
+                        R.drawable.foto_acerca_de
+                    )
+                )
+            }
+            item {
+                ImageGrid(
+                    products = listOf(
+                        Product(
+                            imageRes = R.drawable.imgprueba,
+                            name = "Producto 1",
+                            price = "$19.99"
+                        ),
+                        Product(
+                            imageRes = R.drawable.imgprueba,
+                            name = "Producto 2",
+                            price = "$29.99"
+                        ),
+                        Product(
+                            imageRes = R.drawable.imgprueba,
+                            name = "Producto 3",
+                            price = "$39.99"
+                        ),
+                        Product(
+                            imageRes = R.drawable.imgprueba,
+                            name = "Producto 4",
+                            price = "$49.99"
+                        ),
+                        Product(
+                            imageRes = R.drawable.imgprueba,
+                            name = "Producto 5",
+                            price = "$59.99"
+                        ),
+                        Product(
+                            imageRes = R.drawable.imgprueba,
+                            name = "Producto 6",
+                            price = "$69.99"
+                        ),
+                        Product(
+                            imageRes = R.drawable.imgprueba,
+                            name = "Producto 7",
+                            price = "$79.99"
+                        ),
+                        Product(
+                            imageRes = R.drawable.imgprueba,
+                            name = "Producto 8",
+                            price = "$89.99"
                         )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center // Alineamos el contenido de la Row al inicio
-                    ) {
-                        Pager(
-                            images = listOf(
-                                R.drawable.imgprueba,
-                                R.drawable.foto_acerca_de
-                            )
-                        )
-                    }
-                    ImageGrid(images = listOf(
-                        R.drawable.imgprueba,
-                        R.drawable.imgprueba,
-                        R.drawable.imgprueba,
-                        R.drawable.imgprueba,
-                        R.drawable.imgprueba,
-                        R.drawable.imgprueba,
-                        R.drawable.imgprueba,
-                        R.drawable.imgprueba,
-                    ))
-                }
+                    ),
+                    columns = 2 // Definimos el número de columnas
+                )
             }
         }
     }
 }
-

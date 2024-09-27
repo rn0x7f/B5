@@ -21,8 +21,7 @@ fun MainApp(modifier: Modifier = Modifier) {
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ){
-        HomeScreen()
-
+        AcercaScreen()
     }
 
 }
