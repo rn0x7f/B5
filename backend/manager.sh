@@ -438,10 +438,13 @@ elif [ $parameter_counter -eq 5 ]; then
   setup_key
 elif [ $parameter_counter -eq 6 ]; then
   install_dependencies
-  setup_virtual_env
   mysql_account
   database_config
-  setup_key
+  setup_virtual_env
+  (
+    source .venv/bin/activate
+    setup_key
+  )
 elif [ $parameter_counter -eq 7 ]; then
   init_project
 else
