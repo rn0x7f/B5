@@ -143,9 +143,9 @@ fun CheckboxComp(value: String) {
 }
 
 @Composable
-fun boton(value: String) {
+fun boton(value: String, onClick: () -> Unit) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp),

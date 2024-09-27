@@ -76,7 +76,9 @@ fun SignUpScreen(){
             CheckboxComp(value ="Al crear una cuenta, aceptas nuestros términos y condiciones")
 
             Spacer(modifier = Modifier.height(190.dp))
-            boton(value = "Registrar")
+            boton(value = "Registrar"){
+                //ACCION AL DAR CLICK
+            }
 
             TextoClickeableLogin(value = "")
         }

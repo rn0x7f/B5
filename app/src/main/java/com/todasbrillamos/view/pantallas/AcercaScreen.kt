@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.Espaciador
 import com.todasbrillamos.view.componentes.NavBar
@@ -38,7 +39,7 @@ import com.todasbrillamos.view.componentes.TextoResaltadoMini
  */
 @Preview
 @Composable
-fun AcercaScreen() {
+fun AcercaScreen(navController: NavHostController) {
 
     // Define gradient
     val gradientColors = listOf(
@@ -49,7 +50,7 @@ fun AcercaScreen() {
     val uriHandler = LocalUriHandler.current
 
     Scaffold(
-        bottomBar = { NavBar() }
+        bottomBar = { NavBar(navController) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier

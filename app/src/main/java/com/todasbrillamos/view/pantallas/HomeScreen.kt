@@ -3,19 +3,11 @@ package com.todasbrillamos.view.pantallas
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +17,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.ImageGrid
 import com.todasbrillamos.view.componentes.NavBar
@@ -37,7 +30,7 @@ import com.todasbrillamos.view.componentes.Product
  */
 @Preview
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(navController: NavHostController, modifier: Modifier = Modifier) {
     // Definir el gradiente
     val gradientColors = listOf(
         Color(0xFFffe5b4), // Color inicial
@@ -47,7 +40,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
 
     Scaffold(
-        bottomBar = { NavBar() }
+        bottomBar = { NavBar(navController) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier

@@ -75,7 +75,9 @@ fun LoginScreen() {
             TextoClickeableOlvideContrasena()
             Spacer(modifier = Modifier
                 .padding(20.dp))
-            boton(value = "Iniciar Sesion")
+            boton(value = "Iniciar Sesion"){
+                //ACCION AL DAR CLICK
+            }
             TextoClickeableRegistro()
 
         }

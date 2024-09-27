@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.todasbrillamos.view.componentes.NavBar
 
 /**
@@ -21,7 +22,7 @@ import com.todasbrillamos.view.componentes.NavBar
  */
 @Preview
 @Composable
-fun ItemScreen(modifier: Modifier = Modifier) {
+fun ItemScreen(navController: NavHostController, modifier: Modifier = Modifier) {
 // Definir el gradiente
     val gradientColors = listOf(
         Color(0xFFffe5b4), // Color inicial
@@ -30,7 +31,7 @@ fun ItemScreen(modifier: Modifier = Modifier) {
 
 
     Scaffold(
-        bottomBar = { NavBar() }
+        bottomBar = { NavBar(navController) }
     ) { innerPadding ->
         Surface(
             modifier = Modifier
