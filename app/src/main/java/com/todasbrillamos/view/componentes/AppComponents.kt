@@ -62,6 +62,23 @@ fun TextoResaltado(value: String) {
 }
 
 @Composable
+fun TextoResaltadoMediano(value: String) {
+    Text(
+        text = value,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(),
+        style = TextStyle(
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            fontStyle = FontStyle.Normal
+        ), color = colorResource(id = R.color.rosaTB),
+        textAlign = TextAlign.Center
+
+    )
+}
+
+@Composable
 fun TextoResaltadoMini(value: String) {
     Text(
         text = value,

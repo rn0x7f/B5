@@ -36,15 +36,15 @@ import com.todasbrillamos.view.componentes.boton
 @Composable
 fun LoginScreen(navController: NavController) {
     // Definir el gradiente
-    val gradientColors = listOf(
-        Color( 0xFFffe5b4), // Color inicial
-        Color(0xFFffbba8)  // Color final
-    )
+        val gradientColors = listOf(
+            Color( 0xFFffe5b4), // Color inicial
+            Color(0xFFffbba8)  // Color final
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(brush = Brush.linearGradient(colors = gradientColors))
-                .padding(start = 28.dp, end = 28.dp)
+                .padding(start = 28.dp, end = 28.dp, top = 45.dp)
 
         ) {
             TextoNormal(value = "Hola!")

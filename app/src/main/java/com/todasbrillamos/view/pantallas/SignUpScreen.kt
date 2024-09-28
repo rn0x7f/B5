@@ -43,7 +43,7 @@ fun SignUpScreen(navController: NavController){
             modifier = Modifier
                 .fillMaxSize()
                 .background(brush = Brush.linearGradient(colors = gradientColors))
-                .padding(start = 28.dp, end = 28.dp)
+                .padding(start = 28.dp, end = 28.dp, top = 45.dp, bottom = 45.dp)
         ){
             TextoNormal(value = "Hola!")
             TextoResaltado(value = stringResource(id = R.string.CrearCuenta))

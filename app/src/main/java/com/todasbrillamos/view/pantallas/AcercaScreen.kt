@@ -6,7 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +32,7 @@ import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.Pager
 import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
+import com.todasbrillamos.view.componentes.TextoResaltadoMediano
 import com.todasbrillamos.view.componentes.TextoResaltadoMini
 
 /**
@@ -60,6 +63,7 @@ fun AcercaScreen(navController: NavHostController) {
                 .padding(innerPadding)
                 .padding(28.dp)
         ) {
+
             item {
                 TextoResaltado(value = "Acerca de nosotras: ")
                 Pager(
@@ -73,8 +77,26 @@ fun AcercaScreen(navController: NavHostController) {
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
                     TextoResaltado(value = "Preguntas Frecuentes: ")
-                    TextoNormal(value = "Lorem ipsum", size = 16)
                 }
+                Spacer(modifier = Modifier.height(16.dp)) // Espacio entre secciones
+                TextoResaltadoMediano(value = "¿Quienes Somos?")
+                TextoNormal(
+                    value = "Zazil es una marca comprometida con el bienestar de las mujeres y el cuidado del medio ambiente. Su misión es proporcionar soluciones innovadoras y sostenibles para el período menstrual. ¿Cómo lo hacen? A través de la creación de toallas femeninas reutilizables.",
+                    size = 16
+                )
+                Spacer(modifier = Modifier.height(16.dp)) // Espacio entre secciones
+                TextoResaltadoMediano(value = "Visión")
+                TextoNormal(
+                    value = "Imaginamos un mundo donde la menstruación no solo es sostenible para el planeta, sino también empoderadora para todas las mujeres. Queremos que cada elección consciente de Zazil contribuya a la creación de comunidades fuertes, mujeres empoderadas económicamente y un entorno más saludable y equitativo. Nuestra visión es que Zazil no sea solo un producto, sino una fuerza positiva que transforma la forma en que vivimos la menstruación, promoviendo el bienestar personal y global.",
+                    size = 16
+                )
+                Spacer(modifier = Modifier.height(16.dp)) // Espacio entre secciones
+                TextoResaltadoMediano(value = "Misión")
+                TextoNormal(
+                    value = "En Zazil, no solo estamos redefiniendo la menstruación, sino también el impacto que tiene en la economía y el medio ambiente. Nuestra misión es empoderar a las mujeres a tomar decisiones informadas sobre su salud menstrual mientras generan un impacto positivo en su bienestar financiero y en el planeta.",
+                    size = 16
+                )
+                Espaciador()
             }
             item {
                 TextoResaltadoMini(value = "Contáctanos: ")
@@ -87,7 +109,7 @@ fun AcercaScreen(navController: NavHostController) {
                                 .size(24.dp)
                                 .weight(2f)
                         )
-                        Text(text = "lorem ipsum", modifier = Modifier.weight(8f))
+                        Text(text = "+52 56 2808 3883", modifier = Modifier.weight(8f))
                     }
                     Espaciador()
                     Row(modifier = Modifier.clickable {
@@ -138,7 +160,6 @@ fun AcercaScreen(navController: NavHostController) {
 @Preview
 @Composable
 fun PreviewAcercaScreen() {
-    // You can create a dummy NavController for the preview
     val navController = rememberNavController()
     AcercaScreen(navController)
 }
