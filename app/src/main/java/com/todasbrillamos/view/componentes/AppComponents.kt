@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.todasbrillamos.R
 
 @Composable
@@ -104,7 +105,7 @@ fun TextoClickeable(value: String) {
 }
 
 @Composable
-fun TextoClickeableLogin(value: String) {
+fun TextoClickeableLogin(navController: NavController) {
     val textoInicial = "¿Ya tienes una cuenta? "
     val sesion = "Inicia Sesión"
     val login = "login"
@@ -129,14 +130,16 @@ fun TextoClickeableLogin(value: String) {
         onClick = { offset ->
             annString.getStringAnnotations(tag = login, start = offset, end = offset)
                 .firstOrNull()?.let {
-                    // Aquí podrías manejar el clic para INICIAR SESIÓN
+                    navController.navigate("login") {
+                        popUpTo("signup") { inclusive = true } // Eliminar "signup" de la pila
+                    }
                 }
         }
     )
 }
 
 @Composable
-fun TextoClickeableRegistro() {
+fun TextoClickeableRegistro(navController: NavController) {
     val textoInicial = "¿Aún no tienes cuenta? "
     val registrate = "Registrarme"
     val registroTag = "registro"
@@ -167,6 +170,9 @@ fun TextoClickeableRegistro() {
         onClick = { offset ->
             annString.getStringAnnotations(tag = registroTag, start = offset, end = offset)
                 .firstOrNull()?.let {
+                    navController.navigate("signup"){
+                        popUpTo("login") { inclusive = true } // Eliminar "login" de la pila
+                    }
                 }
         }
     )

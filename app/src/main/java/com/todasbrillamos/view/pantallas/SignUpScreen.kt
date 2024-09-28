@@ -15,6 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.CampoPassword
 import com.todasbrillamos.view.componentes.CampoTexto
@@ -31,24 +33,17 @@ import com.todasbrillamos.view.componentes.boton
  */
 
 @Composable
-fun SignUpScreen(){
+fun SignUpScreen(navController: NavController){
     // Definir el gradiente
     val gradientColors = listOf(
         Color( 0xFFffe5b4), // Color inicial
         Color(0xFFffbba8)  // Color final
     )
-
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(brush = Brush.linearGradient(colors = gradientColors))
-            .padding(28.dp)
-    ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(brush = Brush.linearGradient(colors = gradientColors))
+                .padding(start = 28.dp, end = 28.dp)
         ){
             TextoNormal(value = "Hola!")
             TextoResaltado(value = stringResource(id = R.string.CrearCuenta))
@@ -77,16 +72,19 @@ fun SignUpScreen(){
 
             Spacer(modifier = Modifier.height(190.dp))
             boton(value = "Registrar"){
-                //ACCION AL DAR CLICK
+                navController.navigate("home")
             }
 
-            TextoClickeableLogin(value = "")
+            TextoClickeableLogin(navController)
         }
     }
-}
+
 
 @Preview
 @Composable
-fun PreviewSignUp(){
-    SignUpScreen()
+fun PreviewSignUpScreen() {
+    // Crear un NavController ficticio para la vista previa
+    val navController = rememberNavController()
+    SignUpScreen(navController)
 }
+

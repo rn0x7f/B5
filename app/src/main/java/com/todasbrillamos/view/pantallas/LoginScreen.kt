@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.CampoPassword
 import com.todasbrillamos.view.componentes.CampoTexto
@@ -32,24 +34,18 @@ import com.todasbrillamos.view.componentes.boton
  * @author Kevin Castro
  */
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
     // Definir el gradiente
     val gradientColors = listOf(
         Color( 0xFFffe5b4), // Color inicial
         Color(0xFFffbba8)  // Color final
     )
-
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(brush = Brush.linearGradient(colors = gradientColors))
-            .padding(28.dp)
-    ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(brush = Brush.linearGradient(colors = gradientColors))
+                .padding(start = 28.dp, end = 28.dp)
+
         ) {
             TextoNormal(value = "Hola!")
             TextoResaltado(value = "Bienvenida de vuelta")
@@ -76,18 +72,21 @@ fun LoginScreen() {
             Spacer(modifier = Modifier
                 .padding(20.dp))
             boton(value = "Iniciar Sesion"){
-                //ACCION AL DAR CLICK
+                navController.navigate("home")
+
             }
-            TextoClickeableRegistro()
+            TextoClickeableRegistro(navController)
 
         }
 
 
     }
-}
+
 
 @Preview
 @Composable
-fun PreviewLogin(){
-    LoginScreen()
+fun PreviewLoginScreen() {
+    // Crear un NavController ficticio para la vista previa
+    val navController = rememberNavController()
+    LoginScreen(navController)
 }
