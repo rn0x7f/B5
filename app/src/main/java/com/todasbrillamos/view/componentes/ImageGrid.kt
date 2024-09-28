@@ -52,6 +52,9 @@ fun ImageGrid(products: List<Product> = listOf(), columns: Int = 2) {
                         productName = product.name,
                         productPrice = product.price,
                         imageRes = product.imageRes,
+                        onClick = {
+
+                        },
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = 8.dp)
@@ -74,6 +77,7 @@ fun ProductsCard(
     modifier: Modifier = Modifier,
     productName: String,
     productPrice: String,
+    onClick: () -> Unit,
     imageRes: Int // Añadimos este parámetro para la imagen del producto
 ) {
     Box(

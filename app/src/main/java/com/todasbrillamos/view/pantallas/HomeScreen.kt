@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.ImageGrid
 import com.todasbrillamos.view.componentes.NavBar
@@ -28,7 +29,7 @@ import com.todasbrillamos.view.componentes.Product
  * Pantalla de inicio de la aplicación.
  * El usuario ve esta pantalla al abrir la aplicación.
  */
-@Preview
+
 @Composable
 fun HomeScreen(navController: NavHostController, modifier: Modifier = Modifier) {
     // Definir el gradiente
@@ -114,4 +115,12 @@ fun HomeScreen(navController: NavHostController, modifier: Modifier = Modifier) 
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewHomeScreen() {
+    // You can create a dummy NavController for the preview
+    val navController = rememberNavController()
+    HomeScreen(navController)
 }

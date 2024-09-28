@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.Espaciador
 import com.todasbrillamos.view.componentes.NavBar
@@ -37,7 +38,7 @@ import com.todasbrillamos.view.componentes.TextoResaltadoMini
  * @author Roger Rendón
  * @author Kevin Castro
  */
-@Preview
+
 @Composable
 fun AcercaScreen(navController: NavHostController) {
 
@@ -132,4 +133,12 @@ fun AcercaScreen(navController: NavHostController) {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewAcercaScreen() {
+    // You can create a dummy NavController for the preview
+    val navController = rememberNavController()
+    AcercaScreen(navController)
 }

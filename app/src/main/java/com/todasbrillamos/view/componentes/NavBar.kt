@@ -43,7 +43,7 @@ fun NavBar(navController: NavController) {
                 "home" -> 0
                 "cart" -> 1
                 "acerca" -> 2
-                "profile" -> 3
+                "perfil", "pedidos", "cuenta" -> 3
                 else -> 0
             }
         }
@@ -87,7 +87,7 @@ fun NavBar(navController: NavController) {
                             }
                         }
                         3 -> {
-                            navController.navigate("profile") {
+                            navController.navigate("perfil") {
                                 popUpTo(navController.graph.startDestinationId) { saveState = true }
                                 launchSingleTop = true
                                 restoreState = true
