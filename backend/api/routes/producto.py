@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from utils import productoCrud
+from utils import productoCrud, catalogoCrud
 from schemas.schemas import Producto, ProductoCreate
 from config.db import SessionLocal
 
@@ -15,6 +15,9 @@ def get_db():
 
 @producto.post("/", response_model=Producto)
 def create_product(producto: ProductoCreate, db: Session = Depends(get_db)):
+    # Si no hay catalogo con ese id, lanzar error
+    if catalogoCrud.get_catalogo_by_id(db, producto.id_catalogo) is None:
+        raise HTTPException(status_code=404, detail="Catalogo no encontrado")
     return productoCrud.create_producto(db=db, producto=producto)
 
 @producto.get("/", response_model=list[Producto])
