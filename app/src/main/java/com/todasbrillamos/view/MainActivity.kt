@@ -4,18 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.todasbrillamos.view.pantallas.AcercaScreen
-import com.todasbrillamos.view.pantallas.HomeScreen
+import androidx.activity.viewModels
+import com.todasbrillamos.viewmodel.MainVM
 
 /**
  * Actividad principal de la app
  */
 class MainActivity : ComponentActivity() {
+    private val mainVM : MainVM by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainApp()
+            MainApp(mainVM)
         }
     }
 }

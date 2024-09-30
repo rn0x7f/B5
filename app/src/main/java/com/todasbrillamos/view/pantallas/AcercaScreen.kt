@@ -113,7 +113,7 @@ fun AcercaScreen(navController: NavHostController) {
                     }
                     Espaciador()
                     Row(modifier = Modifier.clickable {
-                        uriHandler.openUri("https://www.facebook.com/")
+                        uriHandler.openUri("https://www.facebook.com/FundacionTodasBrillamos/?locale=es_LA")
                     }) {
                         Image(
                             painter = painterResource(id = R.drawable.facebook),
@@ -126,23 +126,10 @@ fun AcercaScreen(navController: NavHostController) {
                     }
                     Espaciador()
                     Row(modifier = Modifier.clickable {
-                        uriHandler.openUri("https://www.instagram.com/")
+                        uriHandler.openUri("https://www.instagram.com/FundacionTodasBrillamos")
                     }) {
                         Image(
                             painter = painterResource(id = R.drawable.instagram),
-                            contentDescription = "correo",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .weight(2f)
-                        )
-                        Text(text = "@todasbrillamos", modifier = Modifier.weight(8f))
-                    }
-                    Espaciador()
-                    Row(modifier = Modifier.clickable {
-                        uriHandler.openUri("https://www.twitter.com/")
-                    }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.twitter),
                             contentDescription = "correo",
                             modifier = Modifier
                                 .size(24.dp)

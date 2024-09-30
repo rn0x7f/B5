@@ -33,51 +33,51 @@ import com.todasbrillamos.view.componentes.boton
  */
 
 @Composable
-fun SignUpScreen(navController: NavController){
+fun SignUpScreen(navController: NavController) {
     // Definir el gradiente
     val gradientColors = listOf(
-        Color( 0xFFffe5b4), // Color inicial
+        Color(0xFFffe5b4), // Color inicial
         Color(0xFFffbba8)  // Color final
     )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(brush = Brush.linearGradient(colors = gradientColors))
-                .padding(start = 28.dp, end = 28.dp, top = 45.dp, bottom = 45.dp)
-        ){
-            TextoNormal(value = "Hola!")
-            TextoResaltado(value = stringResource(id = R.string.CrearCuenta))
-            Spacer(modifier = Modifier.height(20.dp))
-            CampoTexto(
-                labelValue = "Nombre",
-                painterResource = painterResource(id = R.drawable.profile)
-            )
-            CampoTexto(
-                labelValue = "Apellido",
-                painterResource = painterResource(id = R.drawable.profile)
-            )
-            CampoTexto(
-                labelValue = "Correo electronico",
-                painterResource(id = R.drawable.mail)
-            )
-            CampoTexto(
-                labelValue = "Telefono",
-                painterResource = painterResource(id = R.drawable.phone)
-            )
-            CampoPassword(
-                labelValue = "Contraseña",
-                painterResource = painterResource (id = R.drawable.pass)
-            )
-            CheckboxComp(value ="Al crear una cuenta, aceptas nuestros términos y condiciones")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(brush = Brush.linearGradient(colors = gradientColors))
+            .padding(start = 28.dp, end = 28.dp, top = 45.dp, bottom = 45.dp)
+    ) {
+        TextoNormal(value = "Hola!")
+        TextoResaltado(value = stringResource(id = R.string.CrearCuenta))
+        Spacer(modifier = Modifier.height(20.dp))
+        CampoTexto(
+            labelValue = "Nombre",
+            painterResource = painterResource(id = R.drawable.profile)
+        )
+        CampoTexto(
+            labelValue = "Apellido",
+            painterResource = painterResource(id = R.drawable.profile)
+        )
+        CampoTexto(
+            labelValue = "Correo electronico",
+            painterResource(id = R.drawable.mail)
+        )
+        CampoTexto(
+            labelValue = "Telefono",
+            painterResource = painterResource(id = R.drawable.phone)
+        )
+        CampoPassword(
+            labelValue = "Contraseña",
+            painterResource = painterResource(id = R.drawable.pass)
+        )
+        CheckboxComp(value = "Al crear una cuenta, aceptas nuestros términos y condiciones")
 
-            Spacer(modifier = Modifier.height(190.dp))
-            boton(value = "Registrar"){
-                navController.navigate("home")
-            }
-
-            TextoClickeableLogin(navController)
+        Spacer(modifier = Modifier.height(190.dp))
+        boton(value = "Registrar") {
+            navController.navigate("home")
         }
+
+        TextoClickeableLogin(navController)
     }
+}
 
 
 @Preview

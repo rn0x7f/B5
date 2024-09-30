@@ -21,7 +21,8 @@ class MainVM : ViewModel() {
     }
 
     suspend fun getUsers() {
-        TODO("Not yet implemented")
+        val users: List<UserInfo> = connecter.getUsers()
+        _userState.value = users
     }
 
 }

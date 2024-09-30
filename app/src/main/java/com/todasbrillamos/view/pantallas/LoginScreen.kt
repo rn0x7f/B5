@@ -26,6 +26,7 @@ import com.todasbrillamos.view.componentes.TextoClickeableRegistro
 import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.view.componentes.boton
+import com.todasbrillamos.viewmodel.MainVM
 
 /**
  * Pantalla de inicio de sesión.
@@ -34,7 +35,7 @@ import com.todasbrillamos.view.componentes.boton
  * @author Kevin Castro
  */
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, mainVM: MainVM) {
     // Definir el gradiente
         val gradientColors = listOf(
             Color( 0xFFffe5b4), // Color inicial
@@ -78,8 +79,6 @@ fun LoginScreen(navController: NavController) {
             TextoClickeableRegistro(navController)
 
         }
-
-
     }
 
 
@@ -88,5 +87,5 @@ fun LoginScreen(navController: NavController) {
 fun PreviewLoginScreen() {
     // Crear un NavController ficticio para la vista previa
     val navController = rememberNavController()
-    LoginScreen(navController)
+    LoginScreen(navController, MainVM())
 }

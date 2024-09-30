@@ -5,12 +5,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.view.pantallas.*
+import com.todasbrillamos.viewmodel.MainVM
 
 /**
  * Contiene las rutas de la app para implementar la navegación
  */
 @Composable
-fun MainApp() {
+fun MainApp(mainVM: MainVM) {
     val navController = rememberNavController()
 
     // NAVHOST
@@ -18,12 +19,12 @@ fun MainApp() {
 
         // Pantalla de inicio de sesión
         composable("login") {
-            LoginScreen(navController = navController)
+            LoginScreen(navController, mainVM)
         }
 
         // Pantalla de registro
         composable("signup") {
-            SignUpScreen(navController = navController)
+            SignUpScreen(navController)
         }
 
         // Pantalla principal (home)
