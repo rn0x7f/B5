@@ -1,14 +1,33 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from typing import Annotated
+from pydantic import EmailStr
+from utils import authAcc
+from sqlalchemy.orm import Session
+from schemas.schemas import Usuario, UsuarioCreate
+from config.db import SessionLocal
 
 auth = APIRouter()
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@auth.post("/usuario/verify-token")
+def verify_token(token: str, db: Session = Depends(get_db)):
+    if authAcc.is_valid_token(db, token):
+        return {"status": "OK"}
+    return {"status": "Invalid token"}
+
 @auth.post("/usuario/signup")
-def signup():
-    return {"message": "Signup"}
+def signup(usuario: UsuarioCreate, db: Session = Depends(get_db)):
+    return authAcc.signup(db, usuario)
 
 @auth.post("/usuario/signin")
-def signin():
-    return {"message": "signin"}
+def signin(email: Annotated[EmailStr, "email"], password: Annotated[str, "password"], db: Session = Depends(get_db)):
+    return authAcc.signin(db, email, password)
 
 @auth.post("/usuario/signout")
 def signout():
