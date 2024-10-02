@@ -2,6 +2,8 @@ package com.todasbrillamos.model
 
 import android.util.Log
 import com.todasbrillamos.model.data.Auth
+import com.todasbrillamos.model.data.CatalogAPI
+import com.todasbrillamos.model.data.CatalogInfo
 import com.todasbrillamos.model.data.ProductAPI
 import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.model.data.SignupRequest
@@ -25,6 +27,10 @@ class RemoteConnecter {
 
     private val retrofitProducts by lazy {
         retrofitClient.create(ProductAPI::class.java)
+    }
+
+    private val retrofitCatalogs by lazy {
+        retrofitClient.create(CatalogAPI::class.java)
     }
 
     private val retrofitAuth by lazy {
@@ -153,6 +159,16 @@ class RemoteConnecter {
         return if (response.isSuccessful) {
             response.body()
         }else{
+            Log.e("RemoteConnecter", "Error: ${response.code()}")
+            null
+        }
+    }
+
+    suspend fun getCatalogById(catalogo_id: Int): CatalogInfo? {
+        val response = retrofitCatalogs.getCatalogById(catalogo_id)
+        return if (response.isSuccessful) {
+            response.body()
+        } else {
             Log.e("RemoteConnecter", "Error: ${response.code()}")
             null
         }

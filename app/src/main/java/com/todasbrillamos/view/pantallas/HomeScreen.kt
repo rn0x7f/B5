@@ -23,6 +23,7 @@ import com.todasbrillamos.view.componentes.ImageGrid
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.Pager
 import com.todasbrillamos.view.componentes.Product
+import com.todasbrillamos.viewmodel.MainVM
 
 /**
  * Pantalla de inicio de la aplicación.
@@ -30,7 +31,7 @@ import com.todasbrillamos.view.componentes.Product
  */
 
 @Composable
-fun HomeScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modifier = Modifier) {
     // Definir el gradiente
     val gradientColors = listOf(
         Color(0xFFffe5b4), // Color inicial
@@ -120,5 +121,5 @@ fun HomeScreen(navController: NavHostController, modifier: Modifier = Modifier) 
 fun PreviewHomeScreen() {
     // You can create a dummy NavController for the preview
     val navController = rememberNavController()
-    HomeScreen(navController)
+    HomeScreen(navController, mainVM = MainVM())
 }

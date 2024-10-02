@@ -14,6 +14,9 @@ class MainVM : ViewModel() {
     private val _userInfo = MutableStateFlow<UserInfo?>(null)
     val userInfo: StateFlow<UserInfo?> = _userInfo
 
+    private val _userCart = MutableStateFlow<List<String>>(emptyList())
+    val userCart: StateFlow<List<String>> = _userCart
+
     suspend fun getUserByEmail(email: String) {
         val user = connecter.getUserbyEmail(email)
         _userInfo.value = user
@@ -80,5 +83,10 @@ class MainVM : ViewModel() {
 
     suspend fun signUp(signupRequest: SignupRequest): String? {
         return connecter.signupUser(signupRequest.correo_electronico, signupRequest.nombre, signupRequest.apellido, signupRequest.telefono, signupRequest.contrasena)
+    }
+
+
+    suspend fun getProducts(){
+
     }
 }

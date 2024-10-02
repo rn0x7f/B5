@@ -37,7 +37,7 @@ fun MainApp(mainVM: MainVM) {
 
         // Pantalla principal (home)
         composable("home") {
-            HomeScreen(navController)
+            HomeScreen(navController, mainVM)
         }
 
         // Pantalla acerca de

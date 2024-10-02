@@ -89,7 +89,7 @@ fun ProductsCard(
             elevation = CardDefaults.cardElevation(0.dp),
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { Unit }
+                .clickable { }
                 .background(Color.Transparent),
             shape = RoundedCornerShape(12.dp)
         ) {
