@@ -8,7 +8,6 @@ import retrofit2.http.Path
 
 interface UserAPI
 {
-
     @GET("/api/users/{email}")
     suspend fun getUserByEmail(@Path("email") email: String): Response<UserInfo>
 

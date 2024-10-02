@@ -45,7 +45,7 @@ import com.todasbrillamos.R
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CampoTexto(labelValue: String, painterResource: Painter, textValue: String, onValueChange: (String) -> Unit) {
+fun CampoTexto(labelValue: String, painterResource: Painter, textValue: String, onValueChange: (String) -> Unit,modifier: Modifier = Modifier) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         label = { Text(text = labelValue) },
@@ -57,7 +57,7 @@ fun CampoTexto(labelValue: String, painterResource: Painter, textValue: String, 
         ),
         keyboardOptions = KeyboardOptions.Default,
         value = textValue,
-        onValueChange = onValueChange,
+        onValueChange = {onValueChange (it) },
         singleLine = true,
         leadingIcon = {
             Icon(painter = painterResource, contentDescription = "")
@@ -67,7 +67,7 @@ fun CampoTexto(labelValue: String, painterResource: Painter, textValue: String, 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CampoPassword(labelValue: String, painterResource: Painter, password: String, onValueChange: (String) -> Unit) {
+fun CampoPassword(labelValue: String, painterResource: Painter, password: String, onValueChange: (String) -> Unit,modifier: Modifier = Modifier) {
     val passwordVisible = remember { mutableStateOf(false) }
 
     OutlinedTextField(

@@ -13,6 +13,14 @@ data class SignupRequest(
     val password: String
 )
 
+data class SignupResponse(
+    val email: String,
+    val name: String,
+    val lastName: String,
+    val phone: String,
+    val password: String
+)
+
 data class TokenResponse(
     val token: String
 )
@@ -21,7 +29,7 @@ interface Auth {
     @POST("/api/auth/usuario/signup")
     suspend fun signup(
         @Body request: SignupRequest
-    ): Response<String>
+    ): Response<SignupResponse>
 
     @POST("/api/auth/usuario/signin")
     suspend fun signin(

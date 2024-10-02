@@ -77,18 +77,24 @@ fun LoginScreen(navController: NavController, mainVM: MainVM) {
         Spacer(modifier = Modifier.padding(20.dp))
         boton(value = "Iniciar Sesion") {
             coroutineScope.launch {
-                val result = mainVM.signIn(email.value, password.value)
+                try {
+                    val result = mainVM.signIn(email.value, password.value)
 
-                if (result != null) {
-                    // Save the token to SharedPreferences
-                    sharedPreferencesHelper.saveToken(result)
+                    if (result != null) {
+                        // Save the token to SharedPreferences
+                        sharedPreferencesHelper.saveToken(result)
 
-                    // Navigate to the home screen
-                    navController.navigate("home") {
-                        popUpTo("login") { inclusive = true }
+                        // Navigate to the home screen
+                        navController.navigate("home") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    } else {
+                        statusMessage.value =
+                            "Error de inicio de sesión. Verifica tus credenciales."
                     }
-                } else {
-                    statusMessage.value = "Error de inicio de sesión. Verifica tus credenciales."
+                } catch (e: Exception) {
+                    Log.e("LoginScreen", "Error de inicio de sesión", e)
+                    statusMessage.value = "Error de inicio de sesión. Inténta de nuevo más tarde."
                 }
             }
         }

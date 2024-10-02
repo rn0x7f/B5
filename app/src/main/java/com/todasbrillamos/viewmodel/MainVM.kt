@@ -3,6 +3,7 @@ package com.todasbrillamos.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.todasbrillamos.model.RemoteConnecter
+import com.todasbrillamos.model.data.SignupRequest
 import com.todasbrillamos.model.data.UserInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -75,5 +76,9 @@ class MainVM : ViewModel() {
 
     suspend fun signIn(email: String, password: String): String? {
         return connecter.signinUser(email, password).toString()
+    }
+
+    suspend fun signUp(signupRequest: SignupRequest): String? {
+        return connecter.signupUser(signupRequest.email, signupRequest.name, signupRequest.lastName, signupRequest.phone, signupRequest.password)
     }
 }

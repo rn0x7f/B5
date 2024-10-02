@@ -29,7 +29,7 @@ fun MainApp(mainVM: MainVM) {
 
         // Pantalla de registro
         composable("signup") {
-            SignUpScreen(navController)
+            SignUpScreen(navController, mainVM)
         }
 
         // Pantalla principal (home)
