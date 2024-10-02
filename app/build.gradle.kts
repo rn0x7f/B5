@@ -65,6 +65,9 @@ dependencies {
     implementation("com.exyte:animated-navigation-bar:1.0.0")
     //NAVEGACION
     implementation ("androidx.navigation:navigation-compose:2.7.2") // Asegúrate de tener la versión más reciente
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.7.0")
+
     //Retrofit
     implementation(libs.retrofit)
     implementation(libs.gson)
