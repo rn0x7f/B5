@@ -6,17 +6,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,7 +22,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
 import com.todasbrillamos.model.data.SignupRequest
-import com.todasbrillamos.utils.SharedPreferencesHelper
 import com.todasbrillamos.view.componentes.CampoPassword
 import com.todasbrillamos.view.componentes.CampoTexto
 import com.todasbrillamos.view.componentes.CheckboxComp
@@ -121,7 +117,7 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM) {
                 telefono.value = input
                 // Validar el teléfono mientras se escribe
                 statusMessage.value = if (!phoneRegex.matches(telefono.value) && telefono.value.isNotEmpty()) {
-                    "Teléfono inválido. Formato válido: +52 55 1234 5678"
+                    "Teléfono inválido. Formato válido: 55 1234 5678"
                 } else {
                     "" // Limpiar mensaje si es válido
                 }
@@ -160,11 +156,11 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM) {
             if (statusMessage.value.isEmpty()) {
                 // Crear un objeto de solicitud con los datos del usuario
                 val signupRequest = SignupRequest(
-                    name = nombre.value,
-                    lastName = apellido.value,
-                    email = email.value,
-                    phone = telefono.value,
-                    password = password.value
+                    nombre = nombre.value,
+                    apellido = apellido.value,
+                    correo_electronico = email.value,
+                    telefono = telefono.value,
+                    contrasena = password.value
                 )
 
                 // Mandar los datos a la API usando el signup request

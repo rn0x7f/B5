@@ -6,11 +6,11 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 data class SignupRequest(
-    val email: String,
-    val name: String,
-    val lastName: String,
-    val phone: String,
-    val password: String
+    val correo_electronico: String,
+    val nombre: String,
+    val apellido: String,
+    val telefono: String,
+    val contrasena: String
 )
 
 data class SignupResponse(

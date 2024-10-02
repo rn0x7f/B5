@@ -73,7 +73,6 @@ fun LoginScreen(navController: NavController, mainVM: MainVM) {
             password = password.value,
             onValueChange = { password.value = it }
         )
-        TextoClickeableOlvideContrasena()
         Spacer(modifier = Modifier.padding(20.dp))
         boton(value = "Iniciar Sesion") {
             coroutineScope.launch {

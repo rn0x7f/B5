@@ -79,6 +79,6 @@ class MainVM : ViewModel() {
     }
 
     suspend fun signUp(signupRequest: SignupRequest): String? {
-        return connecter.signupUser(signupRequest.email, signupRequest.name, signupRequest.lastName, signupRequest.phone, signupRequest.password)
+        return connecter.signupUser(signupRequest.correo_electronico, signupRequest.nombre, signupRequest.apellido, signupRequest.telefono, signupRequest.contrasena)
     }
 }
