@@ -28,9 +28,8 @@ import com.todasbrillamos.viewmodel.MainVM
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(navController: NavController, mainVM: MainVM) {
+fun LoginScreen(navController: NavController, mainVM: MainVM, sharedPreferencesHelper: SharedPreferencesHelper) {
     val coroutineScope = rememberCoroutineScope()
-    val sharedPreferencesHelper = SharedPreferencesHelper(LocalContext.current)
     val statusMessage = remember { mutableStateOf("") }
 
     // Definir el gradiente
@@ -113,5 +112,6 @@ fun LoginScreen(navController: NavController, mainVM: MainVM) {
 @Composable
 fun PreviewLoginScreen() {
     val navController = rememberNavController()
-    LoginScreen(navController, MainVM())
+    val sharedPreferencesHelper = SharedPreferencesHelper(LocalContext.current)
+    LoginScreen(navController, MainVM(), sharedPreferencesHelper)
 }

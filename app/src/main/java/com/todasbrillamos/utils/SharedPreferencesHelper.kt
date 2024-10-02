@@ -16,7 +16,7 @@ class SharedPreferencesHelper(context: Context) {
     fun saveToken(token: String) {
         val editor = sharedPreferences.edit()
         editor.putString(TOKEN_KEY, token)
-        editor.apply() 
+        editor.apply()
     }
 
     // Retrieve token

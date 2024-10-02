@@ -20,7 +20,7 @@ import com.todasbrillamos.view.componentes.NavBar
  * @author Roger Rendón
  * @author Kevin Castro
  */
-@Preview
+
 @Composable
 fun ItemScreen(navController: NavHostController, modifier: Modifier = Modifier) {
 // Definir el gradiente

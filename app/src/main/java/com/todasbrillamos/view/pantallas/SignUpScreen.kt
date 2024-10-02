@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
 import com.todasbrillamos.model.data.SignupRequest
+import com.todasbrillamos.utils.SharedPreferencesHelper
 import com.todasbrillamos.view.componentes.CampoPassword
 import com.todasbrillamos.view.componentes.CampoTexto
 import com.todasbrillamos.view.componentes.CheckboxComp
@@ -41,7 +43,7 @@ import kotlinx.coroutines.launch
  */
 
 @Composable
-fun SignUpScreen(navController: NavController, mainVM: MainVM) {
+fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferencesHelper: SharedPreferencesHelper) {
     val coroutineScope = rememberCoroutineScope()
     val statusMessage = remember { mutableStateOf("") }
 
@@ -52,8 +54,8 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM) {
     val password = remember { mutableStateOf("") }
 
     val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$")
-    val passwordRegex = Regex("^(?=.*[A-Z])[A-Za-z]{8,}\$")
-    val phoneRegex = Regex("^\\+?52?\\s?\\(?\\d{2}\\)?\\s?\\d{4}\\s?\\d{4}\$")
+    val passwordRegex = Regex("^(?=.*[A-Z])[A-Za-z0-9]{8,}\$")
+    val phoneRegex = Regex("^\\d{10}\$")
 
     // Definir el gradiente
     val gradientColors = listOf(
@@ -117,7 +119,7 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM) {
                 telefono.value = input
                 // Validar el teléfono mientras se escribe
                 statusMessage.value = if (!phoneRegex.matches(telefono.value) && telefono.value.isNotEmpty()) {
-                    "Teléfono inválido. Formato válido: 55 1234 5678"
+                    "Teléfono inválido"
                 } else {
                     "" // Limpiar mensaje si es válido
                 }
@@ -153,7 +155,7 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM) {
         // Botón de registro
         boton(value = "Registrar") {
             // Verifica si hay algún mensaje de error antes de proceder
-            if (statusMessage.value.isEmpty()) {
+            if (statusMessage.value.isEmpty() && nombre.value.isNotEmpty() && apellido.value.isNotEmpty() && email.value.isNotEmpty() && telefono.value.isNotEmpty() && password.value.isNotEmpty()) {
                 // Crear un objeto de solicitud con los datos del usuario
                 val signupRequest = SignupRequest(
                     nombre = nombre.value,
@@ -183,17 +185,23 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM) {
                         statusMessage.value = "Error en la conexión. Intenta más tarde."
                     }
                 }
+            } else {
+                // No hacer nada si hay algún error
+                statusMessage.value = "Por favor, complete todos los campos correctamente antes de continuar."
             }
         }
 
         TextoClickeableLogin(navController)
     }
 }
+
+
 @Preview
 @Composable
 fun PreviewSignUpScreen() {
     // Crear un NavController ficticio para la vista previa
     val navController = rememberNavController()
-    SignUpScreen(navController, MainVM())
+    val sharedPreferencesHelper = SharedPreferencesHelper(LocalContext.current)
+    SignUpScreen(navController, MainVM(), sharedPreferencesHelper)
 }
 

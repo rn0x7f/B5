@@ -12,15 +12,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
+import com.todasbrillamos.utils.SharedPreferencesHelper
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.view.componentes.boton
+import com.todasbrillamos.viewmodel.MainVM
 
 /**
  * Pantalla de Perfil.
@@ -30,7 +33,10 @@ import com.todasbrillamos.view.componentes.boton
  */
 
 @Composable
-fun ProfileScreen(navController: NavHostController) {
+fun ProfileScreen(
+    navController: NavHostController,
+    sharedPreferencesHelper: SharedPreferencesHelper
+) {
 
     // Definir gradiente
     val gradientColors = listOf(
@@ -113,7 +119,10 @@ fun ProfileScreen(navController: NavHostController) {
                 }
                 Row {
                     boton(value = "Cerrar sesion") {
-                        //ON CLICK CERRAR SESION
+                        sharedPreferencesHelper.clearToken()
+                        navController.navigate("login") {
+                            popUpTo("home") { inclusive = true }
+                        }
                     }
                 }
             }
@@ -126,5 +135,6 @@ fun ProfileScreen(navController: NavHostController) {
 fun PreviewProfileScreen() {
     // Crear un NavController ficticio para la vista previa
     val navController = rememberNavController()
-    ProfileScreen(navController)
+    val sharedPreferencesHelper = SharedPreferencesHelper(LocalContext.current)
+    ProfileScreen(navController, sharedPreferencesHelper)
 }

@@ -1,9 +1,11 @@
 package com.todasbrillamos.view
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.todasbrillamos.utils.SharedPreferencesHelper
 import com.todasbrillamos.view.pantallas.*
 import com.todasbrillamos.viewmodel.MainVM
 
@@ -13,6 +15,7 @@ import com.todasbrillamos.viewmodel.MainVM
 @Composable
 fun MainApp(mainVM: MainVM) {
     val navController = rememberNavController()
+    val sharedPreferencesHelper = SharedPreferencesHelper(LocalContext.current)
 
     // NAVHOST
     NavHost(navController = navController, startDestination = "splash") {
@@ -24,12 +27,12 @@ fun MainApp(mainVM: MainVM) {
 
         // Pantalla de inicio de sesión
         composable("login") {
-            LoginScreen(navController, mainVM)
+            LoginScreen(navController, mainVM, sharedPreferencesHelper)
         }
 
         // Pantalla de registro
         composable("signup") {
-            SignUpScreen(navController, mainVM)
+            SignUpScreen(navController, mainVM, sharedPreferencesHelper)
         }
 
         // Pantalla principal (home)
@@ -44,7 +47,7 @@ fun MainApp(mainVM: MainVM) {
 
         // Pantalla de perfil
         composable("perfil") {
-            ProfileScreen(navController)
+            ProfileScreen(navController,sharedPreferencesHelper)
         }
 
         // Pantalla de cuenta
