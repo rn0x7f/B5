@@ -13,7 +13,7 @@ class Usuario(Base):
     correo_electronico = Column(String(255), primary_key=True)
     nombre = Column(String(30), nullable=False)
     apellido = Column(String(30))
-    telefono = Column(String(15))
+    telefono = Column(String(30))
     contrasena = Column(String(255), nullable=False)
 
     # Relación con la dirección de envío
