@@ -15,7 +15,12 @@ fun MainApp(mainVM: MainVM) {
     val navController = rememberNavController()
 
     // NAVHOST
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = "splash") {
+
+        composable("splash")
+        {
+            SplashScreen(navController)
+        }
 
         // Pantalla de inicio de sesión
         composable("login") {

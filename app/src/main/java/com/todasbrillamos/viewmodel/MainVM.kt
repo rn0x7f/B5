@@ -1,8 +1,8 @@
 package com.todasbrillamos.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.todasbrillamos.model.RemoteConnecter
-import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.model.data.UserInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,19 +10,70 @@ import kotlinx.coroutines.flow.StateFlow
 class MainVM : ViewModel() {
     private val connecter = RemoteConnecter()
 
-    private val _cartState = MutableStateFlow<List<ProductInfo>>(emptyList())
-    val cartState: StateFlow<List<ProductInfo>> = _cartState
+    private val _userInfo = MutableStateFlow<UserInfo?>(null)
+    val userInfo: StateFlow<UserInfo?> = _userInfo
 
-    private val _userState = MutableStateFlow<List<UserInfo>>(emptyList())
-    val userState: StateFlow<List<UserInfo>> = _userState
-
-    suspend fun getProducts() {
-        TODO("Not yet implemented")
+    suspend fun getUserByEmail(email: String) {
+        val user = connecter.getUserbyEmail(email)
+        _userInfo.value = user
     }
 
-    suspend fun getUsers() {
-        val users: List<UserInfo> = connecter.getUsers()
-        _userState.value = users
+    suspend fun updateUserByEmail(newTelefono: String , newNombre: String, newApellido: String) {
+        val currentUser = _userInfo.value
+
+        if (currentUser != null) {
+            val updatedUser = currentUser.copy(
+                telefono = newTelefono,
+                nombre = newNombre,
+                apellido = newApellido
+            )
+            val result = connecter.updateUserByEmail(currentUser.correo_electronico, updatedUser)
+            _userInfo.value = result
+        } else {
+            Log.e("MainVM", "No user information available to update.")
+        }
     }
 
+    suspend fun updateUsersCart(newCompras: List<String>) {
+        val currentUser = _userInfo.value
+        if (currentUser != null) {
+            val updatedUser = currentUser.copy(
+                compras = newCompras
+            )
+
+            val response = connecter.updateUserByEmail(currentUser.correo_electronico, updatedUser)
+
+            if (response != null) {
+                _userInfo.value = response
+            } else {
+                Log.e("MainVM", "Failed to update user info.")
+            }
+        } else {
+            Log.e("MainVM", "No user information available to update.")
+        }
+    }
+
+    suspend fun updateUserAddresses(newDirecciones: List<String>){
+        val currentUser = _userInfo.value
+        if(currentUser != null){
+            val updatedUser = currentUser.copy(
+                direcciones_envio = newDirecciones
+            )
+
+            val response = connecter.updateUserByEmail(currentUser.correo_electronico, updatedUser)
+
+            if(response != null){
+                _userInfo.value = response
+            } else {
+                Log.e("MainVM", "Failed to update user info.")
+
+            }
+        }else{
+            Log.e("MainVM", "No user information available to update.")
+        }
+    }
+
+    suspend fun signIn(email: String, password: String): String? {
+        return connecter.signinUser(email, password).toString()
+    }
 }

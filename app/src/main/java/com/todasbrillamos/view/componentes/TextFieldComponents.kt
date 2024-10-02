@@ -45,12 +45,7 @@ import com.todasbrillamos.R
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CampoTexto(labelValue: String, painterResource: Painter) {
-
-    val textValue = remember {
-        mutableStateOf("")
-    }
-
+fun CampoTexto(labelValue: String, painterResource: Painter, textValue: String, onValueChange: (String) -> Unit) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         label = { Text(text = labelValue) },
@@ -61,11 +56,9 @@ fun CampoTexto(labelValue: String, painterResource: Painter) {
             containerColor = colorResource(id = R.color.BG)
         ),
         keyboardOptions = KeyboardOptions.Default,
-        value = textValue.value,
-        onValueChange = {
-            textValue.value = it
-        },
-        singleLine = true, // Asegura que sea una sola línea
+        value = textValue,
+        onValueChange = onValueChange,
+        singleLine = true,
         leadingIcon = {
             Icon(painter = painterResource, contentDescription = "")
         }
@@ -74,15 +67,8 @@ fun CampoTexto(labelValue: String, painterResource: Painter) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CampoPassword(labelValue: String, painterResource: Painter) {
-
-    val password = remember {
-        mutableStateOf("")
-    }
-
-    val passwordVisible = remember {
-        mutableStateOf(false)
-    }
+fun CampoPassword(labelValue: String, painterResource: Painter, password: String, onValueChange: (String) -> Unit) {
+    val passwordVisible = remember { mutableStateOf(false) }
 
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
@@ -94,11 +80,9 @@ fun CampoPassword(labelValue: String, painterResource: Painter) {
             containerColor = colorResource(id = R.color.BG)
         ),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        value = password.value,
-        onValueChange = {
-            password.value = it
-        },
-        singleLine = true, // Asegura que sea una sola línea
+        value = password,
+        onValueChange = onValueChange,
+        singleLine = true,
         leadingIcon = {
             Icon(painter = painterResource, contentDescription = "")
         },
@@ -108,7 +92,7 @@ fun CampoPassword(labelValue: String, painterResource: Painter) {
             } else {
                 Icons.Filled.VisibilityOff
             }
-            var description = if (passwordVisible.value) {
+            val description = if (passwordVisible.value) {
                 "esconder contraseña"
             } else {
                 "mostrar contraseña"

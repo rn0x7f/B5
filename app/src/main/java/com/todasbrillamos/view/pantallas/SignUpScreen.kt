@@ -50,23 +50,33 @@ fun SignUpScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
         CampoTexto(
             labelValue = "Nombre",
-            painterResource = painterResource(id = R.drawable.profile)
+            painterResource = painterResource(id = R.drawable.profile),
+            textValue = "",
+            onValueChange = { TODO() }
         )
         CampoTexto(
             labelValue = "Apellido",
-            painterResource = painterResource(id = R.drawable.profile)
+            painterResource = painterResource(id = R.drawable.profile),
+            textValue = "",
+            onValueChange = { TODO() }
         )
         CampoTexto(
             labelValue = "Correo electronico",
-            painterResource(id = R.drawable.mail)
+            painterResource(id = R.drawable.mail),
+            textValue = "",
+            onValueChange = { TODO() }
         )
         CampoTexto(
             labelValue = "Telefono",
-            painterResource = painterResource(id = R.drawable.phone)
+            painterResource = painterResource(id = R.drawable.phone),
+            textValue = "",
+            onValueChange = { TODO() }
         )
         CampoPassword(
             labelValue = "Contraseña",
-            painterResource = painterResource(id = R.drawable.pass)
+            painterResource = painterResource(id = R.drawable.pass),
+            password = "",
+            onValueChange = { TODO() }
         )
         CheckboxComp(value = "Al crear una cuenta, aceptas nuestros términos y condiciones")
 
