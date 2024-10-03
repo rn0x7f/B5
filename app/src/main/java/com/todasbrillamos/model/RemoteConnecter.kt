@@ -173,4 +173,12 @@ class RemoteConnecter {
             null
         }
     }
+
+    suspend fun createPaymentIntent(amount: Int, currency: String): String? {
+        // Simulación de un clientSecret de Stripe
+        return "pi_1GqIC8HbExampleSecret"
+    }
+
+
+
 }

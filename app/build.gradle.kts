@@ -74,7 +74,8 @@ dependencies {
 
     //STRIPE
     implementation ("com.stripe:stripe-android:20.51.1")
-
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
+    implementation("com.github.kittinunf.fuel:fuel-json:2.3.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

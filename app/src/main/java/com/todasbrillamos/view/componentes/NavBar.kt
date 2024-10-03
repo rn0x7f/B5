@@ -18,7 +18,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.exyte.animatednavbar.AnimatedNavigationBar
-import com.exyte.animatednavbar.animation.balltrajectory.Parabolic
 import com.exyte.animatednavbar.animation.balltrajectory.Straight
 import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
@@ -41,7 +40,7 @@ fun NavBar(navController: NavController) {
         navController.currentBackStackEntryFlow.collect { backStackEntry ->
             selectedIndex = when (backStackEntry.destination.route) {
                 "home" -> 0
-                "cart" -> 1
+                "checkout" -> 1 // Cambiado a "checkout"
                 "acerca" -> 2
                 "perfil", "pedidos", "cuenta" -> 3
                 else -> 0
@@ -50,7 +49,8 @@ fun NavBar(navController: NavController) {
     }
 
     AnimatedNavigationBar(
-        modifier = Modifier.height(68.dp)
+        modifier = Modifier
+            .height(68.dp)
             .padding(all = 12.dp),
         selectedIndex = selectedIndex,
         cornerRadius = shapeCornerRadius(cornerRadius = 28.dp),
@@ -59,7 +59,7 @@ fun NavBar(navController: NavController) {
         barColor = colorResource(id = R.color.rosaTB),
         ballColor = colorResource(id = R.color.rosaTB)
     ) {
-        // items de navegacion
+        // items de navegación
         navigationItems.forEachIndexed { index, item ->
             IconButton(
                 onClick = {
@@ -73,7 +73,7 @@ fun NavBar(navController: NavController) {
                             }
                         }
                         1 -> {
-                            navController.navigate("cart") {
+                            navController.navigate("checkout") {  // Cambiado a "checkout"
                                 popUpTo(navController.graph.startDestinationId) { saveState = true }
                                 launchSingleTop = true
                                 restoreState = true
