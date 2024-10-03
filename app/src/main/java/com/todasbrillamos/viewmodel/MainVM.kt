@@ -3,6 +3,7 @@ package com.todasbrillamos.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.todasbrillamos.model.RemoteConnecter
+import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.model.data.SignupRequest
 import com.todasbrillamos.model.data.UserInfo
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,9 @@ class MainVM : ViewModel() {
 
     private val _userCart = MutableStateFlow<List<String>>(emptyList())
     val userCart: StateFlow<List<String>> = _userCart
+
+    private val _products = MutableStateFlow<List<ProductInfo>>(emptyList())
+    val products: StateFlow<List<ProductInfo>> = _products
 
     // Obtener información del usuario por email
     suspend fun getUserByEmail(email: String) {
@@ -101,9 +105,14 @@ class MainVM : ViewModel() {
         // Aquí debería ir la lógica de conectar con tu backend para crear un PaymentIntent
         return connecter.createPaymentIntent(amount, currency)
     }*/
-
-    // Obtener productos (si es necesario)
-    suspend fun getProducts() {
-        // Implementar la lógica si necesitas obtener productos desde tu backend o API
+    // Obtener productos desde el backend
+    suspend fun fetchProducts() {
+        val productList = connecter.getProducts()
+        if (productList != null) {
+            _products.value = productList
+            Log.d("MainVM", "Fetched products: ${productList.size}")
+        } else {
+            Log.e("MainVM", "Failed to fetch products.")
+        }
     }
 }

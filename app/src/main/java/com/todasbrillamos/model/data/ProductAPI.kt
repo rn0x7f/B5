@@ -5,10 +5,12 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ProductAPI {
     @GET("/api/products")
-    suspend fun getProducts(): Response<List<ProductInfo>>
+    suspend fun getProducts(@Query("skip") skip: Int,
+                            @Query("limit") limit: Int): Response<List<ProductInfo>>
 
     @GET("/api/products/{id}")
     suspend fun getProductById(@Path("id") id: Int): Response<ProductInfo>

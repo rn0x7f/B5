@@ -1,6 +1,6 @@
 package com.todasbrillamos.view.pantallas
 
-
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -19,26 +22,35 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
+import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.view.componentes.ImageGrid
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.Pager
-import com.todasbrillamos.view.componentes.Product
 import com.todasbrillamos.viewmodel.MainVM
 
 /**
  * Pantalla de inicio de la aplicación.
  * El usuario ve esta pantalla al abrir la aplicación.
  */
-
 @Composable
 fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modifier = Modifier) {
-    // Definir el gradiente
+    // Colectamos los productos desde el ViewModel
+    val products by mainVM.products.collectAsState()
+
+    // Llamamos a fetchProducts cuando se inicie la pantalla
+    LaunchedEffect(Unit) {
+        mainVM.fetchProducts()
+    }
+
+    Log.d("HomeScreen", "Number of products: ${products.size}")
+
+    // Definir gradiente
     val gradientColors = listOf(
         Color(0xFFffe5b4), // Color inicial
         Color(0xFFffbba8)  // Color final
     )
 
-
+    // El contenido de la pantalla
     Scaffold(
         bottomBar = { NavBar(navController) }
     ) { innerPadding ->
@@ -47,13 +59,13 @@ fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modif
                 .fillMaxSize()
                 .background(brush = Brush.linearGradient(colors = gradientColors))
                 .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally // Centrar los elementos
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
                 Image(
                     painter = painterResource(id = R.drawable.logo),
                     contentDescription = "Logo zazil",
-                    modifier = Modifier.size(150.dp) // Ajusta el tamaño de la imagen
+                    modifier = Modifier.size(150.dp)
                 )
             }
 
@@ -65,50 +77,11 @@ fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modif
                     )
                 )
             }
+
             item {
+                // Pasamos directamente ProductInfo a ImageGrid
                 ImageGrid(
-                    products = listOf(
-                        Product(
-                            imageRes = R.drawable.imgprueba,
-                            name = "Producto 1",
-                            price = "$19.99"
-                        ),
-                        Product(
-                            imageRes = R.drawable.imgprueba,
-                            name = "Producto 2",
-                            price = "$29.99"
-                        ),
-                        Product(
-                            imageRes = R.drawable.imgprueba,
-                            name = "Producto 3",
-                            price = "$39.99"
-                        ),
-                        Product(
-                            imageRes = R.drawable.imgprueba,
-                            name = "Producto 4",
-                            price = "$49.99"
-                        ),
-                        Product(
-                            imageRes = R.drawable.imgprueba,
-                            name = "Producto 5",
-                            price = "$59.99"
-                        ),
-                        Product(
-                            imageRes = R.drawable.imgprueba,
-                            name = "Producto 6",
-                            price = "$69.99"
-                        ),
-                        Product(
-                            imageRes = R.drawable.imgprueba,
-                            name = "Producto 7",
-                            price = "$79.99"
-                        ),
-                        Product(
-                            imageRes = R.drawable.imgprueba,
-                            name = "Producto 8",
-                            price = "$89.99"
-                        )
-                    ),
+                    products = products,  // Usamos la lista de ProductInfo desde el ViewModel
                     columns = 2 // Definimos el número de columnas
                 )
             }
@@ -116,10 +89,11 @@ fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modif
     }
 }
 
+
 @Preview
 @Composable
 fun PreviewHomeScreen() {
-    // You can create a dummy NavController for the preview
+    // You can create a dummy NavController for la vista previa
     val navController = rememberNavController()
     HomeScreen(navController, mainVM = MainVM())
 }

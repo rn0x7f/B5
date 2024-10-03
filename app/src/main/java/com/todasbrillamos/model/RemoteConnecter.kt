@@ -4,7 +4,6 @@ import android.util.Log
 import com.todasbrillamos.model.data.Auth
 import com.todasbrillamos.model.data.CatalogAPI
 import com.todasbrillamos.model.data.CatalogInfo
-import com.todasbrillamos.model.data.PaymentRequest
 import com.todasbrillamos.model.data.ProductAPI
 import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.model.data.SignupRequest
@@ -85,7 +84,7 @@ class RemoteConnecter {
     }
 
     suspend fun getProducts(): List<ProductInfo>? {
-        val response = retrofitProducts.getProducts()
+        val response = retrofitProducts.getProducts(skip = 0, limit = 20)
         return if(response.isSuccessful) {
             response.body()
         } else {

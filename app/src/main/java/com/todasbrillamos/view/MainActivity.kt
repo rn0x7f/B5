@@ -6,8 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.navigation.compose.rememberNavController
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.Stripe
+import com.todasbrillamos.view.pantallas.HomeScreen
 import com.todasbrillamos.viewmodel.MainVM
 
 /**
@@ -31,13 +33,13 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
 
-        // Use setContent to display the CardScreen composable
+        // Use setContent to display the HomeScreen composable
         setContent {
-            // Pass the Stripe instance to the composable
-            CardScreen(stripe = stripe)
+            // Inicializamos el navController para la navegación
+            val navController = rememberNavController()
+
+            // Pasamos el navController a la HomeScreen
+            HomeScreen(navController = navController, mainVM = mainVM)
         }
     }
 }
-
-
-

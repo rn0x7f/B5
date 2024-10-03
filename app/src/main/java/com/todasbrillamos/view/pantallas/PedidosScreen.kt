@@ -49,8 +49,10 @@ fun PedidosScreen(navController: NavHostController) {
                 .padding(innerPadding)
                 .padding(28.dp)
         ) {
+            TextoResaltado(value = "Mis pedidos")
             // Lista de opciones en forma de lista vertical
             Column(){
+
 
             }
         }
