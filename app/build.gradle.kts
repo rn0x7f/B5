@@ -72,6 +72,10 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.gson)
 
+    //STRIPE
+    implementation ("com.stripe:stripe-android:20.51.1")
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
