@@ -40,12 +40,6 @@ async def refund_payment(payment_intent_id: str):
     except stripe.error.StripeError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-# Configurar la clave secreta de Stripe
-stripe.api_key = STRIPE_API_KEY
-
-# Definir un enrutador para Stripe
-stripe_route = APIRouter()
-
 # Ruta para crear y configurar la Payment Sheet
 @stripe_route.post("/payment-sheet")
 async def create_payment_sheet(payment_request: PaymentRequest):
