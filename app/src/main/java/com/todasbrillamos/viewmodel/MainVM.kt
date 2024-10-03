@@ -97,10 +97,10 @@ class MainVM : ViewModel() {
     }
 
     // Crear un PaymentIntent para el proceso de pago (con Stripe)
-    suspend fun createPaymentIntent(amount: Int, currency: String): String? {
+    /*suspend fun createPaymentIntent(amount: Int, currency: String): String? {
         // Aquí debería ir la lógica de conectar con tu backend para crear un PaymentIntent
         return connecter.createPaymentIntent(amount, currency)
-    }
+    }*/
 
     // Obtener productos (si es necesario)
     suspend fun getProducts() {

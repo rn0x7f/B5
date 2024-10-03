@@ -4,9 +4,11 @@ import android.util.Log
 import com.todasbrillamos.model.data.Auth
 import com.todasbrillamos.model.data.CatalogAPI
 import com.todasbrillamos.model.data.CatalogInfo
+import com.todasbrillamos.model.data.PaymentRequest
 import com.todasbrillamos.model.data.ProductAPI
 import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.model.data.SignupRequest
+import com.todasbrillamos.model.data.StripeAPI
 import com.todasbrillamos.model.data.TokenResponse
 import com.todasbrillamos.model.data.UserAPI
 import com.todasbrillamos.model.data.UserInfo
@@ -35,6 +37,10 @@ class RemoteConnecter {
 
     private val retrofitAuth by lazy {
         retrofitClient.create(Auth::class.java)
+    }
+
+    private val retrofitStripe by lazy {
+        retrofitClient.create(StripeAPI::class.java)
     }
 
     suspend fun getUserbyEmail(email: String): UserInfo? {
@@ -174,9 +180,20 @@ class RemoteConnecter {
         }
     }
 
-    suspend fun createPaymentIntent(amount: Int, currency: String): String? {
-        // Simulación de un clientSecret de Stripe
-        return "pi_1GqIC8HbExampleSecret"
+    suspend fun createPaymentIntent(paymentRequest: String): String? {
+        return try {
+            println("Connecter: $paymentRequest")
+            val response = retrofitStripe.createPaymentIntent(paymentRequest)
+            if (response.isSuccessful) {
+                response.body()?.clientSecret  // Return the clientSecret for the PaymentIntent
+            } else {
+                Log.e("RemoteConnecter", "Failed to create Payment Intent: ${response.code()}")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("RemoteConnecter", "Error: ${e.message}")
+            null
+        }
     }
 
 
