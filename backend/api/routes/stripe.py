@@ -40,11 +40,6 @@ async def refund_payment(payment_intent_id: str):
     except stripe.error.StripeError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-import stripe
-from fastapi import APIRouter, HTTPException
-from schemas.schemas import PaymentRequest  # Modelo existente
-from config.db import STRIPE_API_KEY
-
 # Configurar la clave secreta de Stripe
 stripe.api_key = STRIPE_API_KEY
 
