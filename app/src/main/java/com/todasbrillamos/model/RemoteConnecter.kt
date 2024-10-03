@@ -4,6 +4,7 @@ import android.util.Log
 import com.todasbrillamos.model.data.Auth
 import com.todasbrillamos.model.data.CatalogAPI
 import com.todasbrillamos.model.data.CatalogInfo
+import com.todasbrillamos.model.data.PaymentRequest
 import com.todasbrillamos.model.data.ProductAPI
 import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.model.data.SignupRequest
