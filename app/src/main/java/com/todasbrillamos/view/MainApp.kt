@@ -2,9 +2,11 @@ package com.todasbrillamos.view
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.todasbrillamos.utils.SharedPreferencesHelper
 import com.todasbrillamos.view.pantallas.*
 import com.todasbrillamos.viewmodel.MainVM
@@ -14,14 +16,16 @@ import com.todasbrillamos.viewmodel.MainVM
  */
 @Composable
 fun MainApp(mainVM: MainVM) {
+    // Crear un NavController para manejar la navegación
     val navController = rememberNavController()
+    // Crear un helper para las preferencias compartidas (SharedPreferences)
     val sharedPreferencesHelper = SharedPreferencesHelper(LocalContext.current)
 
-    // NAVHOST
+    // NavHost define las rutas de la aplicación
     NavHost(navController = navController, startDestination = "splash") {
 
-        composable("splash")
-        {
+        // Pantalla Splash
+        composable("splash") {
             SplashScreen(navController)
         }
 
@@ -47,7 +51,7 @@ fun MainApp(mainVM: MainVM) {
 
         // Pantalla de perfil
         composable("perfil") {
-            ProfileScreen(navController,sharedPreferencesHelper)
+            ProfileScreen(navController, sharedPreferencesHelper)
         }
 
         // Pantalla de cuenta
@@ -60,5 +64,19 @@ fun MainApp(mainVM: MainVM) {
             PedidosScreen(navController)
         }
 
+        // Pantalla de detalle de item, donde el ID del producto es pasado como argumento
+        composable(
+            "item/{productId}",
+            arguments = listOf(navArgument("productId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            // Obtenemos el productId desde los argumentos
+            val productId = backStackEntry.arguments?.getInt("productId")
+            if (productId != null) {
+                // Navegar a la pantalla de detalles del producto con el ID pasado
+                ItemScreen(navController = navController, productID = productId)
+            } else {
+                // En caso de que el productId sea null (precaución adicional)
+            }
+        }
     }
 }

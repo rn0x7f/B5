@@ -1,6 +1,5 @@
 package com.todasbrillamos.view.componentes
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,40 +15,37 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import com.todasbrillamos.model.data.ProductInfo
-
 @Composable
-fun ImageGrid(products: List<ProductInfo> = listOf(), columns: Int = 2) {
-    // Dividimos la lista de productos en filas
+fun ImageGrid(
+    products: List<ProductInfo>,  // Asegúrate de no tener una lista vacía por defecto si siempre recibirás datos
+    columns: Int = 2,
+    onItemClick: (Int) -> Unit // Función que acepta el ID del producto
+) {
     val rows = products.chunked(columns)
 
     Column(
         modifier = Modifier
             .padding(8.dp)
     ) {
-        // Creamos una fila por cada conjunto de productos
         rows.forEach { rowProducts ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween // Espacio entre las columnas
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 rowProducts.forEach { product ->
-                    // Mostramos cada tarjeta de producto
                     ProductsCard(
                         productName = product.nombre,
                         productPrice = product.precio.toString(),
-                        imageUrl = product.imagen,  // Usamos la URL desde ProductInfo
-                        onClick = {
-
-                        },
+                        imageUrl = product.imagen,
+                        onClick = { onItemClick(product.id_producto) },  // Llamamos a onItemClick con el ID del producto
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = 8.dp)
                     )
                 }
 
-                // Si la fila no está completa, añadimos un `Spacer` para mantener el layout
                 if (rowProducts.size < columns) {
                     repeat(columns - rowProducts.size) {
                         Spacer(modifier = Modifier.weight(1f))
@@ -65,19 +61,18 @@ fun ProductsCard(
     modifier: Modifier = Modifier,
     productName: String,
     productPrice: String,
-    onClick: () -> Unit,
-    imageUrl: String // Usamos la URL de la imagen desde ProductInfo
+    onClick: () -> Unit,  // Este onClick ahora es pasado desde ImageGrid
+    imageUrl: String
 ) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-
         Card(
             elevation = CardDefaults.cardElevation(0.dp),
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { onClick() }
+                .clickable { onClick() }  // Ejecuta onClick cuando se hace clic
                 .background(Color.Transparent),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -89,7 +84,7 @@ fun ProductsCard(
                         .fillMaxWidth()
                         .background(Color.White)
                         .padding(4.dp)
-                        .aspectRatio(1f / 1f), // Relación de aspecto cuadrada para la imagen
+                        .aspectRatio(1f / 1f),
                     shape = RoundedCornerShape(12.dp),
                     elevation = CardDefaults.cardElevation(0.dp),
                 ) {
@@ -98,12 +93,11 @@ fun ProductsCard(
                             .fillMaxSize()
                             .background(Color.Transparent)
                     ) {
-                        // Cargar la imagen desde la URL usando Coil
                         AsyncImage(
-                            model = imageUrl, // URL de la imagen
+                            model = imageUrl,
                             contentDescription = productName,
                             modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop // Ajustamos la imagen al tamaño del contenedor
+                            contentScale = ContentScale.Crop
                         )
                     }
                 }
@@ -120,7 +114,7 @@ fun ProductsCard(
                 Spacer(Modifier.height(6.dp))
 
                 Text(
-                    text = productPrice, // Precio como cadena de texto
+                    text = productPrice,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp)

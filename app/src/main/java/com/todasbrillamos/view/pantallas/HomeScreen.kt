@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
-import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.view.componentes.ImageGrid
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.Pager
@@ -61,6 +60,7 @@ fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modif
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Elemento de la imagen del logo
             item {
                 Image(
                     painter = painterResource(id = R.drawable.logo),
@@ -69,6 +69,7 @@ fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modif
                 )
             }
 
+            // Elemento del Pager
             item {
                 Pager(
                     images = listOf(
@@ -78,11 +79,16 @@ fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modif
                 )
             }
 
+            // Elemento del Grid con los productos
             item {
                 // Pasamos directamente ProductInfo a ImageGrid
                 ImageGrid(
-                    products = products,  // Usamos la lista de ProductInfo desde el ViewModel
-                    columns = 2 // Definimos el número de columnas
+                    products = products,
+                    columns = 2,
+                    onItemClick = { productId ->
+                        // Navegar a la pantalla del producto con su ID
+                        navController.navigate("item/$productId")
+                    }
                 )
             }
         }
@@ -90,10 +96,9 @@ fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modif
 }
 
 
-@Preview
 @Composable
+@Preview
 fun PreviewHomeScreen() {
-    // You can create a dummy NavController for la vista previa
     val navController = rememberNavController()
-    HomeScreen(navController, mainVM = MainVM())
+    HomeScreen(navController, MainVM())
 }

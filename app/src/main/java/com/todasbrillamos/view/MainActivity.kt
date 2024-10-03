@@ -9,7 +9,6 @@ import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.Stripe
-import com.todasbrillamos.view.pantallas.HomeScreen
 import com.todasbrillamos.viewmodel.MainVM
 
 /**
@@ -39,7 +38,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             // Pasamos el navController a la HomeScreen
-            HomeScreen(navController = navController, mainVM = mainVM)
+            MainApp(mainVM = mainVM)
         }
     }
 }
