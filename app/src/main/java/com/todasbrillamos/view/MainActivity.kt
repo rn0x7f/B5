@@ -1,11 +1,13 @@
 package com.todasbrillamos.view
 
+import CardScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import com.stripe.android.PaymentConfiguration
+import com.stripe.android.Stripe
 import com.todasbrillamos.viewmodel.MainVM
 
 /**
@@ -13,20 +15,26 @@ import com.todasbrillamos.viewmodel.MainVM
  */
 class MainActivity : ComponentActivity() {
     private val mainVM: MainVM by viewModels()
+    private lateinit var stripe: Stripe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Configuración inicial de Stripe
+        // Initialize Stripe with your publishable key
         PaymentConfiguration.init(
             applicationContext,
             "pk_test_51N6zVhCiCaF6G8C7EgvjiktgMxNTIwaRo9dJD7WAZ062PiH6sxk3lywUZyNU9pQW2ef5wbzCok3QxUalrTHAFG8o00FmdquosV"
         )
 
+        // Create an instance of Stripe
+        stripe = Stripe(applicationContext, PaymentConfiguration.getInstance(applicationContext).publishableKey)
+
         enableEdgeToEdge()
 
+        // Use setContent to display the CardScreen composable
         setContent {
-            MainApp(mainVM)
+            // Pass the Stripe instance to the composable
+            CardScreen(stripe = stripe)
         }
     }
 }

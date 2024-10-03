@@ -1,79 +1,117 @@
-import androidx.compose.foundation.background
+import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.todasbrillamos.R
-import com.todasbrillamos.view.componentes.CampoTexto
-import com.todasbrillamos.view.componentes.CampoPassword
-import com.todasbrillamos.view.componentes.boton
+import kotlinx.coroutines.launch
 
-@Preview
+import com.stripe.android.Stripe
+import com.stripe.android.model.PaymentMethodCreateParams
+
+
 @Composable
-fun CardScreen() {
-    // Definir gradiente
-    val gradientColors = listOf(
-        Color(0xFFffe5b4), // Color inicial
-        Color(0xFFffbba8)  // Color final
-    )
-
-    // Recordar los valores de los campos de texto
+fun CardScreen(stripe: Stripe) {
+    // States for card inputs
     val cardNumber = remember { mutableStateOf("") }
-    val expiryDate = remember { mutableStateOf("") }
-    val cvv = remember { mutableStateOf("") }
+    val expMonth = remember { mutableStateOf("") }
+    val expYear = remember { mutableStateOf("") }
+    val cvc = remember { mutableStateOf("") }
     val postalCode = remember { mutableStateOf("") }
+
+    var paymentStatus by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush = Brush.linearGradient(colors = gradientColors))
-            .padding(28.dp)
+            .padding(16.dp)
     ) {
-        // Campo para el número de tarjeta
-        CampoTexto(
-            labelValue = "Número de Tarjeta",
-            painterResource = painterResource(id = R.drawable.card), // Cambia este ícono por uno adecuado
-            textValue = cardNumber.value,
-            onValueChange = { cardNumber.value = it }
+        TextField(
+            value = cardNumber.value,
+            onValueChange = { cardNumber.value = it },
+            label = { Text("Card Number") },
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo para la fecha de caducidad
-        CampoTexto(
-            labelValue = "Fecha de Caducidad (MM/AA)",
-            painterResource = painterResource(id = R.drawable.date), // Cambia este ícono por uno adecuado
-            textValue = expiryDate.value,
-            onValueChange = { expiryDate.value = it }
+        TextField(
+            value = expMonth.value,
+            onValueChange = { expMonth.value = it },
+            label = { Text("Expiration Month") },
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo para el CVV
-        CampoPassword(
-            labelValue = "CVV",
-            painterResource = painterResource(id = R.drawable.cvv), // Cambia este ícono por uno adecuado
-            password = cvv.value,
-            onValueChange = { cvv.value = it }
+        TextField(
+            value = expYear.value,
+            onValueChange = { expYear.value = it },
+            label = { Text("Expiration Year") },
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo para el código postal
-        CampoTexto(
-            labelValue = "Código Postal",
-            painterResource = painterResource(id = R.drawable.location), // Cambia este ícono por uno adecuado
-            textValue = postalCode.value,
-            onValueChange = { postalCode.value = it }
+        TextField(
+            value = cvc.value,
+            onValueChange = { cvc.value = it },
+            label = { Text("CVC") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextField(
+            value = postalCode.value,
+            onValueChange = { postalCode.value = it },
+            label = { Text("Postal Code") },
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Botón para continuar
-        boton(value = "Pagar") {
-            // Acción para realizar el pago con la tarjeta
+        Button(onClick = {
+            scope.launch {
+                // Attempt to create the PaymentMethod when the button is clicked
+                val cardParams = PaymentMethodCreateParams.Card.Builder()
+                    .setNumber(cardNumber.value)
+                    .setExpiryMonth(expMonth.value.toIntOrNull() ?: 0)
+                    .setExpiryYear(expYear.value.toIntOrNull() ?: 0)
+                    .setCvc(cvc.value)
+                    .build()
+
+                // Create PaymentMethod with Stripe, and handle the result
+                createPaymentMethod(stripe, cardParams) { paymentMethodId ->
+                    paymentStatus = if (paymentMethodId != null) {
+                        "Payment Method Created: $paymentMethodId"
+                    } else {
+                        "Failed to create Payment Method"
+                    }
+                }
+            }
+        }) {
+            Text("Pay Now")
         }
+
+        Text(text = paymentStatus, modifier = Modifier.padding(top = 16.dp))
+    }
+}
+
+// Function to create Payment Method using Stripe
+suspend fun createPaymentMethod(
+    stripe: Stripe,
+    cardParams: PaymentMethodCreateParams.Card,
+    onPaymentMethodCreated: (String?) -> Unit
+) {
+    // Create the PaymentMethodCreateParams with card details and billing information
+    val paymentMethodParams = PaymentMethodCreateParams.create(
+        cardParams,
+    )
+
+    try {
+        // Create the PaymentMethod synchronously using Stripe's SDK
+        val paymentMethod = stripe.createPaymentMethodSynchronous(paymentMethodParams)
+        onPaymentMethodCreated(paymentMethod?.id)  // Return the Payment Method ID
+    } catch (e: Exception) {
+        onPaymentMethodCreated(null)  // Handle failure
     }
 }
