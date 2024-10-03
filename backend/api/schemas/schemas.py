@@ -162,38 +162,21 @@ class PaymentRequest(BaseModel):
 
 # ____________________________________________________________________
 
+
 # Datos base de un carrito
 class CarritoBase(BaseModel):
-    usuario_id: EmailStr
+    usuario_correo_electronico: EmailStr
+    producto_id: int
+    cantidad: int
 
-# Datos que se reciben del cliente para crear un carrito
+# Datos que se reciben del cliente
 class CarritoCreate(CarritoBase):
     pass
 
 # Datos que se muestran al cliente
 class Carrito(CarritoBase):
-    id: int
-    items: list["CarritoItem"] = []
-
-    class Config:
-        from_attributes = True
-
-
-# ____________________________________________________________________
-
-# Datos base de un item en el carrito
-class CarritoItemBase(BaseModel):
-    carrito_id: int
-    producto_id: int
-    cantidad: int
-
-# Datos que se reciben del cliente para crear un item en el carrito
-class CarritoItemCreate(CarritoItemBase):
-    pass
-
-# Datos que se muestran al cliente
-class CarritoItem(CarritoItemBase):
-    id: int
+    # Toma el nombre del producto y el precio del producto con su id
+    producto: Producto
 
     class Config:
         from_attributes = True

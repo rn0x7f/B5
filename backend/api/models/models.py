@@ -22,6 +22,9 @@ class Usuario(Base):
     # Relación con la tabla Compra
     compras = relationship("Compra", back_populates="usuario")
 
+    # Relación con la tabla Carrito
+    carrito = relationship("Carrito", back_populates="usuario")
+
 
 # ______________________________________________________________________________________________________________________
 
@@ -76,6 +79,9 @@ class Producto(Base):
 
     # Relación con la tabla Administra
     administra = relationship("Administra", back_populates="producto")
+
+    # Relación con la tabla Carrito
+    carrito = relationship("Carrito", back_populates="producto")
 
 
 # ______________________________________________________________________________________________________________________
@@ -132,35 +138,21 @@ class Administra(Base):
     producto = relationship("Producto", back_populates="administra")
 
 
-# ______________________________________________________________________________________________________________________
-
-
-# Modelo de la tabla Carrito
-class Carrito(Base):
-    __tablename__ = 'carrito'
-    
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    usuario_id = Column(String(255), ForeignKey('usuario.correo_electronico'))
-
-    # Relación con los items del carrito
-    items = relationship("CarritoItem", back_populates="carrito")
-
 # ____________________________________________________________________
 
-# Modelo de la tabla CarritoItem
-class CarritoItem(Base):
-    __tablename__ = 'carrito_items'
-    
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    carrito_id = Column(Integer, ForeignKey('carrito.id'))
+
+# Modelo Carrito
+class Carrito(Base):
+    __tablename__ = 'carrito'
+
+    id = Column(Integer, primary_key=True, index=True)
+    usuario_correo_electronico = Column(String(255), ForeignKey('usuario.correo_electronico'))
     producto_id = Column(Integer, ForeignKey('producto.id_producto'))
     cantidad = Column(Integer)
 
-    # Relación con el carrito
-    carrito = relationship("Carrito", back_populates="items")
-
-    # Relación con el producto
-    producto = relationship("Producto")
+    # Relación con el Usuario y el Producto
+    usuario = relationship("Usuario", back_populates="carrito")
+    producto = relationship("Producto", back_populates="carrito")
 
 # ____________________________________________________________________
 
