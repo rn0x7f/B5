@@ -59,10 +59,6 @@ fun MainApp(mainVM: MainVM) {
         composable("pedidos") {
             PedidosScreen(navController)
         }
-        // Agrega la ruta para la pantalla de Stripe Checkout
-        composable("checkout") {
-            CheckoutScreen(navController, mainVM)
-        }
 
     }
 }
