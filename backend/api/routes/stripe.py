@@ -19,7 +19,7 @@ async def create_payment_intent(payment_request: PaymentRequest):
             currency=payment_request.currency,
             description=payment_request.description,
             payment_method=payment_request.source,  # Utilizar el token o método de pago
-            confirm=True  # Confirmar el pago automáticamente
+            confirm=False  # Confirmar el pago automáticamente
         )
 
         return {
