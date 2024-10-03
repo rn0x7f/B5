@@ -149,3 +149,12 @@ class Administra(AdministraBase):
 
     class Config:
         from_attributes = True
+
+
+# ____________________________________________________________________
+
+class PaymentRequest(BaseModel):
+    amount: int  # Monto en centavos (e.g. $10.00 sería 1000 centavos)
+    currency: str
+    description: str | None = None
+    source: str  # Token de la tarjeta o método de pago

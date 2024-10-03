@@ -17,6 +17,7 @@ DB_NAME = os.getenv("DB_NAME")
 MYSQL_PORT = os.getenv("MYSQL_PORT")
 MYSQL_IP = os.getenv("MYSQL_IP")
 SECRET_KEY = os.getenv("SECRET_KEY")
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
 # Crear la URL de conexión
 connection_string = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_IP}:{MYSQL_PORT}/{DB_NAME}"
