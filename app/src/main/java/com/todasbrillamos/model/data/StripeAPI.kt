@@ -5,7 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface StripeAPI {
-    @POST("create-payment-intent")
+    @POST("/api/stripe/create-payment-intent")
     suspend fun createPaymentIntent(@Body paymentRequest: String): Response<PaymentIntentResponse>
 }
 
