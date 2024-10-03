@@ -1,6 +1,5 @@
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -8,16 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 import com.stripe.android.Stripe
 import com.stripe.android.model.PaymentMethodCreateParams
 import com.todasbrillamos.model.RemoteConnecter
-import com.todasbrillamos.model.data.PaymentIntentResponse
 import com.todasbrillamos.model.data.PaymentRequest
-import com.todasbrillamos.model.data.StripeAPI
 
 val remoteConnecter = RemoteConnecter()
 
@@ -68,7 +62,7 @@ suspend fun createPaymentIntent(paymentMethodId: String): String? {
     println(paymentRequestJSON)
 
     // Make the API call to the FastAPI backend asynchronously
-    return remoteConnecter.createPaymentIntent(paymentRequestJSON)
+    return remoteConnecter.createPaymentIntent(paymentRequest)
 }
 
 /**************/

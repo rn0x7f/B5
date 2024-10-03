@@ -180,7 +180,7 @@ class RemoteConnecter {
         }
     }
 
-    suspend fun createPaymentIntent(paymentRequest: String): String? {
+    suspend fun createPaymentIntent(paymentRequest: PaymentRequest): String? {
         return try {
             println("Connecter: $paymentRequest")
             val response = retrofitStripe.createPaymentIntent(paymentRequest)
