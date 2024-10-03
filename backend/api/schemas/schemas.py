@@ -158,3 +158,42 @@ class PaymentRequest(BaseModel):
     currency: str
     description: str | None = None
     source: str  # Token de la tarjeta o método de pago
+
+
+# ____________________________________________________________________
+
+# Datos base de un carrito
+class CarritoBase(BaseModel):
+    usuario_id: EmailStr
+
+# Datos que se reciben del cliente para crear un carrito
+class CarritoCreate(CarritoBase):
+    pass
+
+# Datos que se muestran al cliente
+class Carrito(CarritoBase):
+    id: int
+    items: list["CarritoItem"] = []
+
+    class Config:
+        from_attributes = True
+
+
+# ____________________________________________________________________
+
+# Datos base de un item en el carrito
+class CarritoItemBase(BaseModel):
+    carrito_id: int
+    producto_id: int
+    cantidad: int
+
+# Datos que se reciben del cliente para crear un item en el carrito
+class CarritoItemCreate(CarritoItemBase):
+    pass
+
+# Datos que se muestran al cliente
+class CarritoItem(CarritoItemBase):
+    id: int
+
+    class Config:
+        from_attributes = True

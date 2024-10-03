@@ -135,5 +135,35 @@ class Administra(Base):
 # ______________________________________________________________________________________________________________________
 
 
+# Modelo de la tabla Carrito
+class Carrito(Base):
+    __tablename__ = 'carrito'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    usuario_id = Column(String(255), ForeignKey('usuario.correo_electronico'))
+
+    # Relación con los items del carrito
+    items = relationship("CarritoItem", back_populates="carrito")
+
+# ____________________________________________________________________
+
+# Modelo de la tabla CarritoItem
+class CarritoItem(Base):
+    __tablename__ = 'carrito_items'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    carrito_id = Column(Integer, ForeignKey('carrito.id'))
+    producto_id = Column(Integer, ForeignKey('producto.id_producto'))
+    cantidad = Column(Integer)
+
+    # Relación con el carrito
+    carrito = relationship("Carrito", back_populates="items")
+
+    # Relación con el producto
+    producto = relationship("Producto")
+
+# ____________________________________________________________________
+
+
 # Crear todas las tablas en la base de datos
 Base.metadata.create_all(engine)
