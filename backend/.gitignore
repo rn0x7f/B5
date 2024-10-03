@@ -6,3 +6,5 @@ __pycache__/
 *.pyc
 *.pyo
 api/config/__pycache__/
+
+fake_product.py
