@@ -26,3 +26,11 @@ def get_cart(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 def get_cart_by_user(email: str, db: Session = Depends(get_db)):
     cart = carritoCrud.get_cart_by_user(db, email)
     return cart
+
+@carrito.delete("/{email}/{product_id}", response_model=Carrito)
+def delete_from_cart(email: str, product_id: int, db: Session = Depends(get_db)):
+    return carritoCrud.delete_from_cart(db, email, product_id)
+
+@carrito.delete("/{email}")
+def delete_cart(email: str, db: Session = Depends(get_db)):
+    return carritoCrud.delete_cart(db, email)
