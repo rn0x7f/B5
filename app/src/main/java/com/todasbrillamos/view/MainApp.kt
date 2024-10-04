@@ -56,12 +56,16 @@ fun MainApp(mainVM: MainVM) {
 
         // Pantalla de cuenta
         composable("cuenta") {
-            CuentaScreen(navController)
+            CuentaScreen(navController,mainVM)
+        }
+
+        composable("checkout") {
+            CarritoScreen(navController, mainVM)
         }
 
         // Pantalla de pedidos
         composable("pedidos") {
-            PedidosScreen(navController)
+            PedidosScreen(navController, mainVM)
         }
 
         // Pantalla de detalle de item, donde el ID del producto es pasado como argumento
@@ -73,7 +77,7 @@ fun MainApp(mainVM: MainVM) {
             val productId = backStackEntry.arguments?.getInt("productId")
             if (productId != null) {
                 // Navegar a la pantalla de detalles del producto con el ID pasado
-                ItemScreen(navController = navController, productID = productId)
+                ItemScreen(navController = navController, productID = productId, mainVM)
             } else {
                 // En caso de que el productId sea null (precaución adicional)
             }

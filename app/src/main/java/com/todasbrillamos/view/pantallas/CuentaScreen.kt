@@ -2,13 +2,8 @@ package com.todasbrillamos.view.pantallas
 
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,8 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.CampoTexto
 import com.todasbrillamos.view.componentes.NavBar
-import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.view.componentes.boton
+import com.todasbrillamos.viewmodel.MainVM
 
 /**
  * Pantalla de Cuenta de Usuario.
@@ -34,7 +29,7 @@ import com.todasbrillamos.view.componentes.boton
  */
 
 @Composable
-fun CuentaScreen(navController: NavHostController) {
+fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
     // Definir gradiente
     val gradientColors = listOf(
         Color(0xFFffe5b4), // Color inicial
@@ -103,5 +98,5 @@ fun CuentaScreen(navController: NavHostController) {
 fun PreviewCuentaScreen() {
     // Crear un NavController ficticio para la vista previa
     val navController = rememberNavController()
-    CuentaScreen(navController)
+    CuentaScreen(navController, mainVM = MainVM())
 }

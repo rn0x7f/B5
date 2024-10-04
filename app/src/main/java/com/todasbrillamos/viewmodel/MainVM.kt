@@ -3,6 +3,7 @@ package com.todasbrillamos.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.todasbrillamos.model.RemoteConnecter
+import com.todasbrillamos.model.data.CartItem
 import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.model.data.SignupRequest
 import com.todasbrillamos.model.data.UserInfo
@@ -15,8 +16,8 @@ class MainVM : ViewModel() {
     private val _userInfo = MutableStateFlow<UserInfo?>(null)
     val userInfo: StateFlow<UserInfo?> = _userInfo
 
-    private val _userCart = MutableStateFlow<List<String>>(emptyList())
-    val userCart: StateFlow<List<String>> = _userCart
+    private val _userCart = MutableStateFlow<List<CartItem>>(emptyList())
+    val userCart: StateFlow<List<CartItem>> = _userCart
 
     private val _products = MutableStateFlow<List<ProductInfo>>(emptyList())
     val products: StateFlow<List<ProductInfo>> = _products
@@ -44,25 +45,6 @@ class MainVM : ViewModel() {
         }
     }
 
-    // Actualizar el carrito del usuario
-    suspend fun updateUsersCart(newCompras: List<String>) {
-        val currentUser = _userInfo.value
-        if (currentUser != null) {
-            val updatedUser = currentUser.copy(
-                compras = newCompras
-            )
-
-            val response = connecter.updateUserByEmail(currentUser.correo_electronico, updatedUser)
-
-            if (response != null) {
-                _userInfo.value = response
-            } else {
-                Log.e("MainVM", "Failed to update user info.")
-            }
-        } else {
-            Log.e("MainVM", "No user information available to update.")
-        }
-    }
 
     // Actualizar direcciones del usuario
     suspend fun updateUserAddresses(newDirecciones: List<String>) {
@@ -115,4 +97,69 @@ class MainVM : ViewModel() {
             Log.e("MainVM", "Failed to fetch products.")
         }
     }
+
+
+
+    /*
+
+    Funciones del carrito
+
+     */
+
+
+    fun addToCart(product: ProductInfo) {
+        val currentCart = _userCart.value.toMutableList()
+
+        // Buscar si el producto ya está en el carrito
+        val existingItem = currentCart.find { it.product.id_producto == product.id_producto }
+
+        if (existingItem != null) {
+            // Si ya está en el carrito, incrementar la cantidad
+            val updatedItem = existingItem.copy(quantity = existingItem.quantity + 1)
+            val updatedCart = currentCart.map {
+                if (it.product.id_producto == product.id_producto) updatedItem else it
+            }
+            _userCart.value = updatedCart
+        } else {
+            // Si no está en el carrito, agregarlo con cantidad 1
+            val newItem = CartItem(product, quantity = 1)
+            currentCart.add(newItem)
+            _userCart.value = currentCart
+        }
+    }
+
+    fun removeFromCart(product: ProductInfo) {
+        val currentCart = _userCart.value.toMutableList()
+
+        val itemToRemove = currentCart.find { it.product.id_producto == product.id_producto }
+
+        if (itemToRemove != null) {
+            // Si la cantidad es 1, eliminar el elemento del carrito
+            if (itemToRemove.quantity == 1) {
+                currentCart.remove(itemToRemove)
+            } else {
+                // Si la cantidad es mayor a 1, decrementar la cantidad
+                val updatedItem = itemToRemove.copy(quantity = itemToRemove.quantity - 1)
+                // Replace the item in the cart
+                currentCart[currentCart.indexOf(itemToRemove)] = updatedItem
+            }
+            // Update the cart state
+            _userCart.value = currentCart
+        }
+    }
+
+    fun calculateTotal(): Float {
+        var total = 0f
+
+        for (cartItem in _userCart.value) {
+            total += cartItem.product.precio * cartItem.quantity
+        }
+
+        return total
+    }
+
+    fun emptyCart() {
+        _userCart.value = emptyList()
+    }
+
 }

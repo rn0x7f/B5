@@ -3,6 +3,8 @@ package com.todasbrillamos.view.pantallas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -19,13 +21,17 @@ import coil.compose.AsyncImage
 import com.todasbrillamos.model.RemoteConnecter
 import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.view.componentes.NavBar
+import com.todasbrillamos.view.componentes.TextoNormal
+import com.todasbrillamos.viewmodel.MainVM
 import kotlinx.coroutines.launch
 
 /**
  * Vista general de un objeto comprable
  */
 @Composable
-fun ItemScreen(navController: NavHostController, productID: Int, modifier: Modifier = Modifier) {
+fun ItemScreen(navController: NavHostController, productID: Int, mainVM: MainVM ,modifier: Modifier = Modifier) {
+    val estadoCarrito = mainVM.userCart.collectAsState()
+
     // Definir el gradiente
     val gradientColors = listOf(
         Color(0xFFffe5b4), // Color inicial
@@ -74,12 +80,27 @@ fun ItemScreen(navController: NavHostController, productID: Int, modifier: Modif
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Muestra los detalles del producto
-                    Text(text = "Producto: ${productInfo!!.nombre}")
-                    Text(text = "Precio: ${productInfo!!.precio}")
-                    Text(text = "Descripción: ${productInfo!!.descripcion}")
+                    Column {
+                        TextoNormal(value = "Producto: ${productInfo!!.nombre}")
+                        TextoNormal(value = "Precio: ${productInfo!!.precio}", 20)
+                        TextoNormal(value = "Descripción: ${productInfo!!.descripcion}", 14)
+                    }
                 } else {
                     // Mensaje de carga
                     Text(text = "Cargando detalles del producto...")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Botón para agregar al carrito
+                Button(
+                    onClick = { mainVM.addToCart(productInfo!!) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                       Color(0xFFD82E78) //
+                    )
+                ) {
+                    Text(text = "Agregar al carrito")
                 }
             }
         }
@@ -90,5 +111,5 @@ fun ItemScreen(navController: NavHostController, productID: Int, modifier: Modif
 @Composable
 fun PreviewItemScreen() {
     val navController = rememberNavController()
-    ItemScreen(navController, productID = 5)
+    ItemScreen(navController, productID = 5, MainVM())
 }
