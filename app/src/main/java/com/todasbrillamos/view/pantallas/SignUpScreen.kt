@@ -178,6 +178,7 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
                             }
                         } else {
                             // Manejar el caso en que el resultado sea nulo (error en la API)
+                            mainVM.setEmail(email.value)
                             statusMessage.value = "Error al registrar. Verifica tus datos."
                         }
                     } catch (e: Exception) {

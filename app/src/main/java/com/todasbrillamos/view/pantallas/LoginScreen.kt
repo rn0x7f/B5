@@ -81,7 +81,8 @@ fun LoginScreen(navController: NavController, mainVM: MainVM, sharedPreferencesH
                     if (result != null) {
                         // Save the token to SharedPreferences
                         sharedPreferencesHelper.saveToken(result)
-
+                        val newLoggedUser = email.value
+                        mainVM.setEmail(email.value)
                         // Navigate to the home screen
                         navController.navigate("home") {
                             popUpTo("login") { inclusive = true }

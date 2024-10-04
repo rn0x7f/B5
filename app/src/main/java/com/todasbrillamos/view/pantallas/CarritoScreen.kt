@@ -22,16 +22,24 @@ import com.todasbrillamos.model.data.CartItem
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.viewmodel.MainVM
 import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
+import kotlinx.coroutines.launch
 
 @Composable
 fun CarritoScreen(navController: NavHostController, mainVM: MainVM) {
     val estado = mainVM.userCart.collectAsState()
+
+    // Remember the error state for displaying the out-of-stock message
+    var outOfStockMessage by remember { mutableStateOf("") }
 
     val gradientColors = listOf(
         Color(0xFFffe5b4), // Color inicial
@@ -51,7 +59,9 @@ fun CarritoScreen(navController: NavHostController, mainVM: MainVM) {
 
             LazyColumn {
                 items(estado.value) { cartItem: CartItem ->
-                    ProductItem(cartItem, mainVM)
+                    ProductItem(cartItem, mainVM) { message ->
+                        outOfStockMessage = message // Update out-of-stock message
+                    }
                     HorizontalDivider()
                 }
             }
@@ -60,17 +70,26 @@ fun CarritoScreen(navController: NavHostController, mainVM: MainVM) {
                 TextoNormal(value = "No hay productos en el carrito", 20)
             }
 
-            // Calculate total from ViewModel
-            val total = mainVM.calculateTotal()
-            if (total > 0) {
-                TextoNormal(value = "Total: $${total}", 20)
+            // Display the out-of-stock message
+            if (outOfStockMessage.isNotEmpty()) {
+                Text(
+                    text = outOfStockMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
             }
+
+            // Total price calculation can be added here, for example:
+            TextoNormal(value = "Total: $${mainVM.calculateTotal()}")
         }
     }
 }
 
 @Composable
-fun ProductItem(cartItem: CartItem, mainVM: MainVM) {
+fun ProductItem(cartItem: CartItem, mainVM: MainVM, onOutOfStock: (String) -> Unit) {
+
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -108,8 +127,12 @@ fun ProductItem(cartItem: CartItem, mainVM: MainVM) {
                     painter = painterResource(id = R.drawable.minus),
                     contentDescription = "Decrease quantity",
                     modifier = Modifier.clickable {
-                        mainVM.removeFromCart(cartItem.product)
-                        mainVM.calculateTotal()
+                        coroutineScope.launch {
+                            mainVM.removeFromCartBack(cartItem)
+                            mainVM.removeFromCart(cartItem.product)
+                            mainVM.calculateTotal()
+
+                        }
                     }
                 )
 
@@ -119,15 +142,20 @@ fun ProductItem(cartItem: CartItem, mainVM: MainVM) {
                     painter = painterResource(id = R.drawable.plus),
                     contentDescription = "Increase quantity",
                     modifier = Modifier.clickable {
-                        mainVM.addToCart(cartItem.product)
-                        mainVM.calculateTotal()
+                        coroutineScope.launch {
+                            val success = mainVM.addToCartBack(cartItem)
+                            if (success) {
+                                mainVM.addToCart(cartItem.product)
+                                mainVM.calculateTotal()
+                            } else {
+                                onOutOfStock("No hay más existencias de: ${cartItem.product.nombre}")
+                            }
+                        }
                     }
                 )
 
                 Text(text = "$${cartItem.product.precio * cartItem.quantity}", fontSize = 16.sp)
             }
-
-
         }
 
         Spacer(modifier = Modifier.height(8.dp))

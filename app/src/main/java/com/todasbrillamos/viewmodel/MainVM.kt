@@ -98,6 +98,17 @@ class MainVM : ViewModel() {
         }
     }
 
+    suspend fun addToCartBack(cartItem: CartItem, quantity: Int = 1): Boolean {
+        return connecter.addToCart(cartItem, quantity)
+    }
+
+    suspend fun removeFromCartBack(cartItem: CartItem): Boolean {
+        return connecter.removeFromCart(cartItem)
+    }
+
+    fun setEmail(email: String){
+        connecter.userEmail = email
+    }
 
 
     /*
