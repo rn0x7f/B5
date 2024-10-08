@@ -256,4 +256,14 @@ class RemoteConnecter {
             false
         }
     }
+
+
+    suspend fun deleteCart(email: String): Boolean {
+        val response = retrofitCart.deleteCart(email)
+        return if(response.isSuccessful){
+            true
+        }else{
+            false
+        }
+    }
 }

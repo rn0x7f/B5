@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -79,6 +80,7 @@ suspend fun createPaymentIntent(
 
 /**************/
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun CardScreen(
     stripe: Stripe,
@@ -180,10 +182,13 @@ fun CardScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (paymentStatus == "¡Pago exitoso!") {
+        if (paymentStatus == "¡Pago exitoso!" ) {
+            val courutineScope = rememberCoroutineScope()
+            courutineScope.launch {
+                mainVM.emptyCart()
+            }
             Button(onClick = {
                 navController.navigate("home")
-                mainVM.emptyCart()
             }) {
                 Text("Volver a la pantalla principal")
             }

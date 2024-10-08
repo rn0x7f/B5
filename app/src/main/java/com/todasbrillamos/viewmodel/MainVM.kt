@@ -169,8 +169,14 @@ class MainVM : ViewModel() {
         return total
     }
 
-    fun emptyCart() {
+    suspend fun emptyCart(): Boolean {
         _userCart.value = emptyList()
+        try{
+            connecter.deleteCart(connecter.getEmail())
+            return true
+        }catch (e: Exception){
+            return false
+        }
     }
 
 }

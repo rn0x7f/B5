@@ -12,6 +12,9 @@ interface CartAPI {
 
     @DELETE("/api/carts/{email}/{id_producto}")
     suspend fun removeFromCart(@Path("email") email: String, @Path("id_producto") id_producto: Int): Response<Cart>
+
+    @POST("/api/carts/{email}")
+    suspend fun deleteCart(@Path("email") email: String): Response<DeleteCartResponse>
 }
 
 data class AddToCartRequest(
@@ -24,4 +27,8 @@ data class Cart(
     val usuario_correo_electronico: String,
     val producto_id: Int,
     val cantidad: Int
+)
+
+data class DeleteCartResponse(
+    val msg: String
 )
