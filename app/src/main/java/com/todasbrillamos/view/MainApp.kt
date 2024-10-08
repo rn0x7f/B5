@@ -1,5 +1,6 @@
 package com.todasbrillamos.view
 
+import CardScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
@@ -7,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.stripe.android.Stripe
 import com.todasbrillamos.utils.SharedPreferencesHelper
 import com.todasbrillamos.view.pantallas.*
 import com.todasbrillamos.viewmodel.MainVM
@@ -15,7 +17,7 @@ import com.todasbrillamos.viewmodel.MainVM
  * Contiene las rutas de la app para implementar la navegación
  */
 @Composable
-fun MainApp(mainVM: MainVM) {
+fun MainApp(mainVM: MainVM, stripe: Stripe) {
     // Crear un NavController para manejar la navegación
     val navController = rememberNavController()
     // Crear un helper para las preferencias compartidas (SharedPreferences)
@@ -61,6 +63,12 @@ fun MainApp(mainVM: MainVM) {
 
         composable("checkout") {
             CarritoScreen(navController, mainVM)
+        }
+
+        composable("pago/{total}/{description}") { backStackEntry ->
+            val total: Float = backStackEntry.arguments?.getString("total")?.toFloatOrNull() ?: 0f
+            val description: String = backStackEntry.arguments?.getString("description") ?: ""
+            CardScreen(stripe, navController, mainVM, total,description)
         }
 
         // Pantalla de pedidos

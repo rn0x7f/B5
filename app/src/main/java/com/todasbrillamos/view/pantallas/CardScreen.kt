@@ -4,9 +4,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import com.google.gson.Gson
 
@@ -14,6 +13,7 @@ import com.stripe.android.Stripe
 import com.stripe.android.model.PaymentMethodCreateParams
 import com.todasbrillamos.model.RemoteConnecter
 import com.todasbrillamos.model.data.PaymentRequest
+import com.todasbrillamos.viewmodel.MainVM
 
 val remoteConnecter = RemoteConnecter()
 
@@ -37,7 +37,13 @@ suspend fun createPaymentMethod(
 
 /****************/
 // Function to create the PaymentMethod
-suspend fun createPaymentMethod(cardNumber: String, expMonth: String, expYear: String, cvc: String, stripe: Stripe): String? {
+suspend fun createPaymentMethod(
+    cardNumber: String,
+    expMonth: String,
+    expYear: String,
+    cvc: String,
+    stripe: Stripe
+): String? {
     val cardParams = PaymentMethodCreateParams.Card.Builder()
         .setNumber(cardNumber)
         .setExpiryMonth(expMonth.toIntOrNull() ?: 0)
@@ -50,12 +56,16 @@ suspend fun createPaymentMethod(cardNumber: String, expMonth: String, expYear: S
 }
 
 // Function to create the PaymentIntent
-suspend fun createPaymentIntent(paymentMethodId: String): String? {
+suspend fun createPaymentIntent(
+    paymentMethodId: String,
+    total: Float,
+    description: String
+): String? {
     // Create a PaymentRequest with the necessary details
     val paymentRequest = PaymentRequest(
-        amount = 100000,  // Amount in cents (1000.00 MXN)
+        amount = total.toInt(),  // Amount in cents (1000.00 MXN)
         currency = "mxn",
-        description = "Toalla S",
+        description = description,
         source = paymentMethodId  // Pass the payment method ID
     )
 
@@ -70,7 +80,13 @@ suspend fun createPaymentIntent(paymentMethodId: String): String? {
 /**************/
 
 @Composable
-fun CardScreen(stripe: Stripe) {
+fun CardScreen(
+    stripe: Stripe,
+    navController: NavController,
+    mainVM: MainVM,
+    total: Float,
+    description: String
+) {
     // States for card inputs
     val cardNumber = remember { mutableStateOf("") }
     val expMonth = remember { mutableStateOf("") }
@@ -139,22 +155,39 @@ fun CardScreen(stripe: Stripe) {
 
                 // Step 2: If PaymentMethod creation succeeded, create the PaymentIntent
                 if (paymentMethodId != null) {
-                    val clientSecret = createPaymentIntent(paymentMethodId)
+                    val clientSecret =
+                        createPaymentIntent(paymentMethodId, total * 100f, description)
                     println("Client Secret: $clientSecret")
 
                     // Update the payment status
-                    paymentStatus = clientSecret?.let {
-                        "Payment Intent Created: $it"
-                    } ?: "Failed to create Payment Intent $paymentMethodId"
+                    paymentStatus = if (clientSecret != null) {
+                        // Show success message
+                        "¡Pago exitoso!"
+                    } else {
+                        // Handle failure
+                        "Error al crear Payment Intent con ID: $paymentMethodId"
+                    }
                 } else {
-                    paymentStatus = "Failed to create Payment Method"
+                    paymentStatus =
+                        "Error al crear el método de pago, por favor intente de nuevo más tarde"
                 }
             }
         }) {
             Text("Pay Now")
         }
 
-        Text(text = paymentStatus, modifier = Modifier.padding(top = 16.dp))
+        Text(text = paymentStatus)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (paymentStatus == "¡Pago exitoso!") {
+            Button(onClick = {
+                navController.navigate("home")
+                mainVM.emptyCart()
+            }) {
+                Text("Volver a la pantalla principal")
+            }
+        }
     }
 }
 

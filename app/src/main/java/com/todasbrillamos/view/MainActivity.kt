@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             // Pasamos el navController a la HomeScreen
-            MainApp(mainVM = mainVM)
+            MainApp(mainVM = mainVM, stripe)
         }
     }
 }

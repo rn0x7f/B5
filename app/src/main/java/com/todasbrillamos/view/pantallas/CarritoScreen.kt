@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -28,6 +29,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.TextoNormal
@@ -79,8 +82,20 @@ fun CarritoScreen(navController: NavHostController, mainVM: MainVM) {
                 )
             }
 
-            // Total price calculation can be added here, for example:
-            TextoNormal(value = "Total: $${mainVM.calculateTotal()}")
+            if (estado.value.isNotEmpty()) {
+                // Total price calculation can be added here, for example:
+                TextoNormal(value = "Total: $${mainVM.calculateTotal()}")
+                var description: String = ""
+                estado.value.forEach {
+                    description += it.product.nombre + " - " + it.quantity + "\n"
+                }
+                Button(onClick = {navController.navigate("pago/${mainVM.calculateTotal()}/$description")}){
+                    Text(text = "Proceder al pago")
+                }
+            }
+
+
+
         }
     }
 }
@@ -160,4 +175,11 @@ fun ProductItem(cartItem: CartItem, mainVM: MainVM, onOutOfStock: (String) -> Un
 
         Spacer(modifier = Modifier.height(8.dp))
     }
+}
+
+@Preview
+@Composable
+fun PreviewCarritoScreen() {
+    val navController = rememberNavController()
+    CarritoScreen(navController, MainVM())
 }
