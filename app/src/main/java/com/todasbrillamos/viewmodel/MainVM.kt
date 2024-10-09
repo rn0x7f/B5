@@ -28,43 +28,9 @@ class MainVM : ViewModel() {
         _userInfo.value = user
     }
 
-    // Actualizar la información del usuario
-    suspend fun updateUserByEmail(newTelefono: String, newNombre: String, newApellido: String) {
-        val currentUser = _userInfo.value
-
-        if (currentUser != null) {
-            val updatedUser = currentUser.copy(
-                telefono = newTelefono,
-                nombre = newNombre,
-                apellido = newApellido
-            )
-            val result = connecter.updateUserByEmail(currentUser.correo_electronico, updatedUser)
-            _userInfo.value = result
-        } else {
-            Log.e("MainVM", "No user information available to update.")
-        }
-    }
 
 
-    // Actualizar direcciones del usuario
-    suspend fun updateUserAddresses(newDirecciones: List<String>) {
-        val currentUser = _userInfo.value
-        if (currentUser != null) {
-            val updatedUser = currentUser.copy(
-                direcciones_envio = newDirecciones
-            )
 
-            val response = connecter.updateUserByEmail(currentUser.correo_electronico, updatedUser)
-
-            if (response != null) {
-                _userInfo.value = response
-            } else {
-                Log.e("MainVM", "Failed to update user info.")
-            }
-        } else {
-            Log.e("MainVM", "No user information available to update.")
-        }
-    }
 
     // Función para iniciar sesión
     suspend fun signIn(email: String, password: String): String? {
@@ -82,11 +48,7 @@ class MainVM : ViewModel() {
         )
     }
 
-    // Crear un PaymentIntent para el proceso de pago (con Stripe)
-    /*suspend fun createPaymentIntent(amount: Int, currency: String): String? {
-        // Aquí debería ir la lógica de conectar con tu backend para crear un PaymentIntent
-        return connecter.createPaymentIntent(amount, currency)
-    }*/
+
     // Obtener productos desde el backend
     suspend fun fetchProducts() {
         val productList = connecter.getProducts()

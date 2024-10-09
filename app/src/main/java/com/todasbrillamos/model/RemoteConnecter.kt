@@ -1,10 +1,8 @@
 package com.todasbrillamos.model
 
-import android.content.Context
 import android.util.Log
 import com.todasbrillamos.model.data.AddToCartRequest
 import com.todasbrillamos.model.data.Auth
-import com.todasbrillamos.model.data.Cart
 import com.todasbrillamos.model.data.CartAPI
 import com.todasbrillamos.model.data.CartItem
 import com.todasbrillamos.model.data.CatalogAPI
@@ -17,8 +15,6 @@ import com.todasbrillamos.model.data.StripeAPI
 import com.todasbrillamos.model.data.TokenResponse
 import com.todasbrillamos.model.data.UserAPI
 import com.todasbrillamos.model.data.UserInfo
-import com.todasbrillamos.utils.SharedPreferencesHelper
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -77,29 +73,6 @@ class RemoteConnecter {
         }
     }
 
-    suspend fun updateUserByEmail(email: String, user: UserInfo): UserInfo? {
-        val response = retrofitUsers.updateUserByEmail(email, user)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            when (response.code()) {
-                404 -> {
-                    Log.e("RemoteConnecter", "User not found")
-                    null
-                }
-
-                500 -> {
-                    Log.e("RemoteConnecter", "Internal server error")
-                    null
-                }
-
-                else -> {
-                    Log.e("RemoteConnecter", "Error: ${response.code()}")
-                    null
-                }
-            }
-        }
-    }
 
     suspend fun getProducts(): List<ProductInfo>? {
         val response = retrofitProducts.getProducts(skip = 0, limit = 20)
@@ -140,24 +113,7 @@ class RemoteConnecter {
 
     }
 
-    suspend fun updateProductById(id: Int, product: ProductInfo): ProductInfo? {
-        val response = retrofitProducts.updateProductById(id, product)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            when (response.code()) {
-                404 -> {
-                    Log.e("RemoteConnecter", "Product not found")
-                    null
-                }
 
-                else -> {
-                    Log.e("RemoteConnecter", "Error: ${response.code()}")
-                    null
-                }
-            }
-        }
-    }
 
     suspend fun signupUser(
         email: String,
@@ -176,6 +132,11 @@ class RemoteConnecter {
             when (response.code()) {
                 400 -> {
                     Log.e("RemoteConnecter", "Bad request")
+                    null
+                }
+
+                422 -> {
+                    Log.e("RemoteConnecter", "Unprocessable Entity")
                     null
                 }
 
@@ -237,10 +198,8 @@ class RemoteConnecter {
         val response = retrofitCart.addToCart(newAddToCartRequest)
         println("Email: ${getEmail()},ID: ${cartItem.product.id_producto}, Cantidad: $quantity")
         return if (response.isSuccessful) {
-            println("Response: ${response.code()}")
             true
         } else {
-            println("Response: ${response.code()}")
             false
         }
     }
@@ -249,16 +208,15 @@ class RemoteConnecter {
         val response = retrofitCart.removeFromCart(getEmail(), cartItem.product.id_producto)
         println("Email: ${getEmail()},ID: ${cartItem.product.id_producto}")
         return if (response.isSuccessful) {
-            println("Response: ${response.code()}")
             true
         } else {
-            println("Response: ${response.code()}")
             false
         }
     }
 
 
     suspend fun deleteCart(email: String): Boolean {
+        println("Email: $email")
         val response = retrofitCart.deleteCart(email)
         return if(response.isSuccessful){
             true

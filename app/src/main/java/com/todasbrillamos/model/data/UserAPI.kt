@@ -11,6 +11,5 @@ interface UserAPI
     @GET("/api/users/{email}")
     suspend fun getUserByEmail(@Path("email") email: String): Response<UserInfo>
 
-    @PUT("/api/users/{email}")
-    suspend fun updateUserByEmail(@Path("email") email: String, @Body user: UserInfo): Response<UserInfo>
+
 }
