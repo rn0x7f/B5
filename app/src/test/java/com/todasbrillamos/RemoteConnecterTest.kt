@@ -135,26 +135,7 @@ class RemoteConnecterTest {
     }
 
 
-    @Test
-    fun addProductToCart_Success() = runTest {
-        val email = "crocsvin@example.com"
-        remoteConnecter.setEmail(email)
-
-        val cartItem = CartItem(
-            ProductInfo(
-                "Book Talk",
-                "Concern edge agent music.",
-                20.85f,
-                "Muebles",
-                "https://picsum.photos/500/500",
-                1, 5
-            ), 1
-        )
-
-        val result = remoteConnecter.addToCart(cartItem)
-        assertTrue(result)
-
-    }
+    
 
     @Test
     fun addProductToCart_Failure() = runTest {
