@@ -1,12 +1,9 @@
 package com.todasbrillamos.view.pantallas
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -20,26 +17,26 @@ import com.todasbrillamos.view.componentes.CampoTexto
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.boton
 import com.todasbrillamos.viewmodel.MainVM
-
-/**
- * Pantalla de Cuenta de Usuario.
- * El usuario consulta su información de cuenta aquí.
- * @author Roger Rendón
- * @author Kevin Castro
- */
+import kotlinx.coroutines.launch
 
 @Composable
 fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
     // Definir gradiente
     val gradientColors = listOf(
-        Color(0xFFffe5b4), // Color inicial
-        Color(0xFFffbba8)  // Color final
+        Color(0xFFffe5b4),
+        Color(0xFFffbba8)
     )
 
     // Estado para los campos de texto
     val nombre = remember { mutableStateOf("") }
+    val apellido = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val telefono = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+
+    // Estado para manejar errores
+    val errorMessage = remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         bottomBar = { NavBar(navController) }
@@ -51,7 +48,6 @@ fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
                 .padding(innerPadding)
                 .padding(28.dp)
         ) {
-            // Campos de texto para el nombre, email y teléfono
             CampoTexto(
                 labelValue = "Nombre",
                 painterResource = painterResource(id = R.drawable.profile),
@@ -63,8 +59,8 @@ fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
             CampoTexto(
                 labelValue = "Apellido",
                 painterResource = painterResource(id = R.drawable.profile),
-                textValue = nombre.value,
-                onValueChange = { nombre.value = it }
+                textValue = apellido.value,
+                onValueChange = { apellido.value = it }
             )
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -82,12 +78,51 @@ fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
                 textValue = telefono.value,
                 onValueChange = { telefono.value = it }
             )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            CampoTexto(
+                labelValue = "Contraseña",
+                painterResource = painterResource(id = R.drawable.pass),
+                textValue = password.value,
+                onValueChange = { password.value = it }
+            )
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Botón para actualizar los datos
             boton(value = "Actualizar datos") {
-                // Acción para actualizar los datos del usuario
-                // Aquí puedes añadir la lógica para actualizar los datos
+                scope.launch {
+                    try {
+                        val result = mainVM.updateUser(
+                            email = email.value,
+                            name = nombre.value,
+                            lastName = apellido.value,
+                            phone = telefono.value,
+                            password = password.value
+                        )
+
+                        // Manejo del resultado
+                        if (result != null) {
+                            // Puedes agregar lógica adicional si es necesario
+                        } else {
+                            errorMessage.value = "Error al actualizar la información."
+                        }
+                    } catch (e: Exception) {
+                        errorMessage.value = e.message ?: "Ocurrió un error inesperado."
+                    }
+                }
+            }
+
+            // Mostrar mensaje de error si existe
+            errorMessage.value?.let {
+                AlertDialog(
+                    onDismissRequest = { errorMessage.value = null },
+                    title = { Text("Error") },
+                    text = { Text(it) },
+                    confirmButton = {
+                        TextButton(onClick = { errorMessage.value = null }) {
+                            Text("Aceptar")
+                        }
+                    }
+                )
             }
         }
     }
@@ -96,7 +131,6 @@ fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
 @Preview
 @Composable
 fun PreviewCuentaScreen() {
-    // Crear un NavController ficticio para la vista previa
     val navController = rememberNavController()
     CuentaScreen(navController, mainVM = MainVM())
 }

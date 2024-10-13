@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.todasbrillamos.model.RemoteConnecter
 import com.todasbrillamos.model.data.CartItem
+import com.todasbrillamos.model.data.DataChangeRequest
 import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.model.data.SignupRequest
 import com.todasbrillamos.model.data.UserInfo
@@ -46,8 +47,42 @@ class MainVM : ViewModel() {
             signupRequest.telefono,
             signupRequest.contrasena
         )
+
+
     }
 
+    suspend fun updateUser(email: String, name: String, lastName: String, phone: String, password: String): UserInfo? {
+        // Obtener la información actual del usuario
+        val currentUserInfo = connecter.getUserbyEmail(getEmail())
+
+        // Verificar si la información actual del usuario está disponible
+        currentUserInfo?.let {
+            // Crear el objeto DataChangeRequest con los nuevos datos
+            val dataChangeRequest = DataChangeRequest(
+                email = email,
+                name = name,
+                lastName = lastName,
+                phone = phone,
+                password = password
+            )
+
+            // Llamar a la función para actualizar la información del usuario en el RemoteConnecter
+            val response = connecter.updateUserInfo(dataChangeRequest)
+
+            // Verificar si la respuesta es exitosa
+            return if (response.isSuccessful) {
+                // Actualizar el estado local _userInfo con la nueva información del usuario
+                _userInfo.value = response.body()
+                response.body()
+            } else {
+                // Registrar el error si falla la actualización
+                Log.e("MainVM", "Error al actualizar el usuario: ${response.errorBody()?.string()}")
+                null
+            }
+        }
+
+        return null
+    }
 
     // Obtener productos desde el backend
     suspend fun fetchProducts() {
@@ -70,6 +105,10 @@ class MainVM : ViewModel() {
 
     fun setEmail(email: String){
         connecter.userEmail = email
+    }
+
+    fun getEmail(): String{
+        return connecter.userEmail
     }
 
 

@@ -7,6 +7,7 @@ import com.todasbrillamos.model.data.CartAPI
 import com.todasbrillamos.model.data.CartItem
 import com.todasbrillamos.model.data.CatalogAPI
 import com.todasbrillamos.model.data.CatalogInfo
+import com.todasbrillamos.model.data.DataChangeRequest
 import com.todasbrillamos.model.data.PaymentRequest
 import com.todasbrillamos.model.data.ProductAPI
 import com.todasbrillamos.model.data.ProductInfo
@@ -15,6 +16,7 @@ import com.todasbrillamos.model.data.StripeAPI
 import com.todasbrillamos.model.data.TokenResponse
 import com.todasbrillamos.model.data.UserAPI
 import com.todasbrillamos.model.data.UserInfo
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -71,6 +73,10 @@ class RemoteConnecter {
                 }
             }
         }
+    }
+
+    suspend fun updateUserInfo(dataChangeRequest: DataChangeRequest): Response<UserInfo> {
+        return retrofitUsers.updateUser(dataChangeRequest.email, dataChangeRequest)
     }
 
 
@@ -158,15 +164,7 @@ class RemoteConnecter {
         }
     }
 
-    suspend fun getCatalogById(catalogo_id: Int): CatalogInfo? {
-        val response = retrofitCatalogs.getCatalogById(catalogo_id)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            Log.e("RemoteConnecter", "Error: ${response.code()}")
-            null
-        }
-    }
+
 
     suspend fun createPaymentIntent(paymentRequest: PaymentRequest): String? {
         return try {

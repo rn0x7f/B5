@@ -11,5 +11,14 @@ interface UserAPI
     @GET("/api/users/{email}")
     suspend fun getUserByEmail(@Path("email") email: String): Response<UserInfo>
 
-
+    @PUT("/api/users/{email}")
+    suspend fun updateUser(@Path("email") email: String, @Body userInfo: DataChangeRequest): Response<UserInfo>
 }
+
+data class DataChangeRequest(
+    val email: String,
+    val name: String,
+    val lastName: String,
+    val phone: String,
+    val password: String
+)

@@ -156,9 +156,8 @@ fun boton(value: String, onClick: () -> Unit) {
             Text(
                 text = value,
                 fontSize = 18.sp, // Cambiado a sp
-                fontWeight = FontWeight.Bold ,
-                style = TextStyle(textAlign = TextAlign.Center // Centrar el texto
-            )
+                fontWeight = FontWeight.Bold,
+                style = TextStyle(textAlign = TextAlign.Center) // Centrar el texto
             )
         }
     }
