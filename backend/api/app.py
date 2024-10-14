@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from routes.usuario import usuario
 from routes.auth import auth
 from routes.producto import producto
@@ -7,6 +8,19 @@ from routes.stripe import stripe_route
 from routes.carrito import carrito
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+    "http://localhost:3001"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 app.include_router(usuario, prefix="/api/users", tags=["users"])
 app.include_router(catalogo, prefix="/api/catalogs", tags=["catalogs"])
