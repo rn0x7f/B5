@@ -81,7 +81,7 @@ fun LoginScreen(
             onValueChange = { password.value = it }
         )
         Spacer(modifier = Modifier.padding(20.dp))
-        boton(value = "Iniciar Sesion") {
+        boton(value = "Iniciar Sesión") {
             when {
                 email.value.isEmpty() -> statusMessage.value = "Por favor, ingresa tu correo electrónico."
                 password.value.isEmpty() -> statusMessage.value = "Por favor, ingresa tu contraseña."

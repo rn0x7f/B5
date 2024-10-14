@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -26,6 +29,7 @@ import com.todasbrillamos.view.componentes.ImageGrid
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.Pager
 import com.todasbrillamos.viewmodel.MainVM
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Pantalla de inicio de la aplicación.
@@ -35,10 +39,17 @@ import com.todasbrillamos.viewmodel.MainVM
 fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modifier = Modifier) {
     // Colectamos los productos desde el ViewModel
     val products by mainVM.products.collectAsState()
+    val errorMessage = remember { mutableStateOf("") }
 
     // Llamamos a fetchProducts cuando se inicie la pantalla
     LaunchedEffect(Unit) {
-        mainVM.fetchProducts()
+        try {
+            mainVM.fetchProducts()
+            errorMessage.value = ""
+        } catch (e: Exception) {
+            Log.d("HomeScreen", "Error fetching products: ${e.message}")
+        }
+
     }
 
     Log.d("HomeScreen", "Number of products: ${products.size}")
@@ -79,6 +90,7 @@ fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modif
                 )
             }
 
+
             // Elemento del Grid con los productos
             item {
                 // Pasamos directamente ProductInfo a ImageGrid
@@ -91,6 +103,13 @@ fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modif
                     }
                 )
             }
+        }
+        if (errorMessage.value.isNotEmpty()) {
+            Text(
+                text = errorMessage.value,
+                color = Color.Red,
+                modifier = Modifier.padding(top = 16.dp)
+            )
         }
     }
 }

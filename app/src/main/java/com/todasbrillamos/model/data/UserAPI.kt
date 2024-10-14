@@ -16,9 +16,9 @@ interface UserAPI
 }
 
 data class DataChangeRequest(
-    val email: String,
-    val name: String,
-    val lastName: String,
-    val phone: String,
-    val password: String
+    val correo_electronico: String,
+    val nombre: String,
+    val apellido: String,
+    val telefono: String,
+    val contrasena: String
 )

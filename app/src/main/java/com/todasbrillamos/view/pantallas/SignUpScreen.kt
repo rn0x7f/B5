@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -67,6 +69,7 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
             .fillMaxSize()
             .background(brush = Brush.linearGradient(colors = gradientColors))
             .padding(start = 28.dp, end = 28.dp, top = 45.dp, bottom = 45.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         TextoNormal(value = "Hola!")
         TextoResaltado(value = stringResource(id = R.string.CrearCuenta))
@@ -135,7 +138,7 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
                 password.value = input
                 // Validar la contraseña mientras se escribe
                 statusMessage.value = if (!passwordRegex.matches(password.value) && password.value.isNotEmpty()) {
-                    "La contraseña debe tener al menos 8 letras y contener al menos una mayúscula."
+                    "La contraseña debe tener al menos 8 letras y contener al menos una mayúscula. No debe de contener caracteres especiales.\n Intenta de nuevo"
                 } else {
                     "" // Limpiar mensaje si es válido
                 }

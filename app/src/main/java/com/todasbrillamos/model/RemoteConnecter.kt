@@ -76,7 +76,7 @@ class RemoteConnecter {
     }
 
     suspend fun updateUserInfo(dataChangeRequest: DataChangeRequest): Response<UserInfo> {
-        return retrofitUsers.updateUser(dataChangeRequest.email, dataChangeRequest)
+        return retrofitUsers.updateUser(dataChangeRequest.correo_electronico, dataChangeRequest)
     }
 
 

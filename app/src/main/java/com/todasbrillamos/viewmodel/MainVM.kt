@@ -24,13 +24,21 @@ class MainVM : ViewModel() {
     val products: StateFlow<List<ProductInfo>> = _products
 
     // Obtener información del usuario por email
-    suspend fun getUserByEmail(email: String) {
+    suspend fun getUserByEmail() {
+        val email = connecter.getEmail()
         val user = connecter.getUserbyEmail(email)
         _userInfo.value = user
     }
 
+    suspend fun getLoggedUser() {
+        val user = connecter.getUserbyEmail(getEmail())
+        _userInfo.value = user
+    }
 
-
+    suspend fun getUserInfo(email: String): UserInfo? {
+        getLoggedUser()
+        return connecter.getUserbyEmail(email)
+    }
 
 
     // Función para iniciar sesión
@@ -59,11 +67,11 @@ class MainVM : ViewModel() {
         currentUserInfo?.let {
             // Crear el objeto DataChangeRequest con los nuevos datos
             val dataChangeRequest = DataChangeRequest(
-                email = email,
-                name = name,
-                lastName = lastName,
-                phone = phone,
-                password = password
+                correo_electronico = email,
+                nombre = name,
+                apellido = lastName,
+                telefono = phone,
+                contrasena = password
             )
 
             // Llamar a la función para actualizar la información del usuario en el RemoteConnecter
@@ -119,24 +127,23 @@ class MainVM : ViewModel() {
      */
 
 
-    fun addToCart(product: ProductInfo) {
+    fun addToCart(product: ProductInfo): Boolean {
         val currentCart = _userCart.value.toMutableList()
 
-        // Buscar si el producto ya está en el carrito
         val existingItem = currentCart.find { it.product.id_producto == product.id_producto }
 
         if (existingItem != null) {
-            // Si ya está en el carrito, incrementar la cantidad
             val updatedItem = existingItem.copy(quantity = existingItem.quantity + 1)
             val updatedCart = currentCart.map {
                 if (it.product.id_producto == product.id_producto) updatedItem else it
             }
             _userCart.value = updatedCart
+            return true
         } else {
-            // Si no está en el carrito, agregarlo con cantidad 1
             val newItem = CartItem(product, quantity = 1)
             currentCart.add(newItem)
             _userCart.value = currentCart
+            return true
         }
     }
 

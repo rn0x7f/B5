@@ -9,6 +9,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -24,6 +26,7 @@ import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.view.componentes.boton
 import com.todasbrillamos.viewmodel.MainVM
+import kotlinx.coroutines.coroutineScope
 
 /**
  * Pantalla de Perfil.
@@ -35,9 +38,9 @@ import com.todasbrillamos.viewmodel.MainVM
 @Composable
 fun ProfileScreen(
     navController: NavHostController,
+    mainVM: MainVM,
     sharedPreferencesHelper: SharedPreferencesHelper
 ) {
-
     // Definir gradiente
     val gradientColors = listOf(
         Color(0xFFffe5b4), // Color inicial
@@ -136,5 +139,6 @@ fun PreviewProfileScreen() {
     // Crear un NavController ficticio para la vista previa
     val navController = rememberNavController()
     val sharedPreferencesHelper = SharedPreferencesHelper(LocalContext.current)
-    ProfileScreen(navController, sharedPreferencesHelper)
+
+    ProfileScreen(navController, mainVM = MainVM() ,sharedPreferencesHelper)
 }

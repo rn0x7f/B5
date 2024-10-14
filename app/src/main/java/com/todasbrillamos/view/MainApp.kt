@@ -53,7 +53,7 @@ fun MainApp(mainVM: MainVM, stripe: Stripe) {
 
         // Pantalla de perfil
         composable("perfil") {
-            ProfileScreen(navController, sharedPreferencesHelper)
+            ProfileScreen(navController, mainVM ,sharedPreferencesHelper)
         }
 
         // Pantalla de cuenta

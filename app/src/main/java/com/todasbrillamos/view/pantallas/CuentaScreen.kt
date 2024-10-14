@@ -38,6 +38,21 @@ fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
     val errorMessage = remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
 
+    // Obtener el estado del usuario desde el ViewModel
+    val userInfo by mainVM.userInfo.collectAsState() // Asegúrate de que userInfo es un StateFlow o LiveData
+
+    // Actualizar los campos de texto cuando userInfo cambia
+    LaunchedEffect(userInfo) {
+        mainVM.getUserByEmail()
+        userInfo?.let {
+            nombre.value = it.nombre
+            apellido.value = it.apellido
+            email.value = it.correo_electronico
+            telefono.value = it.telefono
+            password.value = "" // Dejar el campo de contraseña vacío o no mostrarla por seguridad
+        }
+    }
+
     Scaffold(
         bottomBar = { NavBar(navController) }
     ) { innerPadding ->

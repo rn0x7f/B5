@@ -3,6 +3,7 @@ package com.todasbrillamos.view.pantallas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
@@ -29,7 +30,7 @@ import kotlinx.coroutines.launch
  * Vista general de un objeto comprable
  */
 @Composable
-fun ItemScreen(navController: NavHostController, productID: Int, mainVM: MainVM ,modifier: Modifier = Modifier) {
+fun ItemScreen(navController: NavHostController, productID: Int, mainVM: MainVM, modifier: Modifier = Modifier) {
     val estadoCarrito = mainVM.userCart.collectAsState()
 
     // Definir el gradiente
@@ -50,6 +51,10 @@ fun ItemScreen(navController: NavHostController, productID: Int, mainVM: MainVM 
             productInfo = productDetails
         }
     }
+
+    // Estado para el diálogo
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogMessage by remember { mutableStateOf("") }
 
     Scaffold(
         bottomBar = { NavBar(navController) }
@@ -94,13 +99,35 @@ fun ItemScreen(navController: NavHostController, productID: Int, mainVM: MainVM 
 
                 // Botón para agregar al carrito
                 Button(
-                    onClick = { mainVM.addToCart(productInfo!!) },
+                    onClick = {
+                        val success = mainVM.addToCart(productInfo!!)
+                        dialogMessage = if (success) {
+                            "Producto agregado al carrito."
+                        } else {
+                            "No se pudo agregar el producto."
+                        }
+                        showDialog = true
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
-                       Color(0xFFD82E78) //
+                        Color(0xFFD82E78)
                     )
                 ) {
                     Text(text = "Agregar al carrito")
+                }
+
+                // AlertDialog para mostrar el mensaje
+                if (showDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showDialog = false },
+                        title = { Text(text = "Notificación") },
+                        text = { Text(dialogMessage) },
+                        confirmButton = {
+                            Button(onClick = { showDialog = false }) {
+                                Text("Aceptar")
+                            }
+                        }
+                    )
                 }
             }
         }
