@@ -3,7 +3,10 @@ package com.todasbrillamos.view.pantallas
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -28,7 +31,11 @@ import com.todasbrillamos.viewmodel.MainVM
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(navController: NavController, mainVM: MainVM, sharedPreferencesHelper: SharedPreferencesHelper) {
+fun LoginScreen(
+    navController: NavController,
+    mainVM: MainVM,
+    sharedPreferencesHelper: SharedPreferencesHelper
+) {
     val coroutineScope = rememberCoroutineScope()
     val statusMessage = remember { mutableStateOf("") }
 
@@ -42,6 +49,7 @@ fun LoginScreen(navController: NavController, mainVM: MainVM, sharedPreferencesH
             .fillMaxSize()
             .background(brush = Brush.linearGradient(colors = gradientColors))
             .padding(start = 28.dp, end = 28.dp, top = 45.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         TextoNormal(value = "Hola!")
         TextoResaltado(value = "Bienvenida de vuelta")
@@ -74,26 +82,33 @@ fun LoginScreen(navController: NavController, mainVM: MainVM, sharedPreferencesH
         )
         Spacer(modifier = Modifier.padding(20.dp))
         boton(value = "Iniciar Sesion") {
-            coroutineScope.launch {
-                try {
-                    val result = mainVM.signIn(email.value, password.value)
+            when {
+                email.value.isEmpty() -> statusMessage.value = "Por favor, ingresa tu correo electrónico."
+                password.value.isEmpty() -> statusMessage.value = "Por favor, ingresa tu contraseña."
+                else -> {
+                    coroutineScope.launch {
+                        try {
+                            val result = mainVM.signIn(email.value, password.value)
 
-                    if (result != null) {
-                        // Save the token to SharedPreferences
-                        sharedPreferencesHelper.saveToken(result)
-                        val newLoggedUser = email.value
-                        mainVM.setEmail(email.value)
-                        // Navigate to the home screen
-                        navController.navigate("home") {
-                            popUpTo("login") { inclusive = true }
+                            if (result != null) {
+                                // Save the token to SharedPreferences
+                                sharedPreferencesHelper.saveToken(result)
+                                val newLoggedUser = email.value
+                                mainVM.setEmail(email.value)
+                                // Navigate to the home screen
+                                navController.navigate("home") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            } else {
+                                statusMessage.value =
+                                    "Error de inicio de sesión. Verifica tus credenciales."
+                            }
+                        } catch (e: Exception) {
+                            Log.e("LoginScreen", "Error de inicio de sesión", e)
+                            statusMessage.value =
+                                "Error de inicio de sesión. Inténta de nuevo más tarde."
                         }
-                    } else {
-                        statusMessage.value =
-                            "Error de inicio de sesión. Verifica tus credenciales."
                     }
-                } catch (e: Exception) {
-                    Log.e("LoginScreen", "Error de inicio de sesión", e)
-                    statusMessage.value = "Error de inicio de sesión. Inténta de nuevo más tarde."
                 }
             }
         }

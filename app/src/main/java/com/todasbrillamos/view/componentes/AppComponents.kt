@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -97,7 +99,7 @@ fun TextoResaltadoMini(value: String) {
 }
 
 @Composable
-fun TextoClickeable(value: String) {
+fun TextoClickeable(value: String, onTermsClick: () -> Unit) {
     val textoInicial = "Al continuar aceptas nuestros "
     val TerminosCondiciones = "Términos y Condiciones"
     val politica = "terminosCondiciones"
@@ -116,8 +118,27 @@ fun TextoClickeable(value: String) {
         onClick = { offset ->
             annString.getStringAnnotations(tag = politica, start = offset, end = offset)
                 .firstOrNull()?.let {
-                    // Aquí podrías manejar el clic para abrir los términos y condiciones
+                    onTermsClick() // Llama a la función para mostrar el diálogo
                 }
+        }
+    )
+}
+
+@Composable
+fun TerminosDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Términos y Condiciones") },
+        text = { Text("Aquí van los términos y condiciones...") }, // Añade el contenido de los términos
+        confirmButton = {
+            Button(onClick = onDismiss) {
+                Text("Aceptar")
+            }
+        },
+        dismissButton = {
+            Button(onClick = onDismiss) {
+                Text("Cancelar")
+            }
         }
     )
 }

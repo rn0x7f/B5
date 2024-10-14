@@ -21,8 +21,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -45,7 +47,13 @@ import com.todasbrillamos.R
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CampoTexto(labelValue: String, painterResource: Painter, textValue: String, onValueChange: (String) -> Unit,modifier: Modifier = Modifier) {
+fun CampoTexto(
+    labelValue: String,
+    painterResource: Painter,
+    textValue: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         label = { Text(text = labelValue) },
@@ -57,7 +65,7 @@ fun CampoTexto(labelValue: String, painterResource: Painter, textValue: String, 
         ),
         keyboardOptions = KeyboardOptions.Default,
         value = textValue,
-        onValueChange = {onValueChange (it) },
+        onValueChange = { onValueChange(it) },
         singleLine = true,
         leadingIcon = {
             Icon(painter = painterResource, contentDescription = "")
@@ -67,7 +75,13 @@ fun CampoTexto(labelValue: String, painterResource: Painter, textValue: String, 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CampoPassword(labelValue: String, painterResource: Painter, password: String, onValueChange: (String) -> Unit,modifier: Modifier = Modifier) {
+fun CampoPassword(
+    labelValue: String,
+    painterResource: Painter,
+    password: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val passwordVisible = remember { mutableStateOf(false) }
 
     OutlinedTextField(
@@ -109,6 +123,9 @@ fun CampoPassword(labelValue: String, painterResource: Painter, password: String
 
 @Composable
 fun CheckboxComp(value: String) {
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -124,7 +141,13 @@ fun CheckboxComp(value: String) {
                 checkedState.value = it
             }
         )
-        TextoClickeable(value = value)
+        TextoClickeable(value = value) {
+            showDialog = true
+        }
+
+        if (showDialog){
+            TerminosDialog(onDismiss = {showDialog = false})
+        }
     }
 }
 
