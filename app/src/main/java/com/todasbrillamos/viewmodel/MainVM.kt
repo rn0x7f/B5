@@ -38,7 +38,7 @@ class MainVM : ViewModel() {
 
     // Función para iniciar sesión
     suspend fun signIn(email: String, password: String): String? {
-        return connecter.signinUser(email, password).toString()
+        return connecter.signinUser(email, password)
     }
 
     // Función para registrarse

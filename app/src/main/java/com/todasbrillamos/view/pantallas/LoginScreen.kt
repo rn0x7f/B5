@@ -39,10 +39,10 @@ fun LoginScreen(
     val coroutineScope = rememberCoroutineScope()
     val statusMessage = remember { mutableStateOf("") }
 
-    // Definir el gradiente
+    // Define the gradient background
     val gradientColors = listOf(
-        Color(0xFFffe5b4), // Color inicial
-        Color(0xFFffbba8)  // Color final
+        Color(0xFFffe5b4),
+        Color(0xFFffbba8)
     )
     Column(
         modifier = Modifier
@@ -63,7 +63,7 @@ fun LoginScreen(
                 .padding(vertical = 10.dp)
         )
 
-        // Define state variables to hold user input
+        // Define state variables for user input
         val email = remember { mutableStateOf("") }
         val password = remember { mutableStateOf("") }
 
@@ -91,15 +91,14 @@ fun LoginScreen(
                             val result = mainVM.signIn(email.value, password.value)
 
                             if (result != null) {
-                                // Save the token to SharedPreferences
+                                // Login successful
                                 sharedPreferencesHelper.saveToken(result)
-                                val newLoggedUser = email.value
                                 mainVM.setEmail(email.value)
-                                // Navigate to the home screen
                                 navController.navigate("home") {
                                     popUpTo("login") { inclusive = true }
                                 }
                             } else {
+                                // Login failed
                                 statusMessage.value =
                                     "Error de inicio de sesión. Verifica tus credenciales."
                             }
@@ -113,6 +112,7 @@ fun LoginScreen(
             }
         }
 
+        // Display status messages
         if (statusMessage.value.isNotEmpty()) {
             Text(
                 text = statusMessage.value,

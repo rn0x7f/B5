@@ -5,6 +5,11 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Query
 
+data class SignInRequest(
+    val email: String,
+    val password: String
+)
+
 data class SignupRequest(
     val correo_electronico: String,
     val nombre: String,
@@ -33,8 +38,7 @@ interface Auth {
 
     @POST("/api/auth/usuario/signin")
     suspend fun signin(
-        @Query("email") email: String,
-        @Query("password") password: String
+        @Body request: SignInRequest
     ): Response<TokenResponse>
 
 }

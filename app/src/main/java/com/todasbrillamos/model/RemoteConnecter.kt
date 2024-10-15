@@ -11,9 +11,9 @@ import com.todasbrillamos.model.data.DataChangeRequest
 import com.todasbrillamos.model.data.PaymentRequest
 import com.todasbrillamos.model.data.ProductAPI
 import com.todasbrillamos.model.data.ProductInfo
+import com.todasbrillamos.model.data.SignInRequest
 import com.todasbrillamos.model.data.SignupRequest
 import com.todasbrillamos.model.data.StripeAPI
-import com.todasbrillamos.model.data.TokenResponse
 import com.todasbrillamos.model.data.UserAPI
 import com.todasbrillamos.model.data.UserInfo
 import retrofit2.Response
@@ -154,10 +154,12 @@ class RemoteConnecter {
         }
     }
 
-    suspend fun signinUser(email: String, password: String): TokenResponse? {
-        val response = retrofitAuth.signin(email, password)
+    suspend fun signinUser(email: String, password: String): String? {
+        val requestBody = SignInRequest(email, password)
+        println("Connecter: $requestBody")
+        val response = retrofitAuth.signin(requestBody)
         return if (response.isSuccessful) {
-            response.body()
+            response.body()?.token
         } else {
             Log.e("RemoteConnecter", "Error: ${response.code()}")
             null
