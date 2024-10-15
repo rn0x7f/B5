@@ -37,6 +37,4 @@ interface Auth {
         @Query("password") password: String
     ): Response<TokenResponse>
 
-    @POST("/api/auth/usuario/signout")
-    suspend fun signout(): Response<String>
 }

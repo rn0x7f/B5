@@ -79,7 +79,7 @@ fun ItemScreen(navController: NavHostController, productID: Int, mainVM: MainVM,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(300.dp), // Puedes ajustar el tamaño
-                        contentScale = ContentScale.Crop // Escalar la imagen para que ocupe el espacio disponible
+                        contentScale = ContentScale.Fit // Escalar la imagen para que ocupe el espacio disponible
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))

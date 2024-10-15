@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.todasbrillamos.model.RemoteConnecter
 import com.todasbrillamos.model.data.CartItem
+import com.todasbrillamos.model.data.Compras
 import com.todasbrillamos.model.data.DataChangeRequest
+import com.todasbrillamos.model.data.Direcciones
 import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.model.data.SignupRequest
 import com.todasbrillamos.model.data.UserInfo
@@ -26,18 +28,13 @@ class MainVM : ViewModel() {
     // Obtener información del usuario por email
     suspend fun getUserByEmail() {
         val email = connecter.getEmail()
-        val user = connecter.getUserbyEmail(email)
+        val user = connecter.getUserByEmail(email)
         _userInfo.value = user
     }
 
     suspend fun getLoggedUser() {
-        val user = connecter.getUserbyEmail(getEmail())
+        val user = connecter.getUserByEmail(getEmail())
         _userInfo.value = user
-    }
-
-    suspend fun getUserInfo(email: String): UserInfo? {
-        getLoggedUser()
-        return connecter.getUserbyEmail(email)
     }
 
 
@@ -56,12 +53,12 @@ class MainVM : ViewModel() {
             signupRequest.contrasena
         )
 
-
     }
 
     suspend fun updateUser(email: String, name: String, lastName: String, phone: String, password: String): UserInfo? {
         // Obtener la información actual del usuario
-        val currentUserInfo = connecter.getUserbyEmail(getEmail())
+        val currentUserInfo = connecter.getUserByEmail(getEmail())
+
 
         // Verificar si la información actual del usuario está disponible
         currentUserInfo?.let {
@@ -80,7 +77,16 @@ class MainVM : ViewModel() {
             // Verificar si la respuesta es exitosa
             return if (response.isSuccessful) {
                 // Actualizar el estado local _userInfo con la nueva información del usuario
-                _userInfo.value = response.body()
+                _userInfo.value =
+                    UserInfo(
+                        correo_electronico = email,
+                        nombre = name,
+                        apellido = lastName,
+                        telefono = phone,
+                        direcciones_envio = userInfo.value?.direcciones_envio ?: Direcciones(emptyList()),
+                        compras = userInfo.value?.compras ?: Compras(emptyList())
+                    )
+                connecter.setEmail(email)
                 response.body()
             } else {
                 // Registrar el error si falla la actualización
