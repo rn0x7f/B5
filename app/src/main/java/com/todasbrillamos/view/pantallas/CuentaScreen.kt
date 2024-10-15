@@ -43,13 +43,17 @@ fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
 
     // Actualizar los campos de texto cuando userInfo cambia
     LaunchedEffect(userInfo) {
-        mainVM.getUserByEmail()
-        userInfo?.let {
-            nombre.value = it.nombre
-            apellido.value = it.apellido
-            email.value = it.correo_electronico
-            telefono.value = it.telefono
-            password.value = "" // Dejar el campo de contraseña vacío o no mostrarla por seguridad
+        try{
+            mainVM.getUserByEmail()
+            userInfo?.let {
+                nombre.value = it.nombre
+                apellido.value = it.apellido
+                email.value = it.correo_electronico
+                telefono.value = it.telefono
+                password.value = "" // Dejar el campo de contraseña vacío o no mostrarla por seguridad
+            }
+        }catch (e: Exception){
+            errorMessage.value = "Ocurrió un error al cargar tus datos"
         }
     }
 
