@@ -38,3 +38,7 @@ app/local.properties
 
 # Mac OS
 .DS_Store
+
+# Node Modules
+
+tbrillamos/dashboard/node_modules/
