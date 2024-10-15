@@ -1,12 +1,17 @@
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import com.google.gson.Gson
 
@@ -14,6 +19,7 @@ import com.stripe.android.Stripe
 import com.stripe.android.model.PaymentMethodCreateParams
 import com.todasbrillamos.model.RemoteConnecter
 import com.todasbrillamos.model.data.PaymentRequest
+import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.viewmodel.MainVM
 
 val remoteConnecter = RemoteConnecter()
@@ -99,11 +105,21 @@ fun CardScreen(
     var paymentStatus by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
+    val gradientColors = listOf(
+        Color(0xFFffe5b4),
+        Color(0xFFffbba8)
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .background(brush = Brush.linearGradient(colors = gradientColors))
     ) {
+        Spacer(modifier = Modifier.height(8.dp))
+        TextoResaltado(value = total.toString())
+        Spacer(modifier = Modifier.height(8.dp))
+
         TextField(
             value = cardNumber.value,
             onValueChange = { cardNumber.value = it },
