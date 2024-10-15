@@ -3,7 +3,7 @@ from typing import Annotated
 from pydantic import EmailStr
 from utils import authAcc
 from sqlalchemy.orm import Session
-from schemas.schemas import Usuario, UsuarioCreate
+from schemas.schemas import Usuario, UsuarioCreate, Login
 from config.db import SessionLocal
 
 auth = APIRouter()
@@ -26,11 +26,11 @@ def signup(usuario: UsuarioCreate, db: Session = Depends(get_db)):
     return authAcc.signup(db, usuario)
 
 @auth.post("/usuario/signin")
-def signin(email: Annotated[EmailStr, "email"], password: Annotated[str, "password"], db: Session = Depends(get_db)):
-    return authAcc.signin(db, email, password)
+def signin(login_request: Login, db: Session = Depends(get_db)):
+    return authAcc.signin(db, str(login_request.email), str(login_request.password))
 
 @auth.post("/usuario/signout")
-def signout():
+def signout():  
     return {"message": "signout"}
 
 @auth.post("/usuario/forgot-password")

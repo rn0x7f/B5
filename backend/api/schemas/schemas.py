@@ -178,3 +178,9 @@ class Carrito(CarritoBase):
 
     class Config:
         from_attributes = True
+
+
+
+class Login(BaseModel):
+    email: str
+    password: str
