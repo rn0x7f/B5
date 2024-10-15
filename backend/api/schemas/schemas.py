@@ -16,9 +16,7 @@ class UsuarioCreate(UsuarioBase):
 
 # Datos que se muestran al cliente
 class Usuario(UsuarioBase):
-    direcciones_envio: list["DireccionEnvioCliente"] = []
-    compras: list["Compra"] = []
-
+    pass
     class Config:
         from_attributes = True
 

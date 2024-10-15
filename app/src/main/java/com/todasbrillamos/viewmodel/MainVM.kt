@@ -4,9 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.todasbrillamos.model.RemoteConnecter
 import com.todasbrillamos.model.data.CartItem
-import com.todasbrillamos.model.data.Compras
 import com.todasbrillamos.model.data.DataChangeRequest
-import com.todasbrillamos.model.data.Direcciones
 import com.todasbrillamos.model.data.ProductInfo
 import com.todasbrillamos.model.data.SignupRequest
 import com.todasbrillamos.model.data.UserInfo
@@ -82,9 +80,7 @@ class MainVM : ViewModel() {
                         correo_electronico = email,
                         nombre = name,
                         apellido = lastName,
-                        telefono = phone,
-                        direcciones_envio = userInfo.value?.direcciones_envio ?: Direcciones(emptyList()),
-                        compras = userInfo.value?.compras ?: Compras(emptyList())
+                        telefono = phone
                     )
                 connecter.setEmail(email)
                 response.body()

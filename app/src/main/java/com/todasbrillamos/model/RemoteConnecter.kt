@@ -55,13 +55,13 @@ class RemoteConnecter {
         retrofitClient.create(CartAPI::class.java)
     }
 
-    suspend fun getUserbyEmail(email: String): UserInfo? {
+    suspend fun getUserByEmail(email: String): UserInfo? {
         val response = retrofitUsers.getUserByEmail(email)
         return if (response.isSuccessful) {
             response.body()
         } else {
             when (response.code()) {
-                404 -> UserInfo("", "", "", "", emptyList(), emptyList()) // User not found
+                404 -> UserInfo("", "", "", "")// User not found
                 500 -> {
                     Log.e("RemoteConnecter", "Internal server error")
                     null
