@@ -17,10 +17,10 @@ class RemoteConnecterTest {
         remoteConnecter.setEmail(email)
 
         val userInfo = UserInfo(
-            "crocsvin@example.com", "kevin", "torres", "5578430107", emptyList(), emptyList()
+            "crocsvin@example.com", "kevin", "torres", "5578430107"
         )
 
-        val result = remoteConnecter.getUserbyEmail(email)
+        val result = remoteConnecter.getUserByEmail(email)
         assertEquals(userInfo, result)
     }
 
@@ -29,8 +29,8 @@ class RemoteConnecterTest {
         val email = "not.found@example.com"
         remoteConnecter.setEmail(email)
 
-        val result = remoteConnecter.getUserbyEmail(email)
-        assertEquals(UserInfo("", "", "", "", emptyList(), emptyList()), result)
+        val result = remoteConnecter.getUserByEmail(email)
+        assertEquals(UserInfo("", "", "", "") ,result)
     }
 
     @Test
