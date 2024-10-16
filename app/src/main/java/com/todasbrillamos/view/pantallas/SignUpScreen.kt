@@ -54,6 +54,7 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
     val email = remember { mutableStateOf("") }
     val telefono = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    var check = false;
 
     val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$")
     val passwordRegex = Regex("^(?=.*[A-Z])[A-Za-z0-9]{8,}\$")
@@ -146,7 +147,7 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
         )
 
         // Checkbox de términos y condiciones
-        CheckboxComp(value = "Al crear una cuenta, aceptas nuestros términos y condiciones")
+        CheckboxComp(value = "Al crear una cuenta, aceptas nuestros términos y condiciones", { check = !check })
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -171,6 +172,11 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
                 // Mandar los datos a la API usando el signup request
                 coroutineScope.launch {
                     try {
+                        if(!check){
+                            statusMessage.value = "Debes aceptar los términos y condiciones"
+                            return@launch
+                        }
+
                         // Llamar a la función del ViewModel para registrar al usuario
                         val result = mainVM.signUp(signupRequest)
 
