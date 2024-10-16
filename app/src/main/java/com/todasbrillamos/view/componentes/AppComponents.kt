@@ -5,11 +5,15 @@
 package com.todasbrillamos.view.componentes
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -126,23 +130,54 @@ fun TextoClickeable(value: String, onTermsClick: () -> Unit) {
 
 @Composable
 fun TerminosDialog(onDismiss: () -> Unit) {
+    // Se usa un Column para permitir el desplazamiento
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Términos y Condiciones") },
-        text = { Text("Aquí van los términos y condiciones...") }, // Añade el contenido de los términos
+        title = { Text(text = "Aviso de Privacidad de Zazil") },
+        text = {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                Text("AVISO DE PRIVACIDAD\n" +
+                        "\n" +
+                        "En Fundación Todas Brillamos AC, valoramos la privacidad de nuestros clientes y nos comprometemos a proteger la información personal que nos proporcionan. Esta política de privacidad explica cómo recopilamos, utilizamos y protegemos sus datos personales.\n" +
+                        "\n" +
+                        "INFORMACIÓN RECOLECTADA\n" +
+                        "\n" +
+                        "- Datos personales: nombre, dirección, correo electrónico, número de teléfono\n" +
+                        "- Información de pago: tarjeta de crédito, débito o PayPal\n" +
+                        "\n" +
+                        "USO DE LA INFORMACIÓN\n" +
+                        "\n" +
+                        "- Procesar y enviar pedidos\n" +
+                        "- Enviar correos electrónicos con promociones y ofertas especiales\n" +
+                        "- Mejorar nuestra tienda online y experiencia de usuario\n" +
+                        "\n" +
+                        "PROTECCIÓN DE LA INFORMACIÓN\n" +
+                        "\n" +
+                        "- Utilizamos medidas de seguridad para proteger sus datos personales\n" +
+                        "- No compartimos información personal con terceros, excepto para procesar pedidos y envíos\n" +
+                        "\n" +
+                        "DERECHOS DE LOS CLIENTES\n" +
+                        "\n" +
+                        "- Acceder, rectificar o cancelar su información personal en cualquier momento\n" +
+                        "- Oponerse al uso de su información para fines de marketing\n" +
+                        "\n" +
+                        "CAMBIOS EN LA POLÍTICA DE PRIVACIDAD\n" +
+                        "\n" +
+                        "- Podemos actualizar esta política de privacidad en cualquier momento\n" +
+                        "- Se notificará a los clientes de cualquier cambio significativo\n" +
+                        "\n" +
+                        "FECHA DE ÚLTIMA ACTUALIZACIÓN: 2 de Septiembre 2024\n" +
+                        "\n" +
+                        "Si tienes alguna pregunta o inquietud, por favor no dudes en contactarnos.")
+            }
+        },
         confirmButton = {
             Button(onClick = onDismiss) {
                 Text("Aceptar")
             }
-        },
-        dismissButton = {
-            Button(onClick = onDismiss) {
-                Text("Cancelar")
-            }
         }
     )
 }
-
 @Composable
 fun TextoClickeableLogin(navController: NavController) {
     val textoInicial = "¿Ya tienes una cuenta? "

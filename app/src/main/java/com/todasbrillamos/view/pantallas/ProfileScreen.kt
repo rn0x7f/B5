@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -27,6 +28,7 @@ import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.view.componentes.boton
 import com.todasbrillamos.viewmodel.MainVM
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * Pantalla de Perfil.
@@ -41,6 +43,8 @@ fun ProfileScreen(
     mainVM: MainVM,
     sharedPreferencesHelper: SharedPreferencesHelper
 ) {
+
+    val courutineScope = rememberCoroutineScope()
     // Definir gradiente
     val gradientColors = listOf(
         Color(0xFFffe5b4), // Color inicial
@@ -122,7 +126,11 @@ fun ProfileScreen(
                 }
                 Row {
                     boton(value = "Cerrar sesion") {
+                        courutineScope.launch {
+                            mainVM.emptyCart()
+                        }
                         sharedPreferencesHelper.clearToken()
+                        mainVM.clearCartHistory()
                         navController.navigate("login") {
                             popUpTo("home") { inclusive = true }
                         }

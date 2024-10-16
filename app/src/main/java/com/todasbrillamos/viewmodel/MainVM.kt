@@ -20,6 +20,9 @@ class MainVM : ViewModel() {
     private val _userCart = MutableStateFlow<List<CartItem>>(emptyList())
     val userCart: StateFlow<List<CartItem>> = _userCart
 
+    private val _userCartHistory = MutableStateFlow<List<List<CartItem>>>(emptyList())
+    val userCartHistory: StateFlow<List<List<CartItem>>> = _userCartHistory
+
     private val _products = MutableStateFlow<List<ProductInfo>>(emptyList())
     val products: StateFlow<List<ProductInfo>> = _products
 
@@ -187,6 +190,17 @@ class MainVM : ViewModel() {
         }catch (e: Exception){
             return false
         }
+    }
+
+    //-------------------------
+    fun addCartToHistory() {
+        if (_userCart.value.isNotEmpty()) {
+            _userCartHistory.value = listOf(_userCart.value) + _userCartHistory.value
+        }
+    }
+
+    fun clearCartHistory(){
+        _userCartHistory.value = emptyList()
     }
 
 }

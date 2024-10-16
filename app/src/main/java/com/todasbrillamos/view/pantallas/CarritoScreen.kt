@@ -36,6 +36,7 @@ import com.todasbrillamos.R
 import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @Composable
 fun CarritoScreen(navController: NavHostController, mainVM: MainVM) {
@@ -84,7 +85,8 @@ fun CarritoScreen(navController: NavHostController, mainVM: MainVM) {
 
             if (estado.value.isNotEmpty()) {
                 // Total price calculation can be added here, for example:
-                TextoNormal(value = "Total: $${mainVM.calculateTotal()}")
+
+                TextoNormal(value = "Total: ${String.format(Locale.getDefault(),"%.2f", mainVM.calculateTotal())}")
                 var description: String = ""
                 estado.value.forEach {
                     description += it.product.nombre + " - " + it.quantity + "\n"
@@ -93,9 +95,6 @@ fun CarritoScreen(navController: NavHostController, mainVM: MainVM) {
                     Text(text = "Proceder al pago")
                 }
             }
-
-
-
         }
     }
 }

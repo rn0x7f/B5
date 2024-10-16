@@ -2,6 +2,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -100,9 +101,11 @@ fun CardScreen(
     val expMonth = remember { mutableStateOf("") }
     val expYear = remember { mutableStateOf("") }
     val cvc = remember { mutableStateOf("") }
+    val address = remember { mutableStateOf("") }
     val postalCode = remember { mutableStateOf("") }
 
     var paymentStatus by remember { mutableStateOf("") }
+    var showDialog by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     val gradientColors = listOf(
@@ -113,50 +116,58 @@ fun CardScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
             .background(brush = Brush.linearGradient(colors = gradientColors))
     ) {
-        Spacer(modifier = Modifier.height(8.dp))
-        TextoResaltado(value = total.toString())
+        Spacer(modifier = Modifier.height(30.dp))
+        TextoResaltado(value = "Total a pagar: $"+ String.format("%.2f", total))
         Spacer(modifier = Modifier.height(8.dp))
 
         TextField(
             value = cardNumber.value,
             onValueChange = { cardNumber.value = it },
-            label = { Text("Card Number") },
-            modifier = Modifier.fillMaxWidth()
+            label = { Text("Número de Tarjeta") },
+            modifier = Modifier.fillMaxWidth().padding(4.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        TextField(
-            value = expMonth.value,
-            onValueChange = { expMonth.value = it },
-            label = { Text("Expiration Month") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+        Row {
+            TextField(
+                value = expMonth.value,
+                onValueChange = { expMonth.value = it },
+                label = { Text("Mes de Expiración") },
+                modifier = Modifier.weight(1f).padding(6.dp)
+            )
 
-        TextField(
-            value = expYear.value,
-            onValueChange = { expYear.value = it },
-            label = { Text("Expiration Year") },
-            modifier = Modifier.fillMaxWidth()
-        )
+            TextField(
+                value = expYear.value,
+                onValueChange = { expYear.value = it },
+                label = { Text("Año de Expiración") },
+                modifier = Modifier.weight(1f).padding(6.dp)
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
             value = cvc.value,
             onValueChange = { cvc.value = it },
             label = { Text("CVC") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(4.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextField(
+            value = address.value,
+            onValueChange = { address.value = it },
+            label = { Text("Dirección") },
+            modifier = Modifier.fillMaxWidth().padding(4.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
             value = postalCode.value,
             onValueChange = { postalCode.value = it },
-            label = { Text("Postal Code") },
-            modifier = Modifier.fillMaxWidth()
+            label = { Text("Código Postal") },
+            modifier = Modifier.fillMaxWidth().padding(4.dp)
         )
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -173,8 +184,9 @@ fun CardScreen(
 
                 // Step 2: If PaymentMethod creation succeeded, create the PaymentIntent
                 if (paymentMethodId != null) {
+                    val desc = description + address.value
                     val clientSecret =
-                        createPaymentIntent(paymentMethodId, total * 100f, description)
+                        createPaymentIntent(paymentMethodId, total * 100f, desc)
                     println("Client Secret: $clientSecret")
 
                     // Update the payment status
@@ -183,31 +195,42 @@ fun CardScreen(
                         "¡Pago exitoso!"
                     } else {
                         // Handle failure
-                        "Error al crear Payment Intent con ID: $paymentMethodId"
+                        "Error al crear un Payment Intent con ID: $paymentMethodId"
                     }
                 } else {
                     paymentStatus =
                         "Error al crear el método de pago, por favor intente de nuevo más tarde"
                 }
+
+                showDialog = true
             }
         }) {
             Text("Pay Now")
         }
 
-        Text(text = paymentStatus)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (paymentStatus == "¡Pago exitoso!" ) {
-            val courutineScope = rememberCoroutineScope()
-            courutineScope.launch {
-                mainVM.emptyCart()
-            }
-            Button(onClick = {
-                navController.navigate("home")
-            }) {
-                Text("Volver a la pantalla principal")
-            }
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    showDialog = false
+                },
+                title = { Text("Estado del Pago") },
+                text = { Text(paymentStatus) },
+                confirmButton = {
+                    Button(onClick = {
+                        showDialog = false
+                        if (paymentStatus == "¡Pago exitoso!") {
+                            // Empty the cart and navigate back to home screen
+                            scope.launch {
+                                mainVM.addCartToHistory()
+                                mainVM.emptyCart()
+                                navController.popBackStack()  // Navigate back to the home screen
+                            }
+                        }
+                    }) {
+                        Text("Aceptar")
+                    }
+                }
+            )
         }
     }
 }

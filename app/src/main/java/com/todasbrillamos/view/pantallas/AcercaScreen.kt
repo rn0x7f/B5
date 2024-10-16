@@ -101,23 +101,13 @@ fun AcercaScreen(navController: NavHostController) {
             item {
                 TextoResaltadoMini(value = "Contáctanos: ")
                 Column(modifier = Modifier.padding(18.dp)) {
-                    Row {
-                        Icon(
-                            painter = painterResource(id = R.drawable.phone),
-                            contentDescription = "correo",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .weight(2f)
-                        )
-                        Text(text = "+52 56 2808 3883", modifier = Modifier.weight(8f))
-                    }
                     Espaciador()
                     Row(modifier = Modifier.clickable {
                         uriHandler.openUri("https://www.facebook.com/FundacionTodasBrillamos/?locale=es_LA")
                     }) {
                         Image(
                             painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = "correo",
+                            contentDescription = "facebook",
                             modifier = Modifier
                                 .size(24.dp)
                                 .weight(2f)
@@ -130,7 +120,20 @@ fun AcercaScreen(navController: NavHostController) {
                     }) {
                         Image(
                             painter = painterResource(id = R.drawable.instagram),
-                            contentDescription = "correo",
+                            contentDescription = "instagram",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .weight(2f)
+                        )
+                        Text(text = "@todasbrillamos", modifier = Modifier.weight(8f))
+                    }
+                    Espaciador()
+                    Row(modifier = Modifier.clickable {
+                        uriHandler.openUri("https://www.tiktok.com/@todas.brillamos")
+                    }) {
+                        Image(
+                            painter = painterResource(id = R.drawable.tiktok),
+                            contentDescription = "tiktok",
                             modifier = Modifier
                                 .size(24.dp)
                                 .weight(2f)
