@@ -122,7 +122,7 @@ fun CampoPassword(
 }
 
 @Composable
-fun CheckboxComp(value: String, onClick: () -> Unit) {
+fun CheckboxComp(value: String) {
     var showDialog by remember {
         mutableStateOf(false)
     }
