@@ -119,13 +119,13 @@ fun ProfileScreen(
                             modifier = Modifier.size(48.dp)
                         )
                         Text(
-                            text = "Mis Pedidos",
+                            text = "Mi historial de compras",
                             modifier = Modifier.padding(start = 16.dp)
                         )
                     }
                 }
                 Row {
-                    boton(value = "Cerrar sesion") {
+                    boton(value = "Cerrar sesión") {
                         courutineScope.launch {
                             mainVM.emptyCart()
                         }

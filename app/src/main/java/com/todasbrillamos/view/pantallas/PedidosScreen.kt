@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.model.data.CartItem
 import com.todasbrillamos.view.componentes.NavBar
+import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.viewmodel.MainVM
 
@@ -44,6 +45,11 @@ fun PedidosScreen(navController: NavHostController, mainVM: MainVM) {
                 .padding(28.dp)
         ) {
             TextoResaltado(value = "Mis pedidos")
+            
+            if (cartHistory.value.isEmpty()) {
+                Spacer(modifier = Modifier.padding(6.dp))
+                TextoNormal(value = "No hay historial de compras disponibles")
+            }
 
             // Displaying the history in a vertical list
             LazyColumn(

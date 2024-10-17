@@ -211,7 +211,6 @@ fun CardScreen(
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = {
-                    showDialog = false
                 },
                 title = { Text("Estado del Pago") },
                 text = { Text(paymentStatus) },
