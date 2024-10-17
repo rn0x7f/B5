@@ -68,7 +68,7 @@ fun AcercaScreen(navController: NavHostController) {
                 TextoResaltado(value = "Acerca de nosotras: ")
                 Pager(
                     images = listOf(
-                        R.drawable.imgprueba,
+                        R.drawable.foto_acerca_de,
                         R.drawable.foto_acerca_de
                     )
                 )

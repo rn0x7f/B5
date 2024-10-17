@@ -84,7 +84,7 @@ fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modif
             item {
                 Pager(
                     images = listOf(
-                        R.drawable.imgprueba,
+                        R.drawable.foto_acerca_de,
                         R.drawable.foto_acerca_de
                     )
                 )
