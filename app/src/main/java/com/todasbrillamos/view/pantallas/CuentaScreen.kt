@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.todasbrillamos.R
+import com.todasbrillamos.utils.SharedPreferencesHelper
 import com.todasbrillamos.view.componentes.CampoTexto
 import com.todasbrillamos.view.componentes.NavBar
 import com.todasbrillamos.view.componentes.boton
@@ -20,7 +21,7 @@ import com.todasbrillamos.viewmodel.MainVM
 import kotlinx.coroutines.launch
 
 @Composable
-fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
+fun CuentaScreen(navController: NavHostController, mainVM: MainVM,sharedPreferencesHelper: SharedPreferencesHelper) {
     // Definir gradiente
     val gradientColors = listOf(
         Color(0xFFffe5b4),
@@ -44,7 +45,7 @@ fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
     // Actualizar los campos de texto cuando userInfo cambia
     LaunchedEffect(userInfo) {
         try{
-            mainVM.getUserByEmail()
+            sharedPreferencesHelper.getEmail()?.let { mainVM.getLoggedUser(it) }
             userInfo?.let {
                 nombre.value = it.nombre
                 apellido.value = it.apellido
@@ -145,11 +146,4 @@ fun CuentaScreen(navController: NavHostController, mainVM: MainVM) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewCuentaScreen() {
-    val navController = rememberNavController()
-    CuentaScreen(navController, mainVM = MainVM())
 }

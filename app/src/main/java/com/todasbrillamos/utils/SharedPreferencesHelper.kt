@@ -7,6 +7,7 @@ class SharedPreferencesHelper(context: Context) {
     companion object {
         private const val PREFS_NAME = "user_prefs"
         private const val TOKEN_KEY = "auth_token"
+        private const val EMAIL_KEY = "user_email"
     }
 
     private val sharedPreferences: SharedPreferences =
@@ -28,6 +29,22 @@ class SharedPreferencesHelper(context: Context) {
     fun clearToken() {
         val editor = sharedPreferences.edit()
         editor.remove(TOKEN_KEY)
+        editor.apply()
+    }
+
+    fun saveEmail(email: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString(EMAIL_KEY, email)
+        editor.apply()
+    }
+
+    fun getEmail(): String? {
+        return sharedPreferences.getString(EMAIL_KEY, null)
+    }
+
+    fun clearEmail() {
+        val editor = sharedPreferences.edit()
+        editor.remove(EMAIL_KEY)
         editor.apply()
     }
 }

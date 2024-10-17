@@ -58,7 +58,7 @@ fun MainApp(mainVM: MainVM, stripe: Stripe) {
 
         // Pantalla de cuenta
         composable("cuenta") {
-            CuentaScreen(navController,mainVM)
+            CuentaScreen(navController,mainVM,sharedPreferencesHelper)
         }
 
         composable("checkout") {

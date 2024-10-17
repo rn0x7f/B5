@@ -33,8 +33,8 @@ class MainVM : ViewModel() {
         _userInfo.value = user
     }
 
-    suspend fun getLoggedUser() {
-        val user = connecter.getUserByEmail(getEmail())
+    suspend fun getLoggedUser(email: String) {
+        val user = connecter.getUserByEmail(email)
         _userInfo.value = user
     }
 

@@ -51,7 +51,7 @@ fun LoginScreen(
             .padding(start = 28.dp, end = 28.dp, top = 45.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        TextoNormal(value = "Hola!")
+        TextoNormal(value = "¡Hola!")
         TextoResaltado(value = "Bienvenida de vuelta")
         Spacer(modifier = Modifier.padding(20.dp))
         Image(
@@ -94,6 +94,7 @@ fun LoginScreen(
                                 // Login successful
                                 sharedPreferencesHelper.saveToken(result)
                                 mainVM.setEmail(email.value)
+                                sharedPreferencesHelper.saveEmail(email.value)
                                 navController.navigate("home") {
                                     popUpTo("login") { inclusive = true }
                                 }

@@ -78,7 +78,7 @@ fun SignUpScreen(
             .padding(start = 28.dp, end = 28.dp, top = 45.dp, bottom = 45.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        TextoNormal(value = "Hola!")
+        TextoNormal(value = "¡Hola!")
         TextoResaltado(value = stringResource(id = R.string.CrearCuenta))
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -168,7 +168,7 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(190.dp))
 
         // Botón de registro
-        boton(value = "Registrar") {
+        boton(value = "Registrarse") {
             // Verifica si el checkbox está marcado
             if (!terminos.value) {
                 statusMessage.value = "Debes aceptar los términos y condiciones para registrarte."
@@ -188,6 +188,7 @@ fun SignUpScreen(
 
                         if (result != null) {
                             mainVM.setEmail(email.value)
+                            sharedPreferencesHelper.saveEmail(email.value)
                             navController.navigate("home") {
                                 popUpTo("signup") { inclusive = true }
                             }

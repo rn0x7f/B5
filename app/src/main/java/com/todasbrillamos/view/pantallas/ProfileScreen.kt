@@ -131,6 +131,7 @@ fun ProfileScreen(
                         }
                         mainVM.setEmail("")
                         sharedPreferencesHelper.clearToken()
+                        sharedPreferencesHelper.clearEmail()
                         mainVM.clearCartHistory()
                         navController.navigate("login") {
                             popUpTo("home") { inclusive = true }
