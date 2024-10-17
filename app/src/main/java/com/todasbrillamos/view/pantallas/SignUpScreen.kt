@@ -58,6 +58,9 @@ fun SignUpScreen(
     val email = remember { mutableStateOf("") }
     val telefono = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val terminos = remember {
+        mutableStateOf(false)
+    }
 
     val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$")
     val passwordRegex = Regex("^(?=.*[A-Z])[A-Za-z0-9]{8,}\$")
@@ -153,7 +156,9 @@ fun SignUpScreen(
         )
 
         // Checkbox de términos y condiciones
-        CheckboxComp(value = "Al crear una cuenta, aceptas nuestros términos y condiciones")
+        CheckboxComp(value = "Al crear una cuenta, aceptas nuestros términos y condiciones") { isChecked ->
+            terminos.value = isChecked
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -164,8 +169,10 @@ fun SignUpScreen(
 
         // Botón de registro
         boton(value = "Registrar") {
-            // Verifica si hay algún mensaje de error antes de proceder
-            if (statusMessage.value.isEmpty() && nombre.value.isNotEmpty() && apellido.value.isNotEmpty() && email.value.isNotEmpty() && telefono.value.isNotEmpty() && password.value.isNotEmpty()) {
+            // Verifica si el checkbox está marcado
+            if (!terminos.value) {
+                statusMessage.value = "Debes aceptar los términos y condiciones para registrarte."
+            } else if (statusMessage.value.isEmpty() && nombre.value.isNotEmpty() && apellido.value.isNotEmpty() && email.value.isNotEmpty() && telefono.value.isNotEmpty() && password.value.isNotEmpty()) {
                 // Crear un objeto de solicitud con los datos del usuario
                 val signupRequest = SignupRequest(
                     nombre = nombre.value,
@@ -175,34 +182,25 @@ fun SignUpScreen(
                     contrasena = password.value
                 )
 
-                // Mandar los datos a la API usando el signup request
                 coroutineScope.launch {
                     try {
-                        // Llamar a la función del ViewModel para registrar al usuario
                         val result = mainVM.signUp(signupRequest)
 
                         if (result != null) {
-                            if (result == "Este usuario ya existe") {
-                                statusMessage.value = "Este usuario ya existe"
-                            } else {
-                                // Navegar a la pantalla de inicio
-                                navController.navigate("home") {
-                                    popUpTo("signup") { inclusive = true }
-                                }
-                                mainVM.setEmail(email.value)
+                            mainVM.setEmail(email.value)
+                            navController.navigate("home") {
+                                popUpTo("signup") { inclusive = true }
                             }
                         } else {
                             statusMessage.value = "Error al registrar. Verifica tus datos."
                         }
                     } catch (e: Exception) {
-                        // Manejar excepciones
                         statusMessage.value = "Error en la conexión. Intenta más tarde."
                     }
                 }
             } else {
-                // No hacer nada si hay algún error
                 statusMessage.value =
-                    "Por favor, complete todos los campos correctamente antes de continuar."
+                    "Por favor, completa todos los campos correctamente antes de continuar."
             }
         }
 

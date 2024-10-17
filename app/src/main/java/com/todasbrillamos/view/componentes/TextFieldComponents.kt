@@ -122,35 +122,33 @@ fun CampoPassword(
 }
 
 @Composable
-fun CheckboxComp(value: String) {
-    var showDialog by remember {
-        mutableStateOf(false)
-    }
+fun CheckboxComp(value: String, onCheckedChange: (Boolean) -> Unit) {
+    var showDialog by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        val checkedState = remember {
-            mutableStateOf(false)
-        }
+        val checkedState = remember { mutableStateOf(false) }
+
         androidx.compose.material3.Checkbox(
             checked = checkedState.value,
             onCheckedChange = {
                 checkedState.value = it
+                onCheckedChange(it)  // Notify parent about the checkbox state change
             }
         )
+
         TextoClickeable(value = value) {
             showDialog = true
         }
 
-        if (showDialog){
-            TerminosDialog(onDismiss = {showDialog = false})
+        if (showDialog) {
+            TerminosDialog(onDismiss = { showDialog = false })
         }
     }
 }
-
 @Composable
 fun boton(value: String, onClick: () -> Unit) {
     Button(
