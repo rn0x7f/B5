@@ -129,6 +129,7 @@ fun ProfileScreen(
                         courutineScope.launch {
                             mainVM.emptyCart()
                         }
+                        mainVM.setEmail("")
                         sharedPreferencesHelper.clearToken()
                         mainVM.clearCartHistory()
                         navController.navigate("login") {

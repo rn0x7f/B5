@@ -45,7 +45,11 @@ import kotlinx.coroutines.launch
  */
 
 @Composable
-fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferencesHelper: SharedPreferencesHelper) {
+fun SignUpScreen(
+    navController: NavController,
+    mainVM: MainVM,
+    sharedPreferencesHelper: SharedPreferencesHelper
+) {
     val coroutineScope = rememberCoroutineScope()
     val statusMessage = remember { mutableStateOf("") }
 
@@ -105,11 +109,12 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
             onValueChange = { input ->
                 email.value = input
                 // Validar el correo mientras se escribe
-                statusMessage.value = if (!emailRegex.matches(email.value) && email.value.isNotEmpty()) {
-                    "Correo electrónico inválido"
-                } else {
-                    "" // Limpiar mensaje si es válido
-                }
+                statusMessage.value =
+                    if (!emailRegex.matches(email.value) && email.value.isNotEmpty()) {
+                        "Correo electrónico inválido"
+                    } else {
+                        "" // Limpiar mensaje si es válido
+                    }
             }
         )
 
@@ -121,11 +126,12 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
             onValueChange = { input ->
                 telefono.value = input
                 // Validar el teléfono mientras se escribe
-                statusMessage.value = if (!phoneRegex.matches(telefono.value) && telefono.value.isNotEmpty()) {
-                    "Teléfono inválido"
-                } else {
-                    "" // Limpiar mensaje si es válido
-                }
+                statusMessage.value =
+                    if (!phoneRegex.matches(telefono.value) && telefono.value.isNotEmpty()) {
+                        "Teléfono inválido, escríbe 10 dígitos sin espacios"
+                    } else {
+                        "" // Limpiar mensaje si es válido
+                    }
             }
         )
 
@@ -137,11 +143,12 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
             onValueChange = { input ->
                 password.value = input
                 // Validar la contraseña mientras se escribe
-                statusMessage.value = if (!passwordRegex.matches(password.value) && password.value.isNotEmpty()) {
-                    "La contraseña debe tener al menos 8 letras y contener al menos una mayúscula. No debe de contener caracteres especiales.\n Intenta de nuevo"
-                } else {
-                    "" // Limpiar mensaje si es válido
-                }
+                statusMessage.value =
+                    if (!passwordRegex.matches(password.value) && password.value.isNotEmpty()) {
+                        "La contraseña debe tener al menos 8 letras y contener al menos una mayúscula. No debe de contener caracteres especiales.\n Intenta de nuevo"
+                    } else {
+                        "" // Limpiar mensaje si es válido
+                    }
             }
         )
 
@@ -175,13 +182,16 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
                         val result = mainVM.signUp(signupRequest)
 
                         if (result != null) {
-                            // Navegar a la pantalla de inicio
-                            navController.navigate("home") {
-                                popUpTo("signup") { inclusive = true }
+                            if (result == "Este usuario ya existe") {
+                                statusMessage.value = "Este usuario ya existe"
+                            } else {
+                                // Navegar a la pantalla de inicio
+                                navController.navigate("home") {
+                                    popUpTo("signup") { inclusive = true }
+                                }
+                                mainVM.setEmail(email.value)
                             }
                         } else {
-                            // Manejar el caso en que el resultado sea nulo (error en la API)
-                            mainVM.setEmail(email.value)
                             statusMessage.value = "Error al registrar. Verifica tus datos."
                         }
                     } catch (e: Exception) {
@@ -191,7 +201,8 @@ fun SignUpScreen(navController: NavController, mainVM: MainVM, sharedPreferences
                 }
             } else {
                 // No hacer nada si hay algún error
-                statusMessage.value = "Por favor, complete todos los campos correctamente antes de continuar."
+                statusMessage.value =
+                    "Por favor, complete todos los campos correctamente antes de continuar."
             }
         }
 

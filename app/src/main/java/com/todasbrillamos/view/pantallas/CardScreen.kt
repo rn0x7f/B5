@@ -205,7 +205,7 @@ fun CardScreen(
                 showDialog = true
             }
         }) {
-            Text("Pay Now")
+            Text("Pagar")
         }
 
         if (showDialog) {

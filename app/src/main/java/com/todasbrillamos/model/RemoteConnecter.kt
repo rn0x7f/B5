@@ -138,7 +138,7 @@ class RemoteConnecter {
             when (response.code()) {
                 400 -> {
                     Log.e("RemoteConnecter", "Bad request")
-                    null
+                    "Este usuario ya existe"
                 }
 
                 422 -> {
