@@ -30,6 +30,9 @@ import com.todasbrillamos.view.componentes.boton
 import com.todasbrillamos.viewmodel.MainVM
 import kotlinx.coroutines.launch
 
+/**
+ *
+ */
 @Composable
 fun LoginScreen(
     navController: NavController,

@@ -34,36 +34,43 @@ import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 
-
+/**
+ * Componente que muestra un carrusel de imágenes.
+ *
+ * @param images Lista de recursos de imágenes pasados como parámetros.
+ * @param modifier Modificador opcional para personalizar la apariencia del carrusel.
+ */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Pager(
     images: List<Int>,  // Lista de imágenes pasada como parámetro
     modifier: Modifier = Modifier
 ) {
+    // Crear un estado de pager para controlar las páginas
     val pagerState = com.google.accompanist.pager.rememberPagerState(
         pageCount = images.size
     )
 
+    // Efecto que hace que el carrusel se desplace automáticamente
     LaunchedEffect(Unit) {
         while (true) {
-            kotlinx.coroutines.delay(3000)
+            kotlinx.coroutines.delay(3000)  // Esperar 3 segundos
             val nextPage = (pagerState.currentPage + 1) % pagerState.pageCount
-            pagerState.scrollToPage(nextPage)
+            pagerState.scrollToPage(nextPage)  // Mover a la siguiente página
         }
     }
 
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()  // Coroutines scope para manejar el desplazamiento
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(modifier = modifier.wrapContentSize()) {
+            // Componente HorizontalPager para mostrar las imágenes
             HorizontalPager(
                 state = pagerState,
                 modifier.wrapContentSize()
             ) { currentPage ->
-
                 Card(
                     modifier
                         .wrapContentSize()
@@ -83,7 +90,7 @@ fun Pager(
                     val nextPage = pagerState.currentPage + 1
                     if (nextPage < images.size) {
                         scope.launch {
-                            pagerState.scrollToPage(nextPage)
+                            pagerState.scrollToPage(nextPage)  // Navegar a la siguiente página
                         }
                     }
                 },
@@ -93,14 +100,14 @@ fun Pager(
                     .align(Alignment.CenterEnd)
                     .clip(CircleShape),
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color(0x52373737)
+                    containerColor = Color(0x52373737)  // Color de fondo del botón
                 )
             ) {
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowRight,
                     contentDescription = "",
                     modifier.fillMaxSize(),
-                    tint = Color.LightGray
+                    tint = Color.LightGray  // Color del icono
                 )
             }
 
@@ -110,7 +117,7 @@ fun Pager(
                     val prevPage = pagerState.currentPage - 1
                     if (prevPage >= 0) {
                         scope.launch {
-                            pagerState.scrollToPage(prevPage)
+                            pagerState.scrollToPage(prevPage)  // Navegar a la página anterior
                         }
                     }
                 },
@@ -120,18 +127,19 @@ fun Pager(
                     .align(Alignment.CenterStart)
                     .clip(CircleShape),
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color(0x52373737)
+                    containerColor = Color(0x52373737)  // Color de fondo del botón
                 )
             ) {
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowLeft,
                     contentDescription = "",
                     modifier.fillMaxSize(),
-                    tint = Color.LightGray
+                    tint = Color.LightGray  // Color del icono
                 )
             }
         }
 
+        // Indicadores de la página
         PageIndicator(
             pageCount = images.size,
             currentPage = pagerState.currentPage,
@@ -140,6 +148,13 @@ fun Pager(
     }
 }
 
+/**
+ * Componente que muestra indicadores de la página actual.
+ *
+ * @param pageCount Número total de páginas.
+ * @param currentPage Página actualmente seleccionada.
+ * @param modifier Modificador opcional para personalizar la apariencia de los indicadores.
+ */
 @Composable
 fun PageIndicator(pageCount: Int, currentPage: Int, modifier: Modifier) {
     Row(
@@ -153,6 +168,12 @@ fun PageIndicator(pageCount: Int, currentPage: Int, modifier: Modifier) {
     }
 }
 
+/**
+ * Componente que representa un indicador de página individual.
+ *
+ * @param isSelected Indica si el indicador está seleccionado.
+ * @param modifier Modificador opcional para personalizar la apariencia del indicador.
+ */
 @Composable
 fun Indicadores(isSelected: Boolean, modifier: Modifier) {
     val size = animateDpAsState(targetValue = if (isSelected) 12.dp else 10.dp, label = "")

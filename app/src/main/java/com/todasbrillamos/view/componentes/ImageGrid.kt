@@ -15,13 +15,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import com.todasbrillamos.model.data.ProductInfo
+
+/**
+ * Componente que muestra una cuadrícula de imágenes de productos.
+ *
+ * @param products Lista de productos a mostrar.
+ * @param columns Número de columnas en la cuadrícula (por defecto 2).
+ * @param onItemClick Función que se invoca cuando se hace clic en un producto, pasando su ID.
+ */
 @Composable
 fun ImageGrid(
     products: List<ProductInfo>,  // Asegúrate de no tener una lista vacía por defecto si siempre recibirás datos
     columns: Int = 2,
     onItemClick: (Int) -> Unit // Función que acepta el ID del producto
 ) {
-    val rows = products.chunked(columns)
+    val rows = products.chunked(columns) // Divide la lista de productos en filas
 
     Column(
         modifier = Modifier
@@ -46,6 +54,7 @@ fun ImageGrid(
                     )
                 }
 
+                // Si hay menos productos en la fila que columnas, agregar espaciadores
                 if (rowProducts.size < columns) {
                     repeat(columns - rowProducts.size) {
                         Spacer(modifier = Modifier.weight(1f))
@@ -56,6 +65,15 @@ fun ImageGrid(
     }
 }
 
+/**
+ * Componente que muestra una tarjeta de producto.
+ *
+ * @param modifier Modificador opcional para personalizar el diseño.
+ * @param productName Nombre del producto a mostrar.
+ * @param productPrice Precio del producto a mostrar.
+ * @param onClick Función que se invoca cuando se hace clic en la tarjeta.
+ * @param imageUrl URL de la imagen del producto.
+ */
 @Composable
 fun ProductsCard(
     modifier: Modifier = Modifier,

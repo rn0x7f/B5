@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
  * @author Kevin Castro
  * @param navController Controlador de navegación para la pantalla de registro
  * @param mainVM ViewModel principal para la lógica de la aplicación
+ * @param sharedPreferencesHelper Instancia de la clase de las preferencias compartidas
  */
 
 @Composable

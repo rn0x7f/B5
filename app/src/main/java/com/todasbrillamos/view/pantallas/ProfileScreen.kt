@@ -32,9 +32,10 @@ import kotlinx.coroutines.launch
 
 /**
  * Pantalla de Perfil.
- * El usuario consulta su perfil e información del mismo aquí.
- * @author Roger Rendón
- * @author Kevin Castro
+ * El usuario puede consultar su información en esta pantalla
+ * @param navController Instancia del control de navegación
+ * @param mainVM Instancia del ViewModel
+ * @param sharedPreferencesHelper Instancia del manejador de datos compartidos
  */
 
 @Composable

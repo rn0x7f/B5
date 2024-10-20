@@ -87,6 +87,14 @@ suspend fun createPaymentIntent(
 
 /**************/
 
+/**
+ * Pantalla del pago
+ * @param stripe Instancia de Stripe
+ * @param navController Controlador de navegación
+ * @param mainVM Instancia del ViewModel
+ * @param total Total de la compra
+ * @param description Descripción de la compra
+ */
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun CardScreen(

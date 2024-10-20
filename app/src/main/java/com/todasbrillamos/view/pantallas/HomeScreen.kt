@@ -34,6 +34,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 /**
  * Pantalla de inicio de la aplicación.
  * El usuario ve esta pantalla al abrir la aplicación.
+ * @param navController Controlador de navegación
+ * @param mainVM Instancia del mainVM
  */
 @Composable
 fun HomeScreen(navController: NavHostController, mainVM: MainVM, modifier: Modifier = Modifier) {

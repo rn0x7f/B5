@@ -20,10 +20,16 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * Clase que maneja la conexión remota con la API del servidor.
+ * Proporciona métodos para interactuar con diferentes servicios como usuarios, productos, carritos, y pagos.
+ */
 class RemoteConnecter {
 
+    // Almacena el correo electrónico del usuario actual.
     var userEmail: String = ""
 
+    // Cliente de Retrofit para la conexión a la API.
     private val retrofitClient by lazy {
         Retrofit.Builder()
             .baseUrl("http://98.82.104.24:8080/")
@@ -31,6 +37,7 @@ class RemoteConnecter {
             .build()
     }
 
+    // Creación de instancias de API para diferentes servicios.
     private val retrofitUsers by lazy {
         retrofitClient.create(UserAPI::class.java)
     }
@@ -55,18 +62,23 @@ class RemoteConnecter {
         retrofitClient.create(CartAPI::class.java)
     }
 
+    /**
+     * Obtiene la información de un usuario basado en su correo electrónico.
+     *
+     * @param email El correo electrónico del usuario.
+     * @return La información del usuario o null si no se encuentra.
+     */
     suspend fun getUserByEmail(email: String): UserInfo? {
         val response = retrofitUsers.getUserByEmail(email)
         return if (response.isSuccessful) {
             response.body()
         } else {
             when (response.code()) {
-                404 -> UserInfo("", "", "", "")// User not found
+                404 -> UserInfo("", "", "", "") // Usuario no encontrado
                 500 -> {
                     Log.e("RemoteConnecter", "Internal server error")
                     null
                 }
-
                 else -> {
                     Log.e("RemoteConnecter", "Error: ${response.code()}")
                     null
@@ -75,11 +87,21 @@ class RemoteConnecter {
         }
     }
 
+    /**
+     * Actualiza la información del usuario.
+     *
+     * @param dataChangeRequest Objeto que contiene la nueva información del usuario.
+     * @return Respuesta que contiene la información actualizada del usuario.
+     */
     suspend fun updateUserInfo(dataChangeRequest: DataChangeRequest): Response<UserInfo> {
         return retrofitUsers.updateUser(dataChangeRequest.correo_electronico, dataChangeRequest)
     }
 
-
+    /**
+     * Obtiene una lista de productos con paginación.
+     *
+     * @return Una lista de productos o null si ocurre un error.
+     */
     suspend fun getProducts(): List<ProductInfo>? {
         val response = retrofitProducts.getProducts(skip = 0, limit = 20)
         return if (response.isSuccessful) {
@@ -90,7 +112,6 @@ class RemoteConnecter {
                     Log.e("RemoteConnecter", "Internal server error")
                     null
                 }
-
                 else -> {
                     Log.e("RemoteConnecter", "Error: ${response.code()}")
                     null
@@ -99,6 +120,12 @@ class RemoteConnecter {
         }
     }
 
+    /**
+     * Obtiene la información de un producto específico basado en su identificador.
+     *
+     * @param id El identificador único del producto.
+     * @return La información del producto o null si no se encuentra.
+     */
     suspend fun getProductById(id: Int): ProductInfo? {
         val response = retrofitProducts.getProductById(id)
         return if (response.isSuccessful) {
@@ -109,18 +136,24 @@ class RemoteConnecter {
                     Log.e("RemoteConnecter", "Product not found")
                     null
                 }
-
                 else -> {
                     Log.e("RemoteConnecter", "Error: ${response.code()}")
                     null
                 }
             }
         }
-
     }
 
-
-
+    /**
+     * Registra un nuevo usuario.
+     *
+     * @param email El correo electrónico del nuevo usuario.
+     * @param name El nombre del nuevo usuario.
+     * @param lastName El apellido del nuevo usuario.
+     * @param phone El número de teléfono del nuevo usuario.
+     * @param password La contraseña del nuevo usuario.
+     * @return Mensaje de éxito o null si ocurre un error.
+     */
     suspend fun signupUser(
         email: String,
         name: String,
@@ -140,12 +173,10 @@ class RemoteConnecter {
                     Log.e("RemoteConnecter", "Bad request")
                     "Este usuario ya existe"
                 }
-
                 422 -> {
                     Log.e("RemoteConnecter", "Unprocessable Entity")
                     null
                 }
-
                 else -> {
                     Log.e("RemoteConnecter", "Error: ${response.code()}")
                     null
@@ -154,6 +185,13 @@ class RemoteConnecter {
         }
     }
 
+    /**
+     * Inicia sesión de un usuario existente.
+     *
+     * @param email El correo electrónico del usuario.
+     * @param password La contraseña del usuario.
+     * @return El token de acceso o null si ocurre un error.
+     */
     suspend fun signinUser(email: String, password: String): String? {
         val requestBody = SignInRequest(email, password)
         println("Connecter: $requestBody")
@@ -166,14 +204,18 @@ class RemoteConnecter {
         }
     }
 
-
-
+    /**
+     * Crea un Payment Intent utilizando Stripe.
+     *
+     * @param paymentRequest Objeto que contiene la información del pago.
+     * @return El clientSecret para el Payment Intent o null si ocurre un error.
+     */
     suspend fun createPaymentIntent(paymentRequest: PaymentRequest): String? {
         return try {
             println("Connecter: $paymentRequest")
             val response = retrofitStripe.createPaymentIntent(paymentRequest)
             if (response.isSuccessful) {
-                response.body()?.clientSecret  // Return the clientSecret for the PaymentIntent
+                response.body()?.clientSecret  // Retorna el clientSecret para el PaymentIntent
             } else {
                 Log.e("RemoteConnecter", "Failed to create Payment Intent: ${response.code()}")
                 null
@@ -184,14 +226,31 @@ class RemoteConnecter {
         }
     }
 
+    /**
+     * Obtiene el correo electrónico del usuario actual.
+     *
+     * @return El correo electrónico del usuario.
+     */
     fun getEmail(): String {
         return userEmail
     }
 
+    /**
+     * Establece el correo electrónico del usuario actual.
+     *
+     * @param email El correo electrónico del usuario.
+     */
     fun setEmail(email: String) {
         userEmail = email
     }
 
+    /**
+     * Agrega un producto al carrito de compras.
+     *
+     * @param cartItem El ítem del carrito a agregar.
+     * @param quantity La cantidad del producto a agregar.
+     * @return True si se agrega exitosamente, de lo contrario false.
+     */
     suspend fun addToCart(cartItem: CartItem, quantity: Int = 1): Boolean {
         val newAddToCartRequest =
             AddToCartRequest(getEmail(), cartItem.product.id_producto, quantity)
@@ -204,6 +263,12 @@ class RemoteConnecter {
         }
     }
 
+    /**
+     * Remueve un producto del carrito de compras.
+     *
+     * @param cartItem El ítem del carrito a eliminar.
+     * @return True si se elimina exitosamente, de lo contrario false.
+     */
     suspend fun removeFromCart(cartItem: CartItem): Boolean {
         val response = retrofitCart.removeFromCart(getEmail(), cartItem.product.id_producto)
         println("Email: ${getEmail()},ID: ${cartItem.product.id_producto}")
@@ -214,13 +279,18 @@ class RemoteConnecter {
         }
     }
 
-
+    /**
+     * Elimina el carrito de compras del usuario.
+     *
+     * @param email El correo electrónico del usuario.
+     * @return True si se elimina exitosamente, de lo contrario false.
+     */
     suspend fun deleteCart(email: String): Boolean {
         println("Email: $email")
         val response = retrofitCart.deleteCart(email)
-        return if(response.isSuccessful){
+        return if(response.isSuccessful) {
             true
-        }else{
+        } else {
             false
         }
     }

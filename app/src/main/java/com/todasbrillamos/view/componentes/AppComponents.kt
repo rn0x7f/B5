@@ -34,6 +34,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.todasbrillamos.R
 
+/**
+ * Componente de texto normal.
+ *
+ * @param value El texto que se mostrará.
+ * @param size Tamaño de fuente opcional (por defecto 24).
+ */
 @Composable
 fun TextoNormal(value: String, size: Int = 24) {
     Text(
@@ -45,12 +51,17 @@ fun TextoNormal(value: String, size: Int = 24) {
             fontSize = size.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
-        ), color = colorResource(id = R.color.negroPrincipal),
+        ),
+        color = colorResource(id = R.color.negroPrincipal),
         textAlign = TextAlign.Center
-
     )
 }
 
+/**
+ * Componente de texto resaltado.
+ *
+ * @param value El texto que se mostrará.
+ */
 @Composable
 fun TextoResaltado(value: String) {
     Text(
@@ -62,12 +73,17 @@ fun TextoResaltado(value: String) {
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
-        ), color = colorResource(id = R.color.rosaTB),
+        ),
+        color = colorResource(id = R.color.rosaTB),
         textAlign = TextAlign.Center
-
     )
 }
 
+/**
+ * Componente de texto resaltado de tamaño mediano.
+ *
+ * @param value El texto que se mostrará.
+ */
 @Composable
 fun TextoResaltadoMediano(value: String) {
     Text(
@@ -79,12 +95,17 @@ fun TextoResaltadoMediano(value: String) {
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
-        ), color = colorResource(id = R.color.rosaTB),
+        ),
+        color = colorResource(id = R.color.rosaTB),
         textAlign = TextAlign.Center
-
     )
 }
 
+/**
+ * Componente de texto resaltado de tamaño mini.
+ *
+ * @param value El texto que se mostrará.
+ */
 @Composable
 fun TextoResaltadoMini(value: String) {
     Text(
@@ -96,12 +117,18 @@ fun TextoResaltadoMini(value: String) {
             fontSize = 15.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
-        ), color = colorResource(id = R.color.rosaTB),
+        ),
+        color = colorResource(id = R.color.rosaTB),
         textAlign = TextAlign.Center
-
     )
 }
 
+/**
+ * Componente de texto clickeable que muestra los términos y condiciones.
+ *
+ * @param value El texto que se mostrará.
+ * @param onTermsClick Callback que se invoca al hacer clic en los términos.
+ */
 @Composable
 fun TextoClickeable(value: String, onTermsClick: () -> Unit) {
     val textoInicial = "Al continuar aceptas nuestros "
@@ -128,9 +155,13 @@ fun TextoClickeable(value: String, onTermsClick: () -> Unit) {
     )
 }
 
+/**
+ * Diálogo que muestra el aviso de privacidad.
+ *
+ * @param onDismiss Callback que se invoca al cerrar el diálogo.
+ */
 @Composable
 fun TerminosDialog(onDismiss: () -> Unit) {
-    // Se usa un Column para permitir el desplazamiento
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(text = "Aviso de Privacidad de Zazil") },
@@ -178,6 +209,12 @@ fun TerminosDialog(onDismiss: () -> Unit) {
         }
     )
 }
+
+/**
+ * Componente de texto clickeable que redirige a la pantalla de inicio de sesión.
+ *
+ * @param navController Controlador de navegación.
+ */
 @Composable
 fun TextoClickeableLogin(navController: NavController) {
     val textoInicial = "¿Ya tienes una cuenta? "
@@ -212,13 +249,17 @@ fun TextoClickeableLogin(navController: NavController) {
     )
 }
 
+/**
+ * Componente de texto clickeable que redirige a la pantalla de registro.
+ *
+ * @param navController Controlador de navegación.
+ */
 @Composable
 fun TextoClickeableRegistro(navController: NavController) {
     val textoInicial = "¿Aún no tienes cuenta? "
     val registrate = "Registrarme"
     val registroTag = "registro"
 
-    
     val annString = buildAnnotatedString {
         append(textoInicial)
         pushStringAnnotation(tag = registroTag, annotation = registroTag)
@@ -252,7 +293,9 @@ fun TextoClickeableRegistro(navController: NavController) {
     )
 }
 
-
+/**
+ * Componente de texto clickeable para "Olvidé mi contraseña".
+ */
 @Composable
 fun TextoClickeableOlvideContrasena() {
     val textoOlvide = "Olvidé mi contraseña"
@@ -288,9 +331,10 @@ fun TextoClickeableOlvideContrasena() {
     )
 }
 
+/**
+ * Componente espaciador con un padding de 8 dp.
+ */
 @Composable
 fun Espaciador() {
     Spacer(modifier = Modifier.padding(8.dp))
 }
-
-

@@ -23,17 +23,22 @@ import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.todasbrillamos.R
 
+/**
+ * Componente que muestra una barra de navegación animada.
+ *
+ * @param navController Controlador de navegación para manejar la navegación entre pantallas.
+ */
 @Composable
 fun NavBar(navController: NavController) {
-
+    // Lista de iconos para la barra de navegación
     val navigationItems = listOf(
-        R.drawable.homebar,    // Iconos de la barra
-        R.drawable.cartbar,
-        R.drawable.about,
-        R.drawable.userbar
+        R.drawable.homebar,    // Icono para la pantalla principal
+        R.drawable.cartbar,    // Icono para la pantalla del carrito
+        R.drawable.about,      // Icono para la pantalla "Acerca"
+        R.drawable.userbar     // Icono para la pantalla de usuario
     )
 
-    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex by remember { mutableStateOf(0) } // Estado del índice seleccionado
 
     // Usar LaunchedEffect para observar cambios en la pantalla actual
     LaunchedEffect(navController) {
@@ -54,10 +59,10 @@ fun NavBar(navController: NavController) {
             .padding(all = 12.dp),
         selectedIndex = selectedIndex,
         cornerRadius = shapeCornerRadius(cornerRadius = 28.dp),
-        ballAnimation = Straight(tween(300)),
-        indentAnimation = Height(tween(300)),
-        barColor = colorResource(id = R.color.rosaTB),
-        ballColor = colorResource(id = R.color.rosaTB)
+        ballAnimation = Straight(tween(300)), // Animación de la bola
+        indentAnimation = Height(tween(300)), // Animación de la indentación
+        barColor = colorResource(id = R.color.rosaTB), // Color de la barra
+        ballColor = colorResource(id = R.color.rosaTB) // Color de la bola
     ) {
         // items de navegación
         navigationItems.forEachIndexed { index, item ->
@@ -99,7 +104,7 @@ fun NavBar(navController: NavController) {
                 Icon(
                     modifier = Modifier.size(30.dp),
                     painter = painterResource(id = item),
-                    contentDescription = null
+                    contentDescription = null // Descripción de contenido para accesibilidad
                 )
             }
         }

@@ -28,6 +28,8 @@ import kotlinx.coroutines.launch
 
 /**
  * Vista general de un objeto comprable
+ * @param navController Controlador de navegación
+ * @param productID ID del producto
  */
 @Composable
 fun ItemScreen(navController: NavHostController, productID: Int, mainVM: MainVM, modifier: Modifier = Modifier) {

@@ -20,6 +20,11 @@ import com.todasbrillamos.view.componentes.boton
 import com.todasbrillamos.viewmodel.MainVM
 import kotlinx.coroutines.launch
 
+/**
+ * Pantalla de la cuenta
+ * @param navController Control del navegador
+ * @param mainVM Instancia del viewModel
+ */
 @Composable
 fun CuentaScreen(navController: NavHostController, mainVM: MainVM,sharedPreferencesHelper: SharedPreferencesHelper) {
     // Definir gradiente

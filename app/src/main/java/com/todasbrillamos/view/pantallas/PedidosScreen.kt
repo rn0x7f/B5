@@ -22,6 +22,11 @@ import com.todasbrillamos.view.componentes.TextoNormal
 import com.todasbrillamos.view.componentes.TextoResaltado
 import com.todasbrillamos.viewmodel.MainVM
 
+/**
+ * Pantalla que muestra el historial de compras
+ * @param navController Instancia del control de navegación
+ * @param mainVM Instancia de viewModel
+ */
 @Composable
 fun PedidosScreen(navController: NavHostController, mainVM: MainVM) {
 

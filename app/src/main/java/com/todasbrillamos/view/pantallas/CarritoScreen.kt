@@ -38,6 +38,11 @@ import com.todasbrillamos.view.componentes.TextoResaltado
 import kotlinx.coroutines.launch
 import java.util.Locale
 
+/**
+ * Pantalla del carrito de compras
+ * @param navController Controlador de navegación
+ * @param mainVM Instancia del ViewModel
+ */
 @Composable
 fun CarritoScreen(navController: NavHostController, mainVM: MainVM) {
     val estado = mainVM.userCart.collectAsState()

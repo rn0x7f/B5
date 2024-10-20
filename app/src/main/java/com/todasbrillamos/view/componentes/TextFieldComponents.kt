@@ -42,8 +42,13 @@ import androidx.compose.ui.unit.sp
 import com.todasbrillamos.R
 
 /**
- * Campo de texto personalizado, tiene animaciones
- * @author Roger Rendon
+ * Campo de texto personalizado con animaciones y estilos personalizados.
+ *
+ * @param labelValue El texto que se muestra como etiqueta del campo.
+ * @param painterResource Icono que se muestra al inicio del campo.
+ * @param textValue El valor actual del campo de texto.
+ * @param onValueChange Callback que se llama cuando el valor del campo cambia.
+ * @param modifier Modificador opcional para personalizar el campo.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,6 +78,15 @@ fun CampoTexto(
     )
 }
 
+/**
+ * Campo de texto para contraseñas con opción para mostrar/ocultar la contraseña.
+ *
+ * @param labelValue El texto que se muestra como etiqueta del campo de contraseña.
+ * @param painterResource Icono que se muestra al inicio del campo.
+ * @param password El valor actual del campo de contraseña.
+ * @param onValueChange Callback que se llama cuando el valor del campo cambia.
+ * @param modifier Modificador opcional para personalizar el campo.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CampoPassword(
@@ -121,6 +135,12 @@ fun CampoPassword(
     )
 }
 
+/**
+ * Componente de casilla de verificación con opción para mostrar un diálogo al hacer clic.
+ *
+ * @param value El texto que se muestra junto a la casilla de verificación.
+ * @param onCheckedChange Callback que se llama cuando se cambia el estado de la casilla de verificación.
+ */
 @Composable
 fun CheckboxComp(value: String, onCheckedChange: (Boolean) -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
@@ -136,7 +156,7 @@ fun CheckboxComp(value: String, onCheckedChange: (Boolean) -> Unit) {
             checked = checkedState.value,
             onCheckedChange = {
                 checkedState.value = it
-                onCheckedChange(it)  // Notify parent about the checkbox state change
+                onCheckedChange(it)  // Notificar al padre sobre el cambio de estado
             }
         )
 
@@ -149,6 +169,13 @@ fun CheckboxComp(value: String, onCheckedChange: (Boolean) -> Unit) {
         }
     }
 }
+
+/**
+ * Botón personalizado con fondo degradado y texto centrado.
+ *
+ * @param value El texto que se mostrará en el botón.
+ * @param onClick Callback que se llama al hacer clic en el botón.
+ */
 @Composable
 fun boton(value: String, onClick: () -> Unit) {
     Button(
@@ -166,7 +193,7 @@ fun boton(value: String, onClick: () -> Unit) {
                 .background(
                     brush = Brush.horizontalGradient(
                         listOf(
-                            colorResource(id = R.color.rosaTB), // Asegúrate de definir estos colores
+                            colorResource(id = R.color.rosaTB), // Colores del degradado
                             colorResource(id = R.color.rosaTB)
                         )
                     ),
@@ -176,7 +203,7 @@ fun boton(value: String, onClick: () -> Unit) {
         ) {
             Text(
                 text = value,
-                fontSize = 18.sp, // Cambiado a sp
+                fontSize = 18.sp, // Tamaño de fuente
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(textAlign = TextAlign.Center) // Centrar el texto
             )

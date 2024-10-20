@@ -15,6 +15,9 @@ import com.todasbrillamos.viewmodel.MainVM
 
 /**
  * Contiene las rutas de la app para implementar la navegación
+ *
+ * @param mainVM El ViewModel principal que gestiona la lógica de negocio de la aplicación.
+ * @param stripe Instancia de Stripe para manejar pagos.
  */
 @Composable
 fun MainApp(mainVM: MainVM, stripe: Stripe) {
@@ -53,22 +56,24 @@ fun MainApp(mainVM: MainVM, stripe: Stripe) {
 
         // Pantalla de perfil
         composable("perfil") {
-            ProfileScreen(navController, mainVM ,sharedPreferencesHelper)
+            ProfileScreen(navController, mainVM, sharedPreferencesHelper)
         }
 
         // Pantalla de cuenta
         composable("cuenta") {
-            CuentaScreen(navController,mainVM,sharedPreferencesHelper)
+            CuentaScreen(navController, mainVM, sharedPreferencesHelper)
         }
 
+        // Pantalla de carrito
         composable("checkout") {
             CarritoScreen(navController, mainVM)
         }
 
+        // Pantalla de pago con parámetros de total y descripción
         composable("pago/{total}/{description}") { backStackEntry ->
             val total: Float = backStackEntry.arguments?.getString("total")?.toFloatOrNull() ?: 0f
             val description: String = backStackEntry.arguments?.getString("description") ?: ""
-            CardScreen(stripe, navController, mainVM, total,description)
+            CardScreen(stripe, navController, mainVM, total, description)
         }
 
         // Pantalla de pedidos

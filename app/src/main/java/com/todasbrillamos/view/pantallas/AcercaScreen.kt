@@ -1,6 +1,5 @@
 package com.todasbrillamos.view.pantallas
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,8 +46,8 @@ fun AcercaScreen(navController: NavHostController) {
 
     // Define gradient
     val gradientColors = listOf(
-        Color(0xFFffe5b4), // Initial color
-        Color(0xFFffbba8)  // Final color
+        Color(0xFFffe5b4), // Color inicial
+        Color(0xFFffbba8)  // Color final
     )
 
     val uriHandler = LocalUriHandler.current
